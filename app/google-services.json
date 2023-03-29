@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "831008053810",
+    "project_id": "audioguias-24add",
+    "storage_bucket": "audioguias-24add.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831008053810:android:22429f420c198d96123a2b",
+        "android_client_info": {
+          "package_name": "com.example.audioguiasandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831008053810-fmprnh32ati95sgbnv59ar7tsm5e57l3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.audioguiasandroid",
+            "certificate_hash": "7b5245d683ca75b5eca972a1cce04db78f14d989"
+          }
+        },
+        {
+          "client_id": "831008053810-gck2fipof5i6e6f2d3m0fbt2bpcneofq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDDdzgsX5x27jUczLa8vop5xX7ETM3rKE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831008053810-gck2fipof5i6e6f2d3m0fbt2bpcneofq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
