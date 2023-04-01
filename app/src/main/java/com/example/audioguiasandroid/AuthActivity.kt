@@ -1,11 +1,15 @@
 package com.example.audioguiasandroid
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Layout
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthActivity : AppCompatActivity() {
@@ -13,7 +17,34 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
-        setup()
+        val bundle = intent.extras
+        val exception = bundle?.getString("exception")
+
+        if (exception.isNullOrEmpty()){
+            setup()
+        }else{
+            showAlert(exception)
+            setup()
+        }
+
+        session()
+
+    }
+
+    override fun onStart(){
+        super.onStart()
+        val authLayout = findViewById<ConstraintLayout>(R.id.authLayout_Auth)
+        authLayout.visibility = View.VISIBLE
+    }
+    private fun session(){
+        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val email = prefs.getString("email", null)
+
+        if (email != null){
+            val authLayout = findViewById<ConstraintLayout>(R.id.authLayout_Auth)
+            authLayout.visibility = View.INVISIBLE
+            showHome(email)
+        }
     }
 
     private fun setup(){
@@ -26,7 +57,7 @@ class AuthActivity : AppCompatActivity() {
 
         signInButton.setOnClickListener {
             if(emailEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty()){
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailEditText.text.toString(),
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(emailEditText.text.toString(),
                     passwordEditText.text.toString()).addOnCompleteListener {
                     if (it.isSuccessful){
                         showHome(it.result?.user?.email ?: "")
@@ -42,12 +73,9 @@ class AuthActivity : AppCompatActivity() {
         signUpButton.setOnClickListener {
             showSignUp()
         }
-
-
-
-
     }
 
+    //TODO: Añadir parametro titulo para que sea mas versatil la funcion
     private fun showAlert(exception: String){
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Error")

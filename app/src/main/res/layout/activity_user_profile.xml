@@ -18,11 +18,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/userImageView_UserProfile"
-            android:layout_width="match_parent"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            tools:srcCompat="@drawable/avatar" />
+
+        <Button
+            android:id="@+id/changeImageButton_UserProfile"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_below="@+id/userImageView_UserProfile"
+            android:layout_gravity="center"
+            android:text="CAMBIAR IMAGEN" />
 
         <Space
             android:layout_width="match_parent"
@@ -44,8 +53,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Nombre"
-            android:inputType="textPersonName"
-            android:text="Nombre" />
+            android:inputType="textPersonName" />
 
         <Space
             android:layout_width="match_parent"
@@ -57,8 +65,17 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Apellidos"
-            android:inputType="textPersonName"
-            android:text="Apellidos" />
+            android:inputType="textPersonName" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <Button
+            android:id="@+id/saveButton_UserProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GUARDAR" />
 
         <Space
             android:layout_width="match_parent"
@@ -75,10 +92,22 @@
             android:layout_height="8dp" />
 
         <Button
-            android:id="@+id/saveButton_UserProfile"
+            android:id="@+id/logOutButton_UserProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="GUARDAR" />
+            android:background="@android:color/holo_orange_dark"
+            android:text="CERRAR SESION" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <Button
+            android:id="@+id/deleteAccountButton_UserProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/design_default_color_error"
+            android:text="ELIMINAR CUENTA" />
 
         <Space
             android:layout_width="match_parent"

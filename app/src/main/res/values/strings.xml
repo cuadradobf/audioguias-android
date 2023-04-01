@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Audioguias</string>
+    <string name="prefs_file">com.example.audioguiasandroid.PREFERENCE_FILE_KEY</string>
 </resources>
