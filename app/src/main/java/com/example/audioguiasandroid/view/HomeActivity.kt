@@ -5,12 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.example.audioguiasandroid.view.AuthActivity
+import com.example.audioguiasandroid.view.UserProfileActivity
+import com.example.audioguiasandroid.view.VerifyActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-enum class ProviderType {
-    BASIC
-}
 class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

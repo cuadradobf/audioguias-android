@@ -1,4 +1,4 @@
-package com.example.audioguiasandroid
+package com.example.audioguiasandroid.view
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import com.example.audioguiasandroid.R
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

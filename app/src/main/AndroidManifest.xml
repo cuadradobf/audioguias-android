@@ -12,28 +12,28 @@
         android:theme="@style/Theme.AudioguiasAndroid"
         tools:targetApi="31">
         <activity
-            android:name=".DeleteAccountActivity"
+            android:name=".view.DeleteAccountActivity"
             android:exported="false" />
         <activity
-            android:name=".ChangePasswordActivity"
+            android:name=".view.ChangePasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".VerifyActivity"
+            android:name=".view.VerifyActivity"
             android:exported="false" />
         <activity
             android:name=".PlantillaActivity"
             android:exported="false" />
         <activity
-            android:name=".UserProfileActivity"
+            android:name=".view.UserProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".view.SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
-            android:name=".AuthActivity"
+            android:name=".view.AuthActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
