@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.controller.showAlert
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
@@ -84,7 +85,7 @@ class UserProfileActivity : AppCompatActivity() {
                         }
                     }
             }else{
-                showAlert("Campos obligatorios sin completar.")
+                showAlert(this,"Error","Campos obligatorios sin completar.")
             }
 
 
@@ -125,18 +126,7 @@ class UserProfileActivity : AppCompatActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
     }
-    private fun showAlert(exception: String){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-        if (exception.isNullOrEmpty()){
-            builder.setMessage("Se ha producido un error.")
-        }else{
-            builder.setMessage(exception)
-        }
-        builder.setPositiveButton("Aceptar",null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
-    }
+
 
     private fun showChangePassword(){
         val intent = Intent(this, ChangePasswordActivity::class.java)
