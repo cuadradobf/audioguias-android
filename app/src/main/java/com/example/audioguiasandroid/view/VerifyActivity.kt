@@ -1,6 +1,7 @@
 package com.example.audioguiasandroid.view
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.controller.showAlert
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -17,7 +19,16 @@ class VerifyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_verify)
 
-        setup()
+        //Setup
+        val user = Firebase.auth.currentUser
+        if (user == null){
+            val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+            prefs.clear()
+            prefs.apply()
+            showAuth("Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+        }else{
+            setup()
+        }
     }
 
     private fun setup(){
@@ -35,7 +46,7 @@ class VerifyActivity : AppCompatActivity() {
                         Log.d(ContentValues.TAG, "Email sent.")
                     }
                 }
-            showInfo("Se ha enviado a " + Firebase.auth.currentUser?.email.toString() + " un email de verificación.")
+            showAlert(this, "Error", "Se ha enviado a " + Firebase.auth.currentUser?.email.toString() + " un email de verificación.")
         }
 
         backButton.setOnClickListener {
@@ -43,17 +54,12 @@ class VerifyActivity : AppCompatActivity() {
         }
     }
 
-    private fun showInfo(info: String){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Información")
-        if (info.isNullOrEmpty()){
-            builder.setMessage("Se ha producido un error al obtener la información.")
-        }else{
-            builder.setMessage(info)
+    private fun showAuth(title: String, exception: String){
+        val intent = Intent(this, AuthActivity::class.java).apply {
+            putExtra("title", title)
+            putExtra("exception", exception)
         }
-        builder.setPositiveButton("Aceptar",null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+        startActivity(intent)
     }
 
     private fun showHome(){

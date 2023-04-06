@@ -2,6 +2,7 @@ package com.example.audioguiasandroid
 
 import android.content.Context
 import android.content.Intent
+import android.icu.text.CaseMap.Title
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -22,7 +23,7 @@ class HomeActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth("Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
+            showAuth("Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
         }else{
             setup()
         }
@@ -54,8 +55,9 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAuth(exception: String){
+    private fun showAuth(title: String, exception: String){
         val intent = Intent(this, AuthActivity::class.java).apply {
+            putExtra("title", title)
             putExtra("exception", exception)
         }
         startActivity(intent)

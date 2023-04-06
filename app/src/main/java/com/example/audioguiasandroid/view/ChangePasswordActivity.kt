@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.controller.showAlert
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -25,7 +26,7 @@ class ChangePasswordActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth("Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth("Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
         }else{
             setup()
         }
@@ -56,22 +57,22 @@ class ChangePasswordActivity : AppCompatActivity() {
                                     .addOnCompleteListener { task ->
                                         if (task.isSuccessful) {
                                             Log.d(TAG, "User password updated.")
-                                            showInfo("Contraseña cambiada correctamente.")
+                                            showAlert(this, "Información", "Contraseña cambiada correctamente.")
                                         }else{
-                                            showAlert("Error al cambiar la contraseña.")
+                                            showAlert(this, "Error", "Error al cambiar la contraseña.")
                                         }
                                     }
 
                             }else{
-                                showAlert("Contraseña actual incorrecta. Error al re-autenticar.")
+                                showAlert(this, "Error", "Contraseña actual incorrecta. Error al re-autenticar.")
                             }
                         }
 
                 }else{
-                    showAlert("La nueva contraseña no coincide.")
+                    showAlert(this, "Error", "La nueva contraseña no coincide.")
                 }
             }else{
-                showAlert("Campos obligatorios por completar.")
+                showAlert(this, "Error", "Campos obligatorios por completar.")
             }
         }
 
@@ -80,37 +81,12 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAuth(exception: String){
+    private fun showAuth(title: String, exception: String){
         val intent = Intent(this, AuthActivity::class.java).apply {
+            putExtra("title", title)
             putExtra("exception", exception)
         }
         startActivity(intent)
-    }
-
-    private fun showAlert(exception: String){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-        if (exception.isNullOrEmpty()){
-            builder.setMessage("Se ha producido un error.")
-        }else{
-            builder.setMessage(exception)
-        }
-        builder.setPositiveButton("Aceptar",null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
-    }
-
-    private fun showInfo(info: String){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Información")
-        if (info.isNullOrEmpty()){
-            builder.setMessage("Se ha producido un error.")
-        }else{
-            builder.setMessage(info)
-        }
-        builder.setPositiveButton("Aceptar",null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
     }
 
     private fun showProfile(){

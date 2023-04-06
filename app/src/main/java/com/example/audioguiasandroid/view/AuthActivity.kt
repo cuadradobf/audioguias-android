@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.controller.showAlert
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthActivity : AppCompatActivity() {
@@ -19,12 +20,13 @@ class AuthActivity : AppCompatActivity() {
         setContentView(R.layout.activity_auth)
 
         val bundle = intent.extras
+        val title = bundle?.getString("title")
         val exception = bundle?.getString("exception")
 
-        if (exception.isNullOrEmpty()){
+        if (exception.isNullOrEmpty() || title.isNullOrEmpty()){
             setup()
         }else{
-            showAlert(exception)
+            showAlert(this, title, exception)
             setup()
         }
 
@@ -63,31 +65,17 @@ class AuthActivity : AppCompatActivity() {
                     if (it.isSuccessful){
                         showHome(it.result?.user?.email ?: "")
                     }else{
-                        showAlert(it.exception?.message.toString())
+                        showAlert(this, "Error", it.exception?.message.toString())
                     }
                 }
             }else{
-                showAlert("Faltan campos obligatorios por completar.")
+                showAlert(this, "Error", "Faltan campos obligatorios por completar.")
             }
         }
 
         signUpButton.setOnClickListener {
             showSignUp()
         }
-    }
-
-    //TODO: Añadir parametro titulo para que sea mas versatil la funcion
-    private fun showAlert(exception: String){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-        if (exception.isNullOrEmpty()){
-            builder.setMessage("Se ha producido un error de autenticación.")
-        }else{
-            builder.setMessage(exception)
-        }
-        builder.setPositiveButton("Aceptar",null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
     }
 
     private fun showHome(email: String/*, providerType: ProviderType*/){

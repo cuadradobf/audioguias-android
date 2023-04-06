@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.controller.showAlert
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,7 +30,7 @@ class DeleteAccountActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth("Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth("Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
         }else{
             setup()
         }
@@ -54,7 +55,7 @@ class DeleteAccountActivity : AppCompatActivity() {
                                 if (task.isSuccessful) {
                                     Log.d(ContentValues.TAG, "User account deleted.")
                                 }else{
-                                    showAlert("Error al eliminar su cuenta de autenticación.")
+                                    showAlert(this, "Error", "Error al eliminar su cuenta de autenticación.")
                                 }
                             }
 
@@ -63,10 +64,10 @@ class DeleteAccountActivity : AppCompatActivity() {
                         prefs.clear()
                         prefs.apply()
 
-                        showAuth("Su cuenta se ha eliminado con exito.")
+                        showAuth("Información", "Su cuenta se ha eliminado con exito.")
 
                     }else{
-                        showAlert("Contraseña incorrecta.")
+                        showAlert(this, "Error", "Contraseña incorrecta.")
                     }
                 }
         }
@@ -77,24 +78,12 @@ class DeleteAccountActivity : AppCompatActivity() {
 
     }
 
-    private fun showAuth(exception: String){
+    private fun showAuth(title: String, exception: String){
         val intent = Intent(this, AuthActivity::class.java).apply {
+            putExtra("title", title)
             putExtra("exception", exception)
         }
         startActivity(intent)
-    }
-
-    private fun showAlert(exception: String){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-        if (exception.isNullOrEmpty()){
-            builder.setMessage("Se ha producido un error.")
-        }else{
-            builder.setMessage(exception)
-        }
-        builder.setPositiveButton("Aceptar",null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
     }
 
     private fun showProfile(){

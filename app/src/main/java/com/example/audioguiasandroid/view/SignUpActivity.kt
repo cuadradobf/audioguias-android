@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.model.data.ProviderType
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.controller.showAlert
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -74,33 +75,20 @@ class SignUpActivity : AppCompatActivity() {
 
                             showHome(it.result?.user?.email ?: "")
                         }else{
-                            showAlert(it.exception?.message.toString())
+                            showAlert(this, "Error", it.exception?.message.toString())
                         }
                     }
                 }else{
-                    showAlert("Las contraseñas no coinciden.")
+                    showAlert(this, "Error", "Las contraseñas no coinciden.")
                 }
             }else{
-                showAlert("Faltan campos obligatorios por completar.")
+                showAlert(this, "Error", "Faltan campos obligatorios por completar.")
             }
         }
 
         backButton.setOnClickListener {
             showAuth()
         }
-    }
-
-    private fun showAlert(exception: String){
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Error")
-        if (exception.isNullOrEmpty()){
-            builder.setMessage("Se ha producido un error de registro.")
-        }else{
-            builder.setMessage(exception)
-        }
-        builder.setPositiveButton("Aceptar",null)
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
     }
 
     private fun showAuth(){

@@ -31,7 +31,7 @@ class UserProfileActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth("Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth("Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
         }else{
             setup()
         }
@@ -96,7 +96,7 @@ class UserProfileActivity : AppCompatActivity() {
             prefs.clear()
             prefs.apply()
             //TODO: Cambiar el tipo de alerta de Error a Anuncio o algo asi
-            showAuth("Se ha cerrado sesión.")
+            showAuth("Información", "Se ha cerrado sesión.")
         }
 
         deleteAccountButton.setOnClickListener {
@@ -115,8 +115,9 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
 
-    private fun showAuth(exception: String){
+    private fun showAuth(title: String, exception: String){
         val intent = Intent(this, AuthActivity::class.java).apply {
+            putExtra("title", title)
             putExtra("exception", exception)
         }
         startActivity(intent)
