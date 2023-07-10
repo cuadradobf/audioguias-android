@@ -12,6 +12,7 @@ import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.model.data.ProviderType
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.controller.showAlert
+import com.example.audioguiasandroid.controller.signUp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
@@ -41,48 +42,8 @@ class SignUpActivity : AppCompatActivity() {
 
 
         signUpButton.setOnClickListener {
-            if (nameEditText.text.isNotEmpty() && emailEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty() && password2EditText.text.isNotEmpty()){
-                if (passwordEditText.text.toString() == password2EditText.text.toString()){
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString()).addOnCompleteListener {
-                        if (it.isSuccessful){
-                            //TODO: Comprobar que textos validos (sin numeros ni simbolos)
-                            db.collection("user").document(emailEditText.text.toString()).set(
-                                hashMapOf("name" to nameEditText.text.toString(),
-                                "surname" to surnameEditText.text.toString(),
-                                "provider" to ProviderType.BASIC.name)
-                            )
-
-                            val user = Firebase.auth.currentUser
-
-                            //Actualizar el nombre en auth
-                            val profileUpdates = userProfileChangeRequest {
-                                displayName = nameEditText.text.toString()
-                            }
-                            user!!.updateProfile(profileUpdates)
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        Log.d(TAG, "User profile updated.")
-                                    }
-                                }
-
-                            //Manda correo de verificación
-                            user!!.sendEmailVerification()
-                                .addOnCompleteListener { task ->
-                                    if (task.isSuccessful) {
-                                        Log.d(TAG, "Email sent.")
-                                    }
-                                }
-
-                            showHome(it.result?.user?.email ?: "")
-                        }else{
-                            showAlert(this, "Error", it.exception?.message.toString())
-                        }
-                    }
-                }else{
-                    showAlert(this, "Error", "Las contraseñas no coinciden.")
-                }
-            }else{
-                showAlert(this, "Error", "Faltan campos obligatorios por completar.")
+            if (signUp(this, emailEditText.text.toString(), passwordEditText.text.toString(), password2EditText.text.toString(), nameEditText.text.toString(), surnameEditText.text.toString(), ProviderType.BASIC.name)){
+                showHome(emailEditText.text.toString())
             }
         }
 

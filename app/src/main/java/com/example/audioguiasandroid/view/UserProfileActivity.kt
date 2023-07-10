@@ -1,26 +1,37 @@
 package com.example.audioguiasandroid.view
 
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
-import com.example.audioguiasandroid.controller.showAlert
+
+import com.example.audioguiasandroid.controller.changeNameAndSurname
+
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
+import java.io.IOException
 
 class UserProfileActivity : AppCompatActivity() {
-    private val db = FirebaseFirestore.getInstance()
+    private var db = FirebaseFirestore.getInstance()
+    private var imageUri : Uri? = null
+    private val PICK_IMAGE_REQUEST = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_profile)
@@ -51,6 +62,22 @@ class UserProfileActivity : AppCompatActivity() {
         val deleteAccountButton = findViewById<Button>(R.id.deleteAccountButton_UserProfile)
         val backButton = findViewById<Button>(R.id.backButton_UserProfile)
 
+        val storage = Firebase.storage
+        var storageRef = storage.reference
+        var userRef: StorageReference = storageRef.child("images").child(Firebase.auth.currentUser?.email.toString() + "/profile")
+
+        //Descargar imagen de perfil
+        userRef.downloadUrl.addOnSuccessListener {
+            Picasso.get()
+                .load(it)
+                .into(userImage)
+        }.addOnFailureListener {
+            storageRef.child("images/default/profile.png").downloadUrl.addOnSuccessListener {
+                Picasso.get()
+                    .load(it)
+                    .into(userImage)
+            }
+        }
 
         emailTextView.text = Firebase.auth.currentUser?.email.toString()
         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get().addOnSuccessListener {
@@ -59,43 +86,21 @@ class UserProfileActivity : AppCompatActivity() {
         }
 
         changeImageButton.setOnClickListener {
-            changeImage()
+            selectImageFromGallery(it)
         }
+
         changePasswordButton.setOnClickListener {
             showChangePassword()
         }
 
         saveButton.setOnClickListener {
-            //TODO: Comprobar que textos validos (sin numeros ni simbolos)
-            if (nameEditText.text.isNotEmpty()){
-                db.collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-                    hashMapOf("name" to nameEditText.text.toString(),
-                        "surname" to surnameEditText.text.toString())
-                )
-                val user = Firebase.auth.currentUser
-
-                //Actualizar el nombre en auth
-                val profileUpdates = userProfileChangeRequest {
-                    displayName = nameEditText.text.toString()
-                }
-                user!!.updateProfile(profileUpdates)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d(ContentValues.TAG, "User profile updated.")
-                        }
-                    }
-            }else{
-                showAlert(this,"Error","Campos obligatorios sin completar.")
-            }
-
-
+            changeNameAndSurname(this, nameEditText.text.toString(), surnameEditText.text.toString())
         }
 
         logOutButton.setOnClickListener {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            //TODO: Cambiar el tipo de alerta de Error a Anuncio o algo asi
             showAuth("Información", "Se ha cerrado sesión.")
         }
 
@@ -109,9 +114,50 @@ class UserProfileActivity : AppCompatActivity() {
 
     }
 
-    private fun changeImage(){
-        //TODO:Cambiar imagen de perfil
+    private fun uploadImage(){
+        if (imageUri != null){
+            val storage = Firebase.storage
+            var storageRef = storage.reference
+            var userRef: StorageReference = storageRef.child("images").child(Firebase.auth.currentUser?.email.toString() + "/profile")
 
+            try {
+                val inputStream = contentResolver.openInputStream(imageUri!!)
+                inputStream?.let {
+                    val uploadTask = userRef.putStream(it)
+                    uploadTask.addOnSuccessListener { taskSnapshot ->
+                        // La imagen se subió exitosamente
+                        Log.d(ContentValues.TAG, "User image uploaded successfully.")
+                        //URL de descarga
+                        //val downloadUrl = taskSnapshot.metadata?.reference?.downloadUrl
+
+
+                    }.addOnFailureListener { exception ->
+                        // Ocurrió un error al subir la imagen
+                        Log.d(ContentValues.TAG, exception.message.toString())
+                    }
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+        }
+
+    }
+    fun selectImageFromGallery(view: View) {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(Intent.createChooser(intent, "Seleccionar imagen"), PICK_IMAGE_REQUEST)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            imageUri = data.data
+
+            // Subir la imagen a Firebase Storage
+            uploadImage()
+        }
     }
 
 
@@ -138,5 +184,6 @@ class UserProfileActivity : AppCompatActivity() {
         val intent = Intent(this, DeleteAccountActivity::class.java)
         startActivity(intent)
     }
+
 }
 

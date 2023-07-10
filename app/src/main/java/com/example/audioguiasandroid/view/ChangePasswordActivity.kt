@@ -1,17 +1,15 @@
 package com.example.audioguiasandroid.view
 
-import android.content.ContentValues.TAG
+
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.controller.changePassword
 import com.example.audioguiasandroid.controller.showAlert
-import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -46,27 +44,7 @@ class ChangePasswordActivity : AppCompatActivity() {
             if (actualPasswordEditText.text.isNotEmpty() && newPasswordEditText.text.isNotEmpty() && newPasswordEditText2.text.isNotEmpty()){
                 if (newPasswordEditText.text.toString() == newPasswordEditText2.text.toString()){
 
-                    val credential = EmailAuthProvider.getCredential(Firebase.auth.currentUser?.email.toString(), actualPasswordEditText.text.toString())
-
-                    Firebase.auth.currentUser!!.reauthenticate(credential)
-                        .addOnCompleteListener {
-                            if (it.isSuccessful){
-                                Log.d(TAG, "User re-authenticated.")
-
-                                Firebase.auth.currentUser!!.updatePassword(newPasswordEditText.text.toString())
-                                    .addOnCompleteListener { task ->
-                                        if (task.isSuccessful) {
-                                            Log.d(TAG, "User password updated.")
-                                            showAlert(this, "Información", "Contraseña cambiada correctamente.")
-                                        }else{
-                                            showAlert(this, "Error", "Error al cambiar la contraseña.")
-                                        }
-                                    }
-
-                            }else{
-                                showAlert(this, "Error", "Contraseña actual incorrecta. Error al re-autenticar.")
-                            }
-                        }
+                    changePassword(this, actualPasswordEditText.text.toString(), newPasswordEditText.text.toString())
 
                 }else{
                     showAlert(this, "Error", "La nueva contraseña no coincide.")

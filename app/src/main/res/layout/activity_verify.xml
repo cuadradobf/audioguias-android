@@ -21,7 +21,7 @@
             android:id="@+id/verifyAccountTextView_Verify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Para poder realizar cambios en el perfil, debes verificar tu email. Pulsa en el botón &quot;VERIFICAR CUENTA&quot; para enviar un email de verificación." />
+            android:text="Para poder realizar cambios en el perfil, debes verificar tu email. Pulsa en el botón &quot;VERIFICAR CUENTA&quot; para enviar un email de verificación. Una vez verifiques la cuenta pulsa el botón &quot;CERRAR SESION&quot; y vuelve a iniciar sesión para completar la verificación." />
 
         <Space
             android:layout_width="match_parent"
@@ -36,6 +36,12 @@
         <Space
             android:layout_width="match_parent"
             android:layout_height="8dp" />
+
+        <Button
+            android:id="@+id/logOutButton_Verify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="CERRAR SESION" />
 
         <Button
             android:id="@+id/backButton_Verify"

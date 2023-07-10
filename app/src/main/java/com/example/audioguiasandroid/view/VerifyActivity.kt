@@ -10,6 +10,7 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.controller.sendEmailVerifyAccount
 import com.example.audioguiasandroid.controller.showAlert
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -36,17 +37,17 @@ class VerifyActivity : AppCompatActivity() {
 
         val verifyAccountButton = findViewById<Button>(R.id.verifyAccount_Verify)
         val backButton = findViewById<Button>(R.id.backButton_Verify)
+        val logOutButton = findViewById<Button>(R.id.logOutButton_Verify)
 
         verifyAccountButton.setOnClickListener {
-            //Manda correo de verificación
-            val user = Firebase.auth.currentUser
-            user!!.sendEmailVerification()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.d(ContentValues.TAG, "Email sent.")
-                    }
-                }
-            showAlert(this, "Error", "Se ha enviado a " + Firebase.auth.currentUser?.email.toString() + " un email de verificación.")
+            sendEmailVerifyAccount(this)
+        }
+
+        logOutButton.setOnClickListener {
+            val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+            prefs.clear()
+            prefs.apply()
+            showAuth("Información", "Se ha cerrado sesión.")
         }
 
         backButton.setOnClickListener {

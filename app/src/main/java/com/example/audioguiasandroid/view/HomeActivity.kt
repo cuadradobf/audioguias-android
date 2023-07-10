@@ -41,17 +41,11 @@ class HomeActivity : AppCompatActivity() {
         val userProfileButton = findViewById<Button>(R.id.profileButton_Home)
 
         userProfileButton.setOnClickListener {
-            showUserProfile()
-            /*
             if (Firebase.auth.currentUser?.isEmailVerified == true){
                 showUserProfile()
             }else{
-                //TODO: ¿por qué no se envía el email de verificación?
                 showVerify()
-
             }
-            */
-
         }
     }
 

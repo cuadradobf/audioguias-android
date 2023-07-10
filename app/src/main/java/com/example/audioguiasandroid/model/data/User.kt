@@ -1,10 +1,10 @@
 package com.example.audioguiasandroid.model.data
 
-class User(email: String, name: String, provider: ProviderType) {
+class User(email: String) {
     var email: String = email
-    var name: String = name
+    var name: String = ""
     var surname: String = ""
-    var provider: ProviderType = provider
+    var provider: String = ""
     var rol: String = "Standar"
     var profileImage: String = ""
     //var audioguiaList: List<Audioguia> = emptyList()
