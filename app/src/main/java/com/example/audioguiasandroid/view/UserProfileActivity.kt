@@ -79,6 +79,8 @@ class UserProfileActivity : AppCompatActivity() {
             }
         }
 
+        //TODO: opcion para quitar imagen de perfil
+
         emailTextView.text = Firebase.auth.currentUser?.email.toString()
         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get().addOnSuccessListener {
             nameEditText.setText(it.get("name") as String?)
@@ -129,8 +131,8 @@ class UserProfileActivity : AppCompatActivity() {
                         Log.d(ContentValues.TAG, "User image uploaded successfully.")
                         //URL de descarga
                         //val downloadUrl = taskSnapshot.metadata?.reference?.downloadUrl
-
-
+                        val intent = Intent(this, UserProfileActivity::class.java)
+                        startActivity(intent)
                     }.addOnFailureListener { exception ->
                         // Ocurrió un error al subir la imagen
                         Log.d(ContentValues.TAG, exception.message.toString())

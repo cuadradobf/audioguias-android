@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp">
+
+        <TextView
+            android:id="@+id/titleTextView_AudioGuide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Titulo" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/titleTextView_AudioGuide">
+
+            <ImageView
+                android:id="@+id/mainImageView_AudioGuide"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                tools:background="@color/black" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="8dp">
+
+                <TextView
+                    android:id="@+id/descriptionTextView_AudioGuide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="110dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/costTextView_AudioGuide"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="descrip dasofijas adfpoasdifasf asfaosdifja adsifjapdodsadf  sadf  asdf  asdf  adsf ad fadf f sdafasdf ad fasf adf asf adofijaofdj asdf afjapodf ajf aodsifa idfjaofifjadofi jafaoidfjaofj ajdiofpajoif adfjaoifja afj aoifj adfjioapfji asdfja poia odsfija  aoidfjaodf " />
+
+                <TextView
+                    android:id="@+id/costTextView_AudioGuide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toStartOf="@id/onlyTextEurosTextView_AudioGuide"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:text="Coste" />
+
+                <TextView
+                    android:id="@+id/onlyTextCostTextView_AudioGuide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toStartOf="@id/costTextView_AudioGuide"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="Precio: "
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/onlyTextEurosTextView_AudioGuide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text=" €"
+                    android:textStyle="bold" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
