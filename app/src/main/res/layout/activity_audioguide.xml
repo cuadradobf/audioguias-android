@@ -91,5 +91,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             tools:text="dfaadfad apdofiaj pd asdoifj apsd adoifja of aspd oiafj adfj adpof adfijasdofi jadofij adsofi jadof ajsdfoaijdfapod ija fjadfo " />
+
+        <fragment
+            android:id="@+id/mapView_AudioGuideActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
