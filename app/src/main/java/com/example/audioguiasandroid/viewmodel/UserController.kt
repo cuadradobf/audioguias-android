@@ -1,7 +1,6 @@
-package com.example.audioguiasandroid.controller
+package com.example.audioguiasandroid.viewmodel
 
 import android.content.ContentValues
-import android.net.Uri
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.EmailAuthProvider
@@ -10,9 +9,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
-import java.io.ByteArrayOutputStream
 
 
 fun changePassword(activity: AppCompatActivity,actualPassword: String, newPassword: String){

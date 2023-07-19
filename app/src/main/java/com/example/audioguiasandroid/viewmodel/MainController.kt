@@ -1,4 +1,4 @@
-package com.example.audioguiasandroid.controller
+package com.example.audioguiasandroid.viewmodel
 
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity

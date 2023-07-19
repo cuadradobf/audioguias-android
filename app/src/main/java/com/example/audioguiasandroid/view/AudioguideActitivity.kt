@@ -1,21 +1,20 @@
 package com.example.audioguiasandroid.view
 
-import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.core.app.ActivityCompat
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioguideBinding
-import com.example.audioguiasandroid.databinding.ActivityHomeBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.example.audioguiasandroid.model.data.Comment
+import com.example.audioguiasandroid.view.adapter.CommentsAdapter
+import com.example.audioguiasandroid.viewmodel.showAlert
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -25,7 +24,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -35,6 +33,8 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityAudioguideBinding
     private var db = FirebaseFirestore.getInstance()
     private lateinit var map: GoogleMap
+    lateinit var commentsAdapter: CommentsAdapter
+    private var storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,15 +66,32 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setup(audioGuideID: String){
 
-
-
-
         db.collection("audioGuide").document(audioGuideID).get()
             .addOnSuccessListener{
                 binding.titleTextViewAudioGuideActivity.text = it.get("title").toString()
                 binding.costTextViewAudioGuideActivity.text = it.get("cost").toString()
                 binding.descriptionTextViewAudioGuideActivity.text = it.get("description") as String?
                 val userID = it.get("user").toString()
+                //Si el autor de la audioguia es el mismo que el usuario se oculta la opcion de comentar su propio contenido
+                if (userID == Firebase.auth.currentUser?.email.toString()){
+                    binding.ratingBarAudioGuideActivity.visibility = View.GONE
+                    binding.commentLayoutAudioGuideActivity.visibility = View.GONE
+                }else{
+                    storage.reference.child("images/" + Firebase.auth.currentUser?.email.toString() + "/profile").downloadUrl
+                        .addOnSuccessListener { uri->
+                            Picasso.get()
+                                .load(uri)
+                                .into(binding.userImageViewAudioGuideActivity)
+                        }
+                        .addOnFailureListener {
+                            storage.reference.child("images/default/profile.png").downloadUrl
+                                .addOnSuccessListener { uri->
+                                    Picasso.get()
+                                        .load(uri)
+                                        .into(binding.userImageViewAudioGuideActivity)
+                                }
+                        }
+                }
                 db.collection("user").document(userID).get()
                     .addOnSuccessListener {document ->
                         binding.autorTextViewAudioGuideActivity.text = document.get("name").toString() + " " + document.get("surname").toString()
@@ -83,16 +100,16 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                         binding.autorTextViewAudioGuideActivity.text = "Anónimo"
                         Log.w(ContentValues.TAG, "Error getting user information.", e)
                     }
-                val storage = Firebase.storage
-                val audioGuideReference : StorageReference = storage.reference.child("images/audioGuides/" + it.id + "/main.jpg")
-                audioGuideReference.downloadUrl
+
+                storage.reference.child("images/audioGuides/" + it.id + "/main.jpg").downloadUrl
                     .addOnSuccessListener {uri ->
-                    Picasso.get()
-                        .load(uri)
-                        .into(binding.mainImageViewAudioGuideActivity)
+                        Picasso.get()
+                            .load(uri)
+                            .into(binding.mainImageViewAudioGuideActivity)
                     }
                     .addOnFailureListener {e ->
                         Log.w(ContentValues.TAG, "Error getting main image of audio guide.", e)
+                        //TODO: añadir una imagen por defecto
                     }
             }
             .addOnFailureListener {e ->
@@ -100,13 +117,100 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
             }
 
+        db.collection("audioGuide").document(audioGuideID).collection("comments").document(Firebase.auth.currentUser?.email.toString()).get()
+            .addOnSuccessListener { document ->
+                if (document != null){
+                    val rating = document.get("valoration").toString().toFloat()
+                    binding.ratingBarAudioGuideActivity.rating = rating
+                    binding.commentEditTextAudioGuideActivity.hint = "Modifica tu comentario..."
+                }
+            }
+
         binding.backButtonAudioGuideActivity.setOnClickListener{
             showHome()
         }
-        //TODO: add reproductor de audio
+
+        binding.playImageViewAudioGuideActivity.setOnClickListener {
+            showAudioplayer(audioGuideID)
+        }
 
         createGoogleMap()
-        //TODO: add comentarios
+
+        initRecyclerView(audioGuideID)
+
+        binding.sendImageViewAudioGuideActivity.setOnClickListener {
+            sendComment(audioGuideID)
+            //TODO: controlar que solo se pueda escribir un comentario por usuario
+        }
+
+        //TODO: configurar boton de favorito/guardado
+    }
+
+    private fun sendComment(audioGuideID: String) {
+        val commentData = binding.commentEditTextAudioGuideActivity.text
+        if (commentData.isNotEmpty() && commentData.isNotBlank() && binding.ratingBarAudioGuideActivity.rating.toDouble() != 0.0){
+            db.collection("audioGuide").document(audioGuideID).collection("comments").document(Firebase.auth.currentUser?.email.toString()).set(
+                hashMapOf(
+                    "commentData" to commentData.toString(),
+                    "user" to Firebase.auth.currentUser?.email.toString(),
+                    "valoration" to binding.ratingBarAudioGuideActivity.rating.toDouble()
+                )
+            )
+            .addOnSuccessListener {
+                Log.d(ContentValues.TAG, "Comment data updated successfully.")
+                //Oculta el teclado y las opciones de comentar
+                val inputMethodManager: InputMethodManager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val currentFocusView = this.currentFocus
+
+                if (currentFocusView != null) {
+                    inputMethodManager.hideSoftInputFromWindow(currentFocusView.windowToken, 0)
+                }
+                binding.ratingBarAudioGuideActivity.visibility = View.GONE
+                binding.commentLayoutAudioGuideActivity.visibility = View.GONE
+                //TODO: Notificar al adapter que se ha realizado un cambio con difUtil
+            }
+            .addOnFailureListener { e ->
+                Log.w(ContentValues.TAG, "Error updating comment data.", e)
+            }
+        }else{
+            showAlert(this,"Error","El comentario está vacio o no se ha indicado ninguna valoración.")
+        }
+    }
+
+    private fun initRecyclerView(audioGuideID: String) {
+        val listComments = mutableListOf<Comment>()
+
+        db.collection("audioGuide").document(audioGuideID).collection("comments").get()
+            .addOnSuccessListener { result ->
+                for (document in result){
+                    listComments.add(
+                        Comment(
+                        document.id,
+                        document.get("user").toString(),
+                        audioGuideID,
+                        document.get("valoration").toString().toDouble(),
+                        document.get("commentData").toString()
+                    ))
+                }
+                val manager = LinearLayoutManager(this)
+                binding.commentsRecyclerAudioGuideActivity.layoutManager = manager
+                commentsAdapter = CommentsAdapter(listComments)
+                binding.commentsRecyclerAudioGuideActivity.adapter = commentsAdapter
+                if(listComments.size == 0){
+                    binding.titleCommetsTextViewAudioGuideActivity.visibility = View.GONE
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.w(ContentValues.TAG, "Error getting comments data from Firebase Storage.", e)
+            }
+
+    }
+
+    private fun showAudioplayer(audioGuideID: String) {
+        val intent = Intent(this, AudioplayerActivity::class.java).apply {
+            putExtra("audioGuide", audioGuideID)
+        }
+        startActivity(intent)
     }
 
     private fun createGoogleMap() {

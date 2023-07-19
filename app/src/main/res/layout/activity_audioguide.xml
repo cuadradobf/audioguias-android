@@ -67,36 +67,90 @@
                 android:layout_height="wrap_content"
                 android:text=" €" />
 
-            <Button
-                android:id="@+id/buyButton_AudioGuideActivity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="COMPRAR"
+            <ImageView
+                android:id="@+id/playImageView_AudioGuideActivity"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/baseline_play_circle_24"
                 android:layout_marginStart="24dp"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/titleDescriptionTextView_AudioGuideActivity"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Descripcion"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/descriptionTextView_AudioGuideActivity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            tools:text="dfaadfad apdofiaj pd asdoifj apsd adoifja of aspd oiafj adfj adpof adfijasdofi jadofij adsofi jadof ajsdfoaijdfapod ija fjadfo " />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
 
-        <fragment
-            android:id="@+id/mapView_AudioGuideActivity"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="200dp" />
+                <TextView
+                    android:id="@+id/titleDescriptionTextView_AudioGuideActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Descripcion"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/descriptionTextView_AudioGuideActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    tools:text="dfaadfad apdofiaj pd asdoifj apsd adoifja of aspd oiafj adfj adpof adfijasdofi jadofij adsofi jadof ajsdfoaijdfapod ija fjadfo " />
+
+                <fragment
+                    android:id="@+id/mapView_AudioGuideActivity"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+
+                <TextView
+                    android:id="@+id/titleCommetsTextView_AudioGuideActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comentarios"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/commentsRecycler_AudioGuideActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+                <RatingBar
+                    android:id="@+id/ratingBar_AudioGuideActivity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+                <LinearLayout
+                    android:id="@+id/commentLayout_AudioGuideActivity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/userImageView_AudioGuideActivity"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_gravity="center"/>
+                    <EditText
+                        android:id="@+id/commentEditText_AudioGuideActivity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Añade un comentario..."/>
+                    <ImageView
+                        android:id="@+id/sendImageView_AudioGuideActivity"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/baseline_send_24"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

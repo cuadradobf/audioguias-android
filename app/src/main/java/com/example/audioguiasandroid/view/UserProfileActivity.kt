@@ -17,7 +17,7 @@ import android.widget.TextView
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
 
-import com.example.audioguiasandroid.controller.changeNameAndSurname
+import com.example.audioguiasandroid.viewmodel.changeNameAndSurname
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore

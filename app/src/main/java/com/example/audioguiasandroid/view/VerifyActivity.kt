@@ -1,17 +1,13 @@
 package com.example.audioguiasandroid.view
 
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
-import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
-import com.example.audioguiasandroid.controller.sendEmailVerifyAccount
-import com.example.audioguiasandroid.controller.showAlert
+import com.example.audioguiasandroid.viewmodel.sendEmailVerifyAccount
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 

@@ -8,9 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.R
-import com.example.audioguiasandroid.controller.showAlert
+import com.example.audioguiasandroid.viewmodel.showAlert
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore

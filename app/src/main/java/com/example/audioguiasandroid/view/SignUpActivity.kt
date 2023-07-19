@@ -1,23 +1,15 @@
 package com.example.audioguiasandroid.view
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.model.data.ProviderType
 import com.example.audioguiasandroid.R
-import com.example.audioguiasandroid.controller.showAlert
-import com.example.audioguiasandroid.controller.signUp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.example.audioguiasandroid.viewmodel.signUp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 
 class SignUpActivity : AppCompatActivity() {
 
