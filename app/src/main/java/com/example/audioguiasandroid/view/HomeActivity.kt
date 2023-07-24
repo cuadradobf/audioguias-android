@@ -6,11 +6,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.Toast
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.appcompat.widget.SearchView
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.audioguiasandroid.databinding.ActivityHomeBinding
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.model.repository.AudioGuideRepository
@@ -20,21 +18,19 @@ import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
-import java.lang.Thread.sleep
-import java.util.concurrent.CompletableFuture
+import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
+
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
-    lateinit var audioGuideAdapter: AudioGuideAdapter
+    private lateinit var audioGuideAdapter: AudioGuideAdapter
+    private var storage = Firebase.storage
+    private var db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_home)
@@ -63,7 +59,42 @@ class HomeActivity : AppCompatActivity() {
     private fun setup(){
         title = "Inicio"
 
-        binding.profileButtonHome.setOnClickListener {
+        storage.reference.child("images/" + Firebase.auth.currentUser?.email.toString() + "/profile").downloadUrl
+            .addOnSuccessListener { uri->
+                Picasso.get()
+                    .load(uri)
+                    .into(binding.userImageViewHome)
+            }
+            .addOnFailureListener {
+                storage.reference.child("images/default/profile.png").downloadUrl
+                    .addOnSuccessListener { uri->
+                        Picasso.get()
+                            .load(uri)
+                            .into(binding.userImageViewHome)
+                    }
+            }
+        initRecyclerView()
+
+        binding.searchEditTextHome.addTextChangedListener {filter ->
+            db.collection("audioGuide")
+                .get()
+                .addOnSuccessListener { result ->
+                    val listAudioGuide : MutableList<AudioGuide> = AudioGuideRepository().getAllAudioGuides(result).toMutableList()
+                    //Al ser Firebase una base de datos no relacional no se pueden realizar consultas complejas como LIKE y contratar un servicio externo como Algolia (permite realizar consultas complejas) tiene un costo
+                    val resultList = listAudioGuide.filter { audioGuide ->
+                        val cityMatches = audioGuide.city?.lowercase()?.contains(filter.toString().lowercase()) ?: false
+                        val countryMatches = audioGuide.country?.lowercase()?.contains(filter.toString().lowercase()) ?: false
+                        val titleMatches = audioGuide.title?.lowercase()?.contains(filter.toString().lowercase()) ?: false
+
+                        cityMatches || countryMatches || titleMatches
+                    }
+                    audioGuideAdapter.updateData(resultList)
+
+                }
+        }
+
+
+        binding.userImageViewHome.setOnClickListener {
             if (Firebase.auth.currentUser?.isEmailVerified == true){
                 showUserProfile()
             }else{
@@ -71,19 +102,31 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        initRecyclerView()
 
-        //TODO: add filtro de busqueda
+
     }
 
-    private fun initRecyclerView(){
-        val db = FirebaseFirestore.getInstance()
-        val audioGuideCollection = db.collection("audioGuide")
+    fun initRecyclerView(){
+        db.collection("audioGuide").get()
+            .addOnSuccessListener { result ->
+                val listAudioGuide : List<AudioGuide> = AudioGuideRepository().getAllAudioGuides(result)
+                val manager = LinearLayoutManager(this)
+                binding.recyclerAudioGuideHome.layoutManager = manager
+                audioGuideAdapter = AudioGuideAdapter(listAudioGuide){ onItemSelected(it) }
+                binding.recyclerAudioGuideHome.adapter = audioGuideAdapter
+                Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
+                //audioGuideAdapter.updateData(listAudioGuide.toList())
+            }
+            .addOnFailureListener { e ->
+
+                Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
+            }
+    }
+
+    private fun initRV(){
         val listAudioGuide = mutableListOf<AudioGuide>()
 
-
-        audioGuideCollection
-            .get()
+        db.collection("audioGuide").get()
             .addOnSuccessListener { result ->
                 for (document in result){
                     listAudioGuide.add(AudioGuide(
@@ -107,27 +150,7 @@ class HomeActivity : AppCompatActivity() {
 
                 Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
             }
-
     }
-
-    /*
-    private fun initRecyclerView(){
-        val manager = LinearLayoutManager(this)
-        //val decoration = DividerItemDecoration(this, manager.orientation)
-        binding.recyclerAudioGuideHome.layoutManager = manager
-        binding.recyclerAudioGuideHome.adapter = AudioGuideAdapter(
-            listAudioGuide = listOf(
-                AudioGuide("D4ssRwDYQ2zPwMqTJTOF", "Mezquita-Catedral", "gs://audioguias-24add.appspot.com/images/audioGuides/D4ssRwDYQ2zPwMqTJTOF/main.jpg", 0.0, "Descripcion", GeoPoint(37.723, -4.745), "Cordoba", "Spain"),
-                AudioGuide("CCCgOaoasFvDiCOljTEO", "Medina Azahara", "gs://audioguias-24add.appspot.com/images/audioGuides/CCCgOaoasFvDiCOljTEO/main.jpg", 0.0, "Descripcion", GeoPoint(37.723, -4.745), "Cordoba", "Spain")
-            )
-
-
-        ) { onItemSelected(it) }
-
-        //binding.recyclerAudioGuideHome.addItemDecoration(decoration)
-    }
-
-     */
 
     private fun onItemSelected(audioGuide: AudioGuide){
         //Toast.makeText(this, audioGuide.title, Toast.LENGTH_SHORT).show()

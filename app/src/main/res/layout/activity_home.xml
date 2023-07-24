@@ -5,38 +5,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".HomeActivity">
+    tools:context=".HomeActivity"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="8dp">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/profileButton_Home"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PERFIL" />
+            android:orientation="horizontal">
+            <!--
+            <SearchView
+                android:id="@+id/searchView_Home"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:iconifiedByDefault="false"
+                android:queryHint="Buscar..." />
+            -->
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            <EditText
+                android:id="@+id/searchEditText_Home"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="Buscar..."
+                android:imeOptions="actionDone"
+                android:singleLine="true"
+                android:maxLines="1"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userImageView_Home"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerAudioGuide_Home"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="16dp"/>
 
     </LinearLayout>
 

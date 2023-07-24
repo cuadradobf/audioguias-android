@@ -1,7 +1,11 @@
 package com.example.audioguiasandroid.viewmodel
 
+import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.audioguiasandroid.R
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 fun showAlert(activity: AppCompatActivity, title: String, exception: String){
     val builder = AlertDialog.Builder(activity)

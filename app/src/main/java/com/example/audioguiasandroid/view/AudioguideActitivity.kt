@@ -13,6 +13,7 @@ import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioguideBinding
 import com.example.audioguiasandroid.model.data.Comment
+import com.example.audioguiasandroid.model.repository.CommentsRepository
 import com.example.audioguiasandroid.view.adapter.CommentsAdapter
 import com.example.audioguiasandroid.viewmodel.showAlert
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -70,7 +71,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
             .addOnSuccessListener{
                 binding.titleTextViewAudioGuideActivity.text = it.get("title").toString()
                 binding.costTextViewAudioGuideActivity.text = it.get("cost").toString()
-                binding.descriptionTextViewAudioGuideActivity.text = it.get("description") as String?
+                binding.descriptionTextViewAudioGuideActivity.text = it.get("description").toString()
                 val userID = it.get("user").toString()
                 //Si el autor de la audioguia es el mismo que el usuario se oculta la opcion de comentar su propio contenido
                 if (userID == Firebase.auth.currentUser?.email.toString()){
@@ -91,6 +92,14 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                                         .into(binding.userImageViewAudioGuideActivity)
                                 }
                         }
+                    db.collection("audioGuide").document(audioGuideID).collection("comments").document(Firebase.auth.currentUser?.email.toString()).get()
+                        .addOnSuccessListener { document ->
+                            if (document.exists()){
+                                val rating = document.get("valoration").toString().toFloat()
+                                binding.ratingBarAudioGuideActivity.rating = rating
+                                binding.commentEditTextAudioGuideActivity.hint = "Modifica tu comentario..."
+                            }
+                        }
                 }
                 db.collection("user").document(userID).get()
                     .addOnSuccessListener {document ->
@@ -109,7 +118,8 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                     .addOnFailureListener {e ->
                         Log.w(ContentValues.TAG, "Error getting main image of audio guide.", e)
-                        //TODO: añadir una imagen por defecto
+                        //Ocultamos ImageView
+                        binding.mainImageViewAudioGuideActivity.visibility = View.GONE
                     }
             }
             .addOnFailureListener {e ->
@@ -117,14 +127,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
             }
 
-        db.collection("audioGuide").document(audioGuideID).collection("comments").document(Firebase.auth.currentUser?.email.toString()).get()
-            .addOnSuccessListener { document ->
-                if (document != null){
-                    val rating = document.get("valoration").toString().toFloat()
-                    binding.ratingBarAudioGuideActivity.rating = rating
-                    binding.commentEditTextAudioGuideActivity.hint = "Modifica tu comentario..."
-                }
-            }
+
 
         binding.backButtonAudioGuideActivity.setOnClickListener{
             showHome()
@@ -140,7 +143,6 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding.sendImageViewAudioGuideActivity.setOnClickListener {
             sendComment(audioGuideID)
-            //TODO: controlar que solo se pueda escribir un comentario por usuario
         }
 
         //TODO: configurar boton de favorito/guardado
@@ -167,7 +169,11 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 binding.ratingBarAudioGuideActivity.visibility = View.GONE
                 binding.commentLayoutAudioGuideActivity.visibility = View.GONE
-                //TODO: Notificar al adapter que se ha realizado un cambio con difUtil
+                db.collection("audioGuide").document(audioGuideID).collection("comments").get()
+                    .addOnSuccessListener { result ->
+                        val listComment = CommentsRepository().getAllComments(result, audioGuideID)
+                        commentsAdapter.updateData(listComment)
+                    }
             }
             .addOnFailureListener { e ->
                 Log.w(ContentValues.TAG, "Error updating comment data.", e)
@@ -178,26 +184,31 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initRecyclerView(audioGuideID: String) {
-        val listComments = mutableListOf<Comment>()
 
         db.collection("audioGuide").document(audioGuideID).collection("comments").get()
             .addOnSuccessListener { result ->
+                /*
                 for (document in result){
                     listComments.add(
                         Comment(
-                        document.id,
-                        document.get("user").toString(),
-                        audioGuideID,
-                        document.get("valoration").toString().toDouble(),
-                        document.get("commentData").toString()
-                    ))
+                            document.id,
+                            document.get("user").toString(),
+                            audioGuideID,
+                            document.get("valoration").toString().toDouble(),
+                            document.get("commentData").toString()
+                        ))
                 }
-                val manager = LinearLayoutManager(this)
-                binding.commentsRecyclerAudioGuideActivity.layoutManager = manager
-                commentsAdapter = CommentsAdapter(listComments)
-                binding.commentsRecyclerAudioGuideActivity.adapter = commentsAdapter
+
+                 */
+                val listComments = CommentsRepository().getAllComments(result, audioGuideID)
+
                 if(listComments.size == 0){
                     binding.titleCommetsTextViewAudioGuideActivity.visibility = View.GONE
+                }else{
+                    val manager = LinearLayoutManager(this)
+                    binding.commentsRecyclerAudioGuideActivity.layoutManager = manager
+                    commentsAdapter = CommentsAdapter(listComments)
+                    binding.commentsRecyclerAudioGuideActivity.adapter = commentsAdapter
                 }
             }
             .addOnFailureListener { e ->
