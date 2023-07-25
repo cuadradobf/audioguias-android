@@ -5,7 +5,9 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import com.example.audioguiasandroid.model.data.ProviderType
 import com.example.audioguiasandroid.model.data.User
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 
 
@@ -53,7 +54,9 @@ fun changeNameAndSurname(activity: AppCompatActivity, name: String, surname: Str
             hashMapOf(
                 "name" to name,
                 "surname" to surname
-            )
+            ),
+            //Opcion para combinar los datos y que no los machaque
+            SetOptions.merge()
         )
             .addOnSuccessListener {
                 Log.d(ContentValues.TAG, "User data updated successfully.")

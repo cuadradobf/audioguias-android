@@ -23,6 +23,7 @@ class AudioGuideViewHolder(view: View):RecyclerView.ViewHolder(view) {
         binding.titleTextViewAudioGuide.text = audioGuideModel.title
         binding.descriptionTextViewAudioGuide.text = audioGuideModel.description
         binding.costTextViewAudioGuide.text = audioGuideModel.cost.toString()
+        //TODO: add ciudad y pais
 
         val storage = Firebase.storage
         val storageRef = storage.reference

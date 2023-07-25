@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.util.Log
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioplayerBinding
+import com.example.audioguiasandroid.model.repository.UserRepository
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -54,13 +56,13 @@ class AudioplayerActivity : AppCompatActivity() {
     }
 
     private fun setup(audioGuideID: String) {
+        title = "Reproductor de audio"
         player = SimpleExoPlayer.Builder(this).build()
         playerView = binding.playerAudioPlayer
         db.collection("audioGuide").document(audioGuideID).get()
             .addOnSuccessListener { document->
-                val titleAudioGuide = document.get("title").toString()
+                binding.titleTextViewAudioPlayer.text = document.get("title").toString()
                 val userEmail = document.get("user").toString()
-                binding.titleTextViewAudioPlayer.text = titleAudioGuide
                 db.collection("user").document(userEmail).get()
                     .addOnSuccessListener { user->
                         val userName = user.get("name").toString()
@@ -77,6 +79,14 @@ class AudioplayerActivity : AppCompatActivity() {
             }
             .addOnFailureListener { e->
                 Log.w(ContentValues.TAG, "Error getting audio guide information from Firebase.", e)
+            }
+        //Comprueba si el usuario tiene guardada en su lista de favoritos la guia actual y cambia el icono del boton de guardado
+        db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
+            .addOnSuccessListener { document ->
+                val listFavAudioGuides = document.get("favAudioGuide") as? List<String>
+                if (listFavAudioGuides!= null && listFavAudioGuides.contains(audioGuideID)){
+                    binding.bookmarkImageViewAudioPlayer.setImageResource(R.drawable.baseline_bookmark_24)
+                }
             }
 
         val storage = Firebase.storage
@@ -108,7 +118,36 @@ class AudioplayerActivity : AppCompatActivity() {
         binding.backButtonAudioPlayer.setOnClickListener {
             showAudioguide(audioGuideID)
         }
-        //TODO: configurar boton de favorito/guardado
+
+        //Boton favorito/guardado
+        binding.bookmarkImageViewAudioPlayer.setOnClickListener {
+            db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
+                .addOnSuccessListener { document ->
+                    var listFavAudioGuides = document.get("favAudioGuide") as? List<String>
+                    if (listFavAudioGuides != null){
+                        if (listFavAudioGuides.contains(audioGuideID)){
+                            binding.bookmarkImageViewAudioPlayer.setImageResource(R.drawable.baseline_bookmark_border_24)
+                            listFavAudioGuides = listFavAudioGuides.minus(audioGuideID)
+
+                        }else{
+                            binding.bookmarkImageViewAudioPlayer.setImageResource(R.drawable.baseline_bookmark_24)
+                            listFavAudioGuides = listFavAudioGuides.plus(audioGuideID)
+                        }
+                    }else{
+                        binding.bookmarkImageViewAudioPlayer.setImageResource(R.drawable.baseline_bookmark_24)
+                        listFavAudioGuides = listOf(audioGuideID)
+                    }
+                    db.collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
+                        hashMapOf(
+                            "favAudioGuide" to listFavAudioGuides
+                        ),
+                        //Opcion para combinar los datos y que no los machaque
+                        SetOptions.merge()
+                    )
+                }
+        }
+        //TODO: add boton para compartir
+        //TODO: opcion para reproducir con el dispositivo bloqueado
     }
 
     private fun showAudioguide(audioGuideID: String) {

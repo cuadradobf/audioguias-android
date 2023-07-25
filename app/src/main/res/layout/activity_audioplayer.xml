@@ -12,14 +12,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp">
 
-        <Button
-            android:id="@+id/backButton_AudioPlayer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ATRAS" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/backButton_AudioPlayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ATRAS"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/bookmarkImageView_AudioPlayer"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/baseline_bookmark_border_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <ImageView
             android:id="@+id/mainImageView_AudioPlayer"
@@ -41,14 +59,8 @@
             android:id="@+id/autorTextView_AudioPlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <ImageView
-            android:id="@+id/favImageView_AudioPlayer"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/baseline_favorite_border_24"
-            android:layout_gravity="end"/>
+            android:text="TextView"
+            android:layout_marginStart="8dp"/>
 
         <com.google.android.exoplayer2.ui.PlayerControlView
             android:id="@+id/player_AudioPlayer"
@@ -56,7 +68,7 @@
             android:layout_height="wrap_content"
             app:show_timeout="0"
             app:hide_on_touch="false"
-            />
+            android:layout_marginTop="8dp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

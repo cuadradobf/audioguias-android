@@ -103,8 +103,13 @@ class HomeActivity : AppCompatActivity() {
         }
 
 
+        //TODO: add menu desplegable
+
+
 
     }
+
+
 
     fun initRecyclerView(){
         db.collection("audioGuide").get()

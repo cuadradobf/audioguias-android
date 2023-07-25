@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -66,11 +67,11 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setup(audioGuideID: String){
-
+        title = "Audioguia"
         db.collection("audioGuide").document(audioGuideID).get()
             .addOnSuccessListener{
                 binding.titleTextViewAudioGuideActivity.text = it.get("title").toString()
-                binding.costTextViewAudioGuideActivity.text = it.get("cost").toString()
+                //binding.costTextViewAudioGuideActivity.text = it.get("cost").toString()
                 binding.descriptionTextViewAudioGuideActivity.text = it.get("description").toString()
                 val userID = it.get("user").toString()
                 //Si el autor de la audioguia es el mismo que el usuario se oculta la opcion de comentar su propio contenido
@@ -126,8 +127,46 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.w(ContentValues.TAG, "Error firebase.", e)
 
             }
+        //Comprueba si el usuario tiene guardada en su lista de favoritos la guia actual y cambia el icono del boton de guardado
+        db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
+            .addOnSuccessListener { document ->
+                val listFavAudioGuides = document.get("favAudioGuide") as? List<String>
+                if (listFavAudioGuides!= null && listFavAudioGuides.contains(audioGuideID)){
+                    binding.bookmarkImageViewAudioGuideActivity.setImageResource(R.drawable.baseline_bookmark_24)
+                }
+            }
 
+        createGoogleMap()
 
+        initRecyclerView(audioGuideID)
+
+        //Boton favorito/guardado
+        binding.bookmarkImageViewAudioGuideActivity.setOnClickListener {
+            db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
+                .addOnSuccessListener { document ->
+                    var listFavAudioGuides = document.get("favAudioGuide") as? List<String>
+                    if (listFavAudioGuides != null){
+                        if (listFavAudioGuides.contains(audioGuideID)){
+                            binding.bookmarkImageViewAudioGuideActivity.setImageResource(R.drawable.baseline_bookmark_border_24)
+                            listFavAudioGuides = listFavAudioGuides.minus(audioGuideID)
+
+                        }else{
+                            binding.bookmarkImageViewAudioGuideActivity.setImageResource(R.drawable.baseline_bookmark_24)
+                            listFavAudioGuides = listFavAudioGuides.plus(audioGuideID)
+                        }
+                    }else{
+                        binding.bookmarkImageViewAudioGuideActivity.setImageResource(R.drawable.baseline_bookmark_24)
+                        listFavAudioGuides = listOf(audioGuideID)
+                    }
+                    db.collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
+                        hashMapOf(
+                            "favAudioGuide" to listFavAudioGuides
+                        ),
+                        //Opcion para combinar los datos y que no los machaque
+                        SetOptions.merge()
+                    )
+                }
+        }
 
         binding.backButtonAudioGuideActivity.setOnClickListener{
             showHome()
@@ -137,15 +176,10 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
             showAudioplayer(audioGuideID)
         }
 
-        createGoogleMap()
-
-        initRecyclerView(audioGuideID)
-
         binding.sendImageViewAudioGuideActivity.setOnClickListener {
             sendComment(audioGuideID)
         }
 
-        //TODO: configurar boton de favorito/guardado
     }
 
     private fun sendComment(audioGuideID: String) {
@@ -187,19 +221,6 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
         db.collection("audioGuide").document(audioGuideID).collection("comments").get()
             .addOnSuccessListener { result ->
-                /*
-                for (document in result){
-                    listComments.add(
-                        Comment(
-                            document.id,
-                            document.get("user").toString(),
-                            audioGuideID,
-                            document.get("valoration").toString().toDouble(),
-                            document.get("commentData").toString()
-                        ))
-                }
-
-                 */
                 val listComments = CommentsRepository().getAllComments(result, audioGuideID)
 
                 if(listComments.size == 0){
