@@ -13,8 +13,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-
-import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
 
 import com.example.audioguiasandroid.viewmodel.changeNameAndSurname

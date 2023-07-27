@@ -9,10 +9,8 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioguideBinding
-import com.example.audioguiasandroid.model.data.Comment
 import com.example.audioguiasandroid.model.repository.CommentsRepository
 import com.example.audioguiasandroid.view.adapter.CommentsAdapter
 import com.example.audioguiasandroid.viewmodel.showAlert
@@ -27,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 

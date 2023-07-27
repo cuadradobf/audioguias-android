@@ -8,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -18,79 +16,72 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.databinding.ActivityAudioguideBinding
+import com.example.audioguiasandroid.databinding.ActivityFavsBinding
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.model.repository.AudioGuideRepository
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.example.audioguiasandroid.viewmodel.onItemSelected
 import com.example.audioguiasandroid.viewmodel.showAuth
-import com.example.audioguiasandroid.viewmodel.showFavs
-import com.example.audioguiasandroid.viewmodel.showHome
 import com.example.audioguiasandroid.viewmodel.showUserProfile
 import com.example.audioguiasandroid.viewmodel.showVerify
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 
-class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
+class FavsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityFavsBinding
+    private var db = FirebaseFirestore.getInstance()
+    private var storage = Firebase.storage
+    private lateinit var audioGuideAdapter: AudioGuideAdapter
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
-    private lateinit var audioGuideAdapter: AudioGuideAdapter
-    private var storage = Firebase.storage
-    private var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityFavsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         //Setup
         val user = Firebase.auth.currentUser
-        if (user == null){
-            val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        if (user == null) {
+            val prefs =
+                getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
-        }else{
+            showAuth(this,
+                "Alerta",
+                "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión."
+            )
+        } else {
             setup()
         }
-
-        //Guardar datos
-        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-        prefs.putString("email", Firebase.auth.currentUser?.email.toString())
-        prefs.apply()
-
-
-
-
     }
 
     private fun setup() {
-        val userImageView = findViewById<ImageView>(R.id.userImageView_Home)
-        val searchEditText = findViewById<EditText>(R.id.searchEditText_Home)
-
+        title = "Favoritos"
         storage.reference.child("images/" + Firebase.auth.currentUser?.email.toString() + "/profile").downloadUrl
             .addOnSuccessListener { uri->
                 Picasso.get()
                     .load(uri)
-                    .into(userImageView)
+                    .into(binding.userImageViewFavs)
             }
             .addOnFailureListener {
                 storage.reference.child("images/default/profile.png").downloadUrl
                     .addOnSuccessListener { uri->
                         Picasso.get()
                             .load(uri)
-                            .into(userImageView)
+                            .into(binding.userImageViewFavs)
                     }
             }
-        //TODO: implementar fragment con el navigation drawer
 
-        initNavigationDrawer()
 
         initRecyclerView()
 
-        searchEditText.addTextChangedListener {filter ->
+        binding.searchEditTextFavs.addTextChangedListener {filter ->
+            //TODO: cambiar la lista por la de favs
             db.collection("audioGuide")
                 .get()
                 .addOnSuccessListener { result ->
@@ -108,7 +99,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
         }
 
-        userImageView.setOnClickListener {
+        binding.userImageViewFavs.setOnClickListener {
             if (Firebase.auth.currentUser?.isEmailVerified == true){
                 showUserProfile(this)
             }else{
@@ -116,31 +107,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
     }
-
-    private fun initNavigationDrawer() {
-        val toolbar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
-        setSupportActionBar(toolbar)
-
-        drawer = findViewById(R.id.drawerLayout_Home)
-
-
-
-        toggle = ActionBarDrawerToggle(this, drawer, toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        drawer.addDrawerListener(toggle)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-
-        val navigationView : NavigationView = findViewById(R.id.navigatioView_Home)
-        navigationView.setNavigationItemSelectedListener(this)
-
-
-    }
-
     private fun initRecyclerView(){
+        //TODO: cambiar la lista por la de favs
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerAudioGuide_Home)
         db.collection("audioGuide").get()
             .addOnSuccessListener { result ->
@@ -157,45 +125,5 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
             }
     }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-            when(item.itemId){
-                R.id.nav_item_home -> showHome(this)
-                R.id.nav_item_downloads -> Toast.makeText(this, "Descargas", Toast.LENGTH_SHORT).show()
-                R.id.nav_item_favs -> showFavs(this)
-                R.id.nav_item_help -> Toast.makeText(this, "Ayuda y comentarios", Toast.LENGTH_SHORT).show()
-                R.id.nav_item_config -> Toast.makeText(this, "Configuración", Toast.LENGTH_SHORT).show()
-                R.id.nav_item_profile -> showUserProfile(this)
-                R.id.nav_item_logout -> {
-                    val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-                    prefs.clear()
-                    prefs.apply()
-                    showAuth(this,"Información", "Se ha cerrado sesión.")
-                }
-        }
-
-        drawer.closeDrawer(GravityCompat.START)
-        return true
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        toggle.syncState()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        toggle.onConfigurationChanged(newConfig)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)){
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-
-
 
 }

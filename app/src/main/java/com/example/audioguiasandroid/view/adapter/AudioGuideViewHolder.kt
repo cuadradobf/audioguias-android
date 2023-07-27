@@ -24,6 +24,7 @@ class AudioGuideViewHolder(view: View):RecyclerView.ViewHolder(view) {
         binding.descriptionTextViewAudioGuide.text = audioGuideModel.description
         binding.costTextViewAudioGuide.text = audioGuideModel.cost.toString()
         //TODO: add ciudad y pais
+        //TODO: quitar precio o modificar para que solo aparezcan 2 decimales
 
         val storage = Firebase.storage
         val storageRef = storage.reference

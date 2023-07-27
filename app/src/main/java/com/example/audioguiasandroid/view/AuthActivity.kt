@@ -8,7 +8,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.example.audioguiasandroid.HomeActivity
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.showAlert
 import com.google.firebase.auth.FirebaseAuth

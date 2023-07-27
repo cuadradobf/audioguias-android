@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item android:id="@+id/nav_item_home"
+            android:title="Home"/>
+        <item android:id="@+id/nav_item_downloads"
+            android:title="Descargas"/>
+        <item android:id="@+id/nav_item_favs"
+            android:title="Favoritos"/>
+        <item android:id="@+id/nav_item_help"
+            android:title="Ayuda y comentarios"/>
+        <item android:id="@+id/nav_item_config"
+            android:title="Configuración"/>
+    </group>
+    <item android:title="Cuenta">
+        <menu>
+            <item android:id="@+id/nav_item_profile"
+                android:title="Modificar perfil"/>
+            <item android:id="@+id/nav_item_logout"
+                android:title="Cerrar sesión"/>
+        </menu>
+    </item>
+</menu>
