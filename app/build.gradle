@@ -77,6 +77,8 @@ dependencies {
     //Librerias para implementar NavigationDrawer
     implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+    //Libreria para utilizar fragments
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
 
 
 }

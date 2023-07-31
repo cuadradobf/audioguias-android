@@ -10,6 +10,8 @@ import android.widget.EditText
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.changePassword
 import com.example.audioguiasandroid.viewmodel.showAlert
+import com.example.audioguiasandroid.viewmodel.showAuth
+import com.example.audioguiasandroid.viewmodel.showUserProfile
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -24,7 +26,7 @@ class ChangePasswordActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth("Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
         }else{
             setup()
         }
@@ -55,21 +57,9 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
 
         backButton.setOnClickListener {
-            showProfile()
+            showUserProfile(this)
         }
     }
 
-    private fun showAuth(title: String, exception: String){
-        val intent = Intent(this, AuthActivity::class.java).apply {
-            putExtra("title", title)
-            putExtra("exception", exception)
-        }
-        startActivity(intent)
-    }
-
-    private fun showProfile(){
-        val intent = Intent(this, UserProfileActivity::class.java)
-        startActivity(intent)
-    }
 
 }

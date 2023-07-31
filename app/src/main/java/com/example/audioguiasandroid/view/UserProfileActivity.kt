@@ -16,6 +16,10 @@ import android.widget.TextView
 import com.example.audioguiasandroid.R
 
 import com.example.audioguiasandroid.viewmodel.changeNameAndSurname
+import com.example.audioguiasandroid.viewmodel.showAuth
+import com.example.audioguiasandroid.viewmodel.showChangePassword
+import com.example.audioguiasandroid.viewmodel.showDeleteAccount
+import com.example.audioguiasandroid.viewmodel.showMain
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,7 +44,7 @@ class UserProfileActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth("Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
         }else{
             setup()
         }
@@ -90,7 +94,7 @@ class UserProfileActivity : AppCompatActivity() {
         }
 
         changePasswordButton.setOnClickListener {
-            showChangePassword()
+            showChangePassword(this)
         }
 
         saveButton.setOnClickListener {
@@ -101,15 +105,15 @@ class UserProfileActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth("Información", "Se ha cerrado sesión.")
+            showAuth(this,"Información", "Se ha cerrado sesión.")
         }
 
         deleteAccountButton.setOnClickListener {
-            showDeleteAccount()
+            showDeleteAccount(this)
         }
 
         backButton.setOnClickListener {
-            showHome()
+            showMain(this, "home")
         }
 
     }
@@ -159,31 +163,5 @@ class UserProfileActivity : AppCompatActivity() {
             uploadImage()
         }
     }
-
-
-    private fun showAuth(title: String, exception: String){
-        val intent = Intent(this, AuthActivity::class.java).apply {
-            putExtra("title", title)
-            putExtra("exception", exception)
-        }
-        startActivity(intent)
-    }
-
-    private fun showHome(){
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
-    }
-
-
-    private fun showChangePassword(){
-        val intent = Intent(this, ChangePasswordActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun showDeleteAccount(){
-        val intent = Intent(this, DeleteAccountActivity::class.java)
-        startActivity(intent)
-    }
-
 }
 

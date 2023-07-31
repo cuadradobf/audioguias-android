@@ -1,22 +1,19 @@
 package com.example.audioguiasandroid.viewmodel
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.example.audioguiasandroid.R
+import androidx.fragment.app.FragmentActivity
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.view.AudioguideActitivity
 import com.example.audioguiasandroid.view.AudioplayerActivity
 import com.example.audioguiasandroid.view.AuthActivity
-import com.example.audioguiasandroid.view.FavsActivity
-import com.example.audioguiasandroid.view.HomeActivity
+import com.example.audioguiasandroid.view.ChangePasswordActivity
+import com.example.audioguiasandroid.view.DeleteAccountActivity
+import com.example.audioguiasandroid.view.MainActivity
+import com.example.audioguiasandroid.view.SignUpActivity
 import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.VerifyActivity
-import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 fun showAlert(activity: AppCompatActivity, title: String, exception: String){
     val builder = AlertDialog.Builder(activity)
@@ -38,8 +35,10 @@ fun showAlert(activity: AppCompatActivity, title: String, exception: String){
     dialog.show()
 }
 
-fun showHome(activity: AppCompatActivity){
-    val intent = Intent(activity, HomeActivity::class.java)
+fun showMain(activity: AppCompatActivity, fragment: String){
+    val intent = Intent(activity, MainActivity::class.java).apply {
+        putExtra("fragment", fragment)
+    }
     activity.startActivity(intent)
 }
 fun showUserProfile(activity: AppCompatActivity){
@@ -54,26 +53,47 @@ fun showAuth(activity: AppCompatActivity, title: String, exception: String){
     }
     activity.startActivity(intent)
 }
-
+fun showAuth(activity: AppCompatActivity){
+    val intent = Intent(activity, AuthActivity::class.java)
+    activity.startActivity(intent)
+}
 fun showVerify(activity: AppCompatActivity){
     val intent = Intent(activity, VerifyActivity::class.java)
     activity.startActivity(intent)
 }
 
-fun showFavs(activity: AppCompatActivity){
-    val intent = Intent(activity, FavsActivity::class.java)
+fun showAudioplayer(activity: AppCompatActivity, audioGuideID: String){
+    val intent = Intent(activity, AudioplayerActivity::class.java).apply {
+        putExtra("audioGuide", audioGuideID)
+    }
     activity.startActivity(intent)
 }
 
-fun showAudioplayer(activity: AppCompatActivity){
-    val intent = Intent(activity, AudioplayerActivity::class.java)
-    activity.startActivity(intent)
-}
-
-fun onItemSelected(activity: AppCompatActivity, audioGuide: AudioGuide){
+fun onItemSelected(activity: FragmentActivity, audioGuide: AudioGuide){
     val intent = Intent(activity, AudioguideActitivity::class.java).apply {
         putExtra("audioGuide", audioGuide.id)
     }
+    activity.startActivity(intent)
+}
+fun showSignUp(activity: FragmentActivity){
+    val intent = Intent(activity, SignUpActivity::class.java)
+    activity.startActivity(intent)
+}
+
+fun showAudioguide(activity: FragmentActivity, audioGuideID: String) {
+    val intent = Intent(activity, AudioguideActitivity::class.java).apply {
+        putExtra("audioGuide", audioGuideID)
+    }
+    activity.startActivity(intent)
+}
+
+fun showChangePassword(activity: FragmentActivity){
+    val intent = Intent(activity, ChangePasswordActivity::class.java)
+    activity.startActivity(intent)
+}
+
+fun showDeleteAccount(activity: FragmentActivity){
+    val intent = Intent(activity, DeleteAccountActivity::class.java)
     activity.startActivity(intent)
 }
 

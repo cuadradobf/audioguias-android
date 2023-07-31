@@ -9,6 +9,8 @@ import android.util.Log
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioplayerBinding
 import com.example.audioguiasandroid.model.repository.UserRepository
+import com.example.audioguiasandroid.viewmodel.showAudioguide
+import com.example.audioguiasandroid.viewmodel.showAuth
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerControlView
@@ -38,7 +40,7 @@ class AudioplayerActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth("Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
+            showAuth(this, "Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
         }else{
             val bundle = intent.extras
             val audioGuideID = bundle?.getString("audioGuide")
@@ -116,7 +118,7 @@ class AudioplayerActivity : AppCompatActivity() {
             }
 
         binding.backButtonAudioPlayer.setOnClickListener {
-            showAudioguide(audioGuideID)
+            showAudioguide(this, audioGuideID)
         }
 
         //Boton favorito/guardado
@@ -148,20 +150,5 @@ class AudioplayerActivity : AppCompatActivity() {
         }
         //TODO: add boton para compartir
         //TODO: opcion para reproducir con el dispositivo bloqueado
-    }
-
-    private fun showAudioguide(audioGuideID: String) {
-        val intent = Intent(this, AudioguideActitivity::class.java).apply {
-            putExtra("audioGuide", audioGuideID)
-        }
-        startActivity(intent)
-    }
-
-    private fun showAuth(title: String, exception: String){
-        val intent = Intent(this, AuthActivity::class.java).apply {
-            putExtra("title", title)
-            putExtra("exception", exception)
-        }
-        startActivity(intent)
     }
 }

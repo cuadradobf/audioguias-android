@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.EditText
 import com.example.audioguiasandroid.model.data.ProviderType
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.viewmodel.showAuth
+import com.example.audioguiasandroid.viewmodel.showMain
 import com.example.audioguiasandroid.viewmodel.signUp
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -34,24 +36,12 @@ class SignUpActivity : AppCompatActivity() {
 
         signUpButton.setOnClickListener {
             if (signUp(this, emailEditText.text.toString(), passwordEditText.text.toString(), password2EditText.text.toString(), nameEditText.text.toString(), surnameEditText.text.toString(), ProviderType.BASIC.name)){
-                showHome(emailEditText.text.toString())
+                showMain(this, "home")
             }
         }
 
         backButton.setOnClickListener {
-            showAuth()
+            showAuth(this)
         }
-    }
-
-    private fun showAuth(){
-        val intent = Intent(this, AuthActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun showHome(email: String){
-        val intent = Intent(this, HomeActivity::class.java).apply {
-            putExtra("email", email)
-        }
-        startActivity(intent)
     }
 }

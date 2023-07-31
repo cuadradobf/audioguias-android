@@ -20,6 +20,9 @@
         android:theme="@style/Theme.AudioguiasAndroid"
         tools:targetApi="31">
         <activity
+            android:name=".view.MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.FavsActivity"
             android:exported="false" />
         <activity

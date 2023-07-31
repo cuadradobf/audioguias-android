@@ -1,7 +1,6 @@
 package com.example.audioguiasandroid.view
 
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,6 +9,8 @@ import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.showAlert
+import com.example.audioguiasandroid.viewmodel.showMain
+import com.example.audioguiasandroid.viewmodel.showSignUp
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthActivity : AppCompatActivity() {
@@ -44,7 +45,7 @@ class AuthActivity : AppCompatActivity() {
         if (email != null){
             val authLayout = findViewById<ConstraintLayout>(R.id.authLayout_Auth)
             authLayout.visibility = View.INVISIBLE
-            showHome(email)
+            showMain(this, "home")
         }
     }
 
@@ -61,7 +62,7 @@ class AuthActivity : AppCompatActivity() {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(emailEditText.text.toString(),
                     passwordEditText.text.toString()).addOnCompleteListener {
                     if (it.isSuccessful){
-                        showHome(it.result?.user?.email ?: "")
+                        showMain(this, "home")
                     }else{
                         showAlert(this, "Error", it.exception?.message.toString())
                     }
@@ -72,20 +73,7 @@ class AuthActivity : AppCompatActivity() {
         }
 
         signUpButton.setOnClickListener {
-            showSignUp()
+            showSignUp(this)
         }
-    }
-
-    private fun showHome(email: String/*, providerType: ProviderType*/){
-        val homeIntent = Intent(this, HomeActivity::class.java).apply {
-            putExtra("email",email)
-            //putExtra("provider", providerType.name)
-        }
-        startActivity(homeIntent)
-    }
-
-    private fun showSignUp(){
-        val intent = Intent(this, SignUpActivity::class.java)
-        startActivity(intent)
     }
 }

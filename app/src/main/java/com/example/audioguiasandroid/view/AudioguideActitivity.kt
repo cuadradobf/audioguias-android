@@ -14,6 +14,9 @@ import com.example.audioguiasandroid.databinding.ActivityAudioguideBinding
 import com.example.audioguiasandroid.model.repository.CommentsRepository
 import com.example.audioguiasandroid.view.adapter.CommentsAdapter
 import com.example.audioguiasandroid.viewmodel.showAlert
+import com.example.audioguiasandroid.viewmodel.showAudioplayer
+import com.example.audioguiasandroid.viewmodel.showAuth
+import com.example.audioguiasandroid.viewmodel.showMain
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -46,7 +49,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth("Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
+            showAuth(this, "Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
         }else{
             val bundle = intent.extras
             val audioGuideID = bundle?.getString("audioGuide")
@@ -166,11 +169,11 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         binding.backButtonAudioGuideActivity.setOnClickListener{
-            showHome()
+            showMain(this, "home")
         }
 
         binding.playImageViewAudioGuideActivity.setOnClickListener {
-            showAudioplayer(audioGuideID)
+            showAudioplayer(this, audioGuideID)
         }
 
         binding.sendImageViewAudioGuideActivity.setOnClickListener {
@@ -235,13 +238,6 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    private fun showAudioplayer(audioGuideID: String) {
-        val intent = Intent(this, AudioplayerActivity::class.java).apply {
-            putExtra("audioGuide", audioGuideID)
-        }
-        startActivity(intent)
-    }
-
     private fun createGoogleMap() {
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapView_AudioGuideActivity) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -273,17 +269,4 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-    private fun showAuth(title: String, exception: String){
-        val intent = Intent(this, AuthActivity::class.java).apply {
-            putExtra("title", title)
-            putExtra("exception", exception)
-        }
-        startActivity(intent)
-    }
-    private fun showHome(){
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
-    }
-
-
 }
