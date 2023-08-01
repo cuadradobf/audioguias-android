@@ -20,6 +20,7 @@ import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.example.audioguiasandroid.viewmodel.onItemSelected
+import com.example.audioguiasandroid.viewmodel.updateDataAdapter
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
@@ -74,7 +75,7 @@ class FavsFragment : Fragment() {
         initRecyclerView()
 
         searchEditText?.addTextChangedListener {filter ->
-            audioGuideAdapter.updateData(AudioGuideRepository().getFilteredList(listAudioGuide, filter))
+            updateDataAdapter(audioGuideAdapter, listAudioGuide, filter)
         }
 
         userImageView?.setOnClickListener {

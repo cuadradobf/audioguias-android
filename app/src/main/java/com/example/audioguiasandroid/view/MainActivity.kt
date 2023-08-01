@@ -24,6 +24,8 @@ import com.example.audioguiasandroid.databinding.ActivityMainBinding
 import com.example.audioguiasandroid.view.fragment.FavsFragment
 import com.example.audioguiasandroid.view.fragment.HomeFragment
 import com.example.audioguiasandroid.viewmodel.showAuth
+import com.example.audioguiasandroid.viewmodel.showConfiguration
+import com.example.audioguiasandroid.viewmodel.showHelp
 import com.example.audioguiasandroid.viewmodel.showMain
 import com.example.audioguiasandroid.viewmodel.showUserProfile
 import com.google.android.material.navigation.NavigationView
@@ -117,6 +119,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_item_home -> showMain(this, "home")
+            //TODO: implementar downloadActivity
             R.id.nav_item_downloads -> Toast.makeText(this, "Descargas", Toast.LENGTH_SHORT).show()
             R.id.nav_item_favs -> {
                 supportFragmentManager.commit {
@@ -124,8 +127,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     add<FavsFragment>(R.id.fragmentContainerView_Main)
                 }
             }
-            R.id.nav_item_help -> Toast.makeText(this, "Ayuda y comentarios", Toast.LENGTH_SHORT).show()
-            R.id.nav_item_config -> Toast.makeText(this, "Configuración", Toast.LENGTH_SHORT).show()
+            R.id.nav_item_help -> showHelp(this)
+            R.id.nav_item_config -> showConfiguration(this)
             R.id.nav_item_profile -> showUserProfile(this)
             R.id.nav_item_logout -> {
                 val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()

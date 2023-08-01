@@ -7,15 +7,19 @@
     tools:context=".view.DeleteAccountActivity">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="16dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <Button
+            android:id="@+id/backButton_DeleteAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ATRAS"
+            android:layout_marginVertical="4dp"/>
 
         <EditText
             android:id="@+id/passwordEditText_DeleteAccount"
@@ -23,27 +27,16 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Contraseña"
-            android:inputType="textPassword" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:inputType="textPassword"
+            android:layout_marginVertical="4dp"/>
 
         <Button
             android:id="@+id/deleteAccountButton_DeleteAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ELIMINAR CUENTA" />
+            android:text="ELIMINAR CUENTA"
+            android:layout_marginVertical="4dp"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-
-        <Button
-            android:id="@+id/backButton_DeleteAccount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ATRAS" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

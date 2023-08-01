@@ -9,115 +9,109 @@
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/userImageView_UserProfile"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            tools:srcCompat="@drawable/avatar" />
-
         <Button
-            android:id="@+id/changeImageButton_UserProfile"
+            android:id="@+id/backButton_UserProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/userImageView_UserProfile"
-            android:layout_gravity="center"
-            android:text="CAMBIAR IMAGEN" />
+            android:text="ATRAS"
+            android:layout_marginVertical="4dp"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userImageView_UserProfile"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:srcCompat="@drawable/avatar" />
+            <ImageView
+                android:id="@+id/removeImageView_UserProfile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_remove_circle_outline_24"
+                app:layout_constraintBottom_toBottomOf="@+id/userImageView_UserProfile"
+                app:layout_constraintEnd_toEndOf="@+id/userImageView_UserProfile" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <TextView
             android:id="@+id/emailTextView_UserProfile"
             android:layout_width="match_parent"
-            android:layout_height="38dp"
-            android:text="Email" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:layout_height="wrap_content"
+            tools:text="Email"
+            android:textSize="20dp"
+            android:layout_marginVertical="4dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:textSize="16dp"
+            android:text="Nombre"/>
 
         <EditText
             android:id="@+id/nameEditText_UserProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Nombre"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:layout_marginVertical="4dp"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:textSize="16dp"
+            android:text="Apellidos"/>
 
         <EditText
             android:id="@+id/surnameEditText_UserProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Apellidos"
-            android:inputType="textPersonName" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:inputType="textPersonName"
+            android:layout_marginVertical="4dp"/>
 
         <Button
             android:id="@+id/saveButton_UserProfile"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GUARDAR" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:text="GUARDAR"
+            android:layout_marginVertical="4dp"
+            android:layout_gravity="end"/>
 
         <Button
             android:id="@+id/changePasswordButton_UserProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CAMBIAR CONTRASEÑA" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:text="CAMBIAR CONTRASEÑA"
+            android:layout_marginVertical="4dp"/>
 
         <Button
             android:id="@+id/logOutButton_UserProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/holo_orange_dark"
-            android:text="CERRAR SESION" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:text="CERRAR SESION"
+            android:layout_marginVertical="4dp"/>
 
         <Button
             android:id="@+id/deleteAccountButton_UserProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/design_default_color_error"
-            android:text="ELIMINAR CUENTA" />
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp" />
-
-        <Button
-            android:id="@+id/backButton_UserProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ATRAS" />
+            android:background="@color/red"
+            android:text="ELIMINAR CUENTA"
+            android:layout_marginVertical="4dp"
+            android:layout_gravity="bottom"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

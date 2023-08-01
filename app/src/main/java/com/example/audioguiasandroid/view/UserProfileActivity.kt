@@ -54,7 +54,7 @@ class UserProfileActivity : AppCompatActivity() {
         title = "Perfil"
 
         val userImage = findViewById<ImageView>(R.id.userImageView_UserProfile)
-        val changeImageButton = findViewById<Button>(R.id.changeImageButton_UserProfile)
+        val removeImage = findViewById<ImageView>(R.id.removeImageView_UserProfile)
         val emailTextView = findViewById<TextView>(R.id.emailTextView_UserProfile)
         val nameEditText = findViewById<EditText>(R.id.nameEditText_UserProfile)
         val surnameEditText = findViewById<EditText>(R.id.surnameEditText_UserProfile)
@@ -81,7 +81,15 @@ class UserProfileActivity : AppCompatActivity() {
             }
         }
 
-        //TODO: opcion para quitar imagen de perfil
+        //opcion para quitar la imagen de perfil
+        removeImage.setOnClickListener{
+            userRef.delete()
+            storageRef.child("images/default/profile.png").downloadUrl.addOnSuccessListener {
+                Picasso.get()
+                    .load(it)
+                    .into(userImage)
+            }
+        }
 
         emailTextView.text = Firebase.auth.currentUser?.email.toString()
         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get().addOnSuccessListener {
@@ -89,7 +97,7 @@ class UserProfileActivity : AppCompatActivity() {
             surnameEditText.setText(it.get("surname") as String?)
         }
 
-        changeImageButton.setOnClickListener {
+        userImage.setOnClickListener {
             selectImageFromGallery(it)
         }
 

@@ -26,7 +26,7 @@ class UserRepository {
                 user.surname = it.get("surname") as String
                 user.rol = it.get("rol") as String
                 user.profileImage = it.get("profileImage") as String
-                //TODO: Implementar audioguias en la base de datos
+
                 //user.audioguiaList =
                 Log.d(TAG, "User data got successfully.")
             }
@@ -50,7 +50,7 @@ class UserRepository {
                     user.rol = document.get("rol") as String
                     user.provider = document.get("provider") as String
                     user.profileImage = document.get("profileImage") as String
-                    //TODO: Implementar audioguias
+
                     users.add(user)
                 }
             }
@@ -66,7 +66,7 @@ class UserRepository {
                 "name" to user.name,
                 "surname" to user.surname,
                 "profileImage" to user.profileImage
-                //TODO: Implementar audioguias
+
             ))
             .addOnSuccessListener {
                 Log.d(TAG, "User data updated successfully.")

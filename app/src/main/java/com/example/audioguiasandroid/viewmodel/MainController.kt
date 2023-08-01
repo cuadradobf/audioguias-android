@@ -9,7 +9,10 @@ import com.example.audioguiasandroid.view.AudioguideActitivity
 import com.example.audioguiasandroid.view.AudioplayerActivity
 import com.example.audioguiasandroid.view.AuthActivity
 import com.example.audioguiasandroid.view.ChangePasswordActivity
+import com.example.audioguiasandroid.view.ConfigurationActivity
+import com.example.audioguiasandroid.view.ContactUsActivity
 import com.example.audioguiasandroid.view.DeleteAccountActivity
+import com.example.audioguiasandroid.view.HelpActivity
 import com.example.audioguiasandroid.view.MainActivity
 import com.example.audioguiasandroid.view.SignUpActivity
 import com.example.audioguiasandroid.view.UserProfileActivity
@@ -97,5 +100,18 @@ fun showDeleteAccount(activity: FragmentActivity){
     activity.startActivity(intent)
 }
 
+fun showConfiguration(activity: FragmentActivity){
+    val intent = Intent(activity, ConfigurationActivity::class.java)
+    activity.startActivity(intent)
+}
+fun showHelp(activity: FragmentActivity){
+    val intent = Intent(activity, HelpActivity::class.java)
+    activity.startActivity(intent)
+}
+
+fun showContactUs(activity: FragmentActivity){
+    val intent = Intent(activity, ContactUsActivity::class.java)
+    activity.startActivity(intent)
+}
 
 

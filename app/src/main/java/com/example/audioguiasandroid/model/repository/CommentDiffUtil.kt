@@ -16,7 +16,12 @@ class CommentDiffUtil(
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition] == newList[newItemPosition]
-        //TODO: En caso de implementar la edicion de comentarios modificar esto
+        //return oldList[oldItemPosition] == newList[newItemPosition]
+        return when{
+            oldList[oldItemPosition].commentData != newList[newItemPosition].commentData -> false
+            oldList[oldItemPosition].valoration != newList[newItemPosition].valoration -> false
+            oldList[oldItemPosition] != newList[newItemPosition]  -> false
+            else -> true
+        }
     }
 }

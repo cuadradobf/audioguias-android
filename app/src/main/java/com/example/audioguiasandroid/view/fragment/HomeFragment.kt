@@ -24,6 +24,9 @@ import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.example.audioguiasandroid.viewmodel.onItemSelected
 import com.example.audioguiasandroid.viewmodel.showUserProfile
 import com.example.audioguiasandroid.viewmodel.showVerify
+import com.example.audioguiasandroid.viewmodel.updateDataAdapter
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -36,6 +39,7 @@ class HomeFragment : Fragment() {
     private lateinit var audioGuideAdapter: AudioGuideAdapter
     private lateinit var listAudioGuide : List<AudioGuide>
     private var _binding: FragmentHomeBinding? = null
+    lateinit var geofencingClient: GeofencingClient
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -48,6 +52,7 @@ class HomeFragment : Fragment() {
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        geofencingClient = LocationServices.getGeofencingClient(requireActivity())
         setup()
 
         return root
@@ -60,7 +65,7 @@ class HomeFragment : Fragment() {
     private fun setup() {
         val userImageView = _binding?.userImageViewHomeF
         val searchEditText = _binding?.searchEditTextHomeF
-
+        //Add funcion de ubicacion
         storage.reference.child("images/" + Firebase.auth.currentUser?.email.toString() + "/profile").downloadUrl
             .addOnSuccessListener { uri->
                 Picasso.get()
@@ -75,13 +80,11 @@ class HomeFragment : Fragment() {
                             .into(userImageView)
                     }
             }
-        //TODO: implementar fragment con el navigation drawer
 
         initRecyclerView()
 
         searchEditText?.addTextChangedListener {filter ->
-            audioGuideAdapter.updateData(AudioGuideRepository().getFilteredList(listAudioGuide, filter))
-
+            updateDataAdapter(audioGuideAdapter, listAudioGuide, filter)
         }
 
         userImageView?.setOnClickListener {

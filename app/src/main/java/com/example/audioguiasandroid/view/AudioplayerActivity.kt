@@ -11,6 +11,7 @@ import com.example.audioguiasandroid.databinding.ActivityAudioplayerBinding
 import com.example.audioguiasandroid.model.repository.UserRepository
 import com.example.audioguiasandroid.viewmodel.showAudioguide
 import com.example.audioguiasandroid.viewmodel.showAuth
+import com.example.audioguiasandroid.viewmodel.showMain
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerControlView
@@ -47,14 +48,10 @@ class AudioplayerActivity : AppCompatActivity() {
 
             if (audioGuideID != null){
                 setup(audioGuideID)
+            }else{
+                showMain(this, "home")
             }
-
         }
-
-        //Guardar datos
-        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-        prefs.putString("email", Firebase.auth.currentUser?.email.toString())
-        prefs.apply()
     }
 
     private fun setup(audioGuideID: String) {
@@ -148,7 +145,7 @@ class AudioplayerActivity : AppCompatActivity() {
                     )
                 }
         }
-        //TODO: add boton para compartir
+        //TODO: add boton para compartir. Tiene sentido? Solo puedes compartir para gente que tenga la aplicacion ya que no hay link a la pagina web
         //TODO: opcion para reproducir con el dispositivo bloqueado
     }
 }

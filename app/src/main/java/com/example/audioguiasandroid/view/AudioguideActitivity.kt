@@ -35,7 +35,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityAudioguideBinding
     private var db = FirebaseFirestore.getInstance()
     private lateinit var map: GoogleMap
-    lateinit var commentsAdapter: CommentsAdapter
+    var commentsAdapter: CommentsAdapter? = null
     private var storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,14 +56,11 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
             if (audioGuideID != null){
                 setup(audioGuideID)
+            }else{
+                showMain(this, "home")
             }
 
         }
-
-        //Guardar datos
-        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-        prefs.putString("email", Firebase.auth.currentUser?.email.toString())
-        prefs.apply()
     }
 
     private fun setup(audioGuideID: String){
@@ -206,7 +203,16 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                 db.collection("audioGuide").document(audioGuideID).collection("comments").get()
                     .addOnSuccessListener { result ->
                         val listComment = CommentsRepository().getAllComments(result, audioGuideID)
-                        commentsAdapter.updateData(listComment)
+                        if(commentsAdapter == null){
+                            val manager = LinearLayoutManager(this)
+                            binding.commentsRecyclerAudioGuideActivity.layoutManager = manager
+                            commentsAdapter = CommentsAdapter(listComment)
+                            binding.commentsRecyclerAudioGuideActivity.adapter = commentsAdapter
+                            binding.titleCommetsTextViewAudioGuideActivity.visibility = View.VISIBLE
+                        }else{
+                            commentsAdapter?.updateData(listComment)
+                        }
+
                     }
             }
             .addOnFailureListener { e ->
@@ -221,14 +227,14 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
         db.collection("audioGuide").document(audioGuideID).collection("comments").get()
             .addOnSuccessListener { result ->
-                val listComments = CommentsRepository().getAllComments(result, audioGuideID)
+                val listComment = CommentsRepository().getAllComments(result, audioGuideID)
 
-                if(listComments.size == 0){
+                if(listComment.size == 0){
                     binding.titleCommetsTextViewAudioGuideActivity.visibility = View.GONE
                 }else{
                     val manager = LinearLayoutManager(this)
                     binding.commentsRecyclerAudioGuideActivity.layoutManager = manager
-                    commentsAdapter = CommentsAdapter(listComments)
+                    commentsAdapter = CommentsAdapter(listComment)
                     binding.commentsRecyclerAudioGuideActivity.adapter = commentsAdapter
                 }
             }

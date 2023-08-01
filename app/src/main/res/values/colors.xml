@@ -12,4 +12,7 @@
     <color name="colorPrimaryDark">#2C384A</color>
     <color name="colorAccent">#039BE5</color>
     <color name="background">#ECEFF1</color>
+
+    <color name="red">#B00020</color>
+
 </resources>

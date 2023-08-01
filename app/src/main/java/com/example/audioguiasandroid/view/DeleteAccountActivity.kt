@@ -11,6 +11,7 @@ import android.widget.EditText
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.showAlert
 import com.example.audioguiasandroid.viewmodel.showAuth
+import com.example.audioguiasandroid.viewmodel.showMain
 import com.example.audioguiasandroid.viewmodel.showUserProfile
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -59,7 +60,6 @@ class DeleteAccountActivity : AppCompatActivity() {
                                     showAlert(this, "Error", "Error al eliminar su cuenta de autenticación.")
                                 }
                             }
-
                         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).delete()
                         val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
                         prefs.clear()
@@ -74,7 +74,7 @@ class DeleteAccountActivity : AppCompatActivity() {
         }
 
         backButton.setOnClickListener {
-            showUserProfile(this)
+            showMain(this, "home")
         }
 
     }

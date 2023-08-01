@@ -20,13 +20,16 @@
         android:theme="@style/Theme.AudioguiasAndroid"
         tools:targetApi="31">
         <activity
+            android:name=".view.ContactUsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.HelpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.ConfigurationActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.FavsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".view.HomeActivity"
             android:exported="false" />
         <activity
             android:name=".view.AudioplayerActivity"

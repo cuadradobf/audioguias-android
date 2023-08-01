@@ -1,8 +1,13 @@
 package com.example.audioguiasandroid.viewmodel
 
 import android.content.ContentValues
+import android.provider.Settings.Global.getString
 import android.util.Log
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import com.example.audioguiasandroid.R
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -10,7 +15,6 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
-
 
 fun changePassword(activity: AppCompatActivity,actualPassword: String, newPassword: String){
     val credential = EmailAuthProvider.getCredential(Firebase.auth.currentUser?.email.toString(), actualPassword)
@@ -150,4 +154,89 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
         }
         return true
 }
+fun changeLanguage(activity: FragmentActivity, languages: Array<String>, checkedItem: Int, textView: TextView){
+    val builder = AlertDialog.Builder(activity)
+    val firebaseArray = arrayOf("ES", "EN")
+    builder.setSingleChoiceItems(languages,checkedItem){dialog, item ->
+        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
+            hashMapOf(
+                "language" to firebaseArray[item]
+            ),
+            //Opcion para combinar los datos y que no los machaque
+            SetOptions.merge()
+        )
+        textView.text = firebaseArray[item]
+        dialog.dismiss()
+        //TODO: cambiar logica de configuracion
+    }
+    builder.create()
 
+    builder.setPositiveButton("Cancelar",null)
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+}
+
+fun changeUnitOfMeasurement(activity: FragmentActivity, units: Array<String>, checkedItem: Int, textView: TextView){
+    val builder = AlertDialog.Builder(activity)
+    builder.setSingleChoiceItems(units,checkedItem){dialog, item ->
+        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
+            hashMapOf(
+                "unitOfMeasurement" to units[item]
+            ),
+            //Opcion para combinar los datos y que no los machaque
+            SetOptions.merge()
+        )
+        textView.text = units[item]
+        dialog.dismiss()
+        //TODO: cambiar logica de configuracion
+    }
+    builder.create()
+
+    builder.setPositiveButton("Cancelar",null)
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+}
+
+fun changeRedMode(activity: FragmentActivity, modes: Array<String>, checkedItem: Int, textView: TextView){
+    val builder = AlertDialog.Builder(activity)
+    val firebaseArray = arrayOf("all", "wifi", "offline")
+    builder.setSingleChoiceItems(modes,checkedItem){dialog, item ->
+        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
+            hashMapOf(
+                "redMode" to firebaseArray[item]
+            ),
+            //Opcion para combinar los datos y que no los machaque
+            SetOptions.merge()
+        )
+        textView.text = modes[item]
+        dialog.dismiss()
+        //TODO: cambiar logica de configuracion
+    }
+    builder.create()
+
+    builder.setPositiveButton("Cancelar",null)
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+}
+
+fun changeDownloadStorage(activity: FragmentActivity, modes: Array<String>, checkedItem: Int, textView: TextView){
+    val builder = AlertDialog.Builder(activity)
+    val firebaseArray = arrayOf("internal", "external")
+    builder.setSingleChoiceItems(modes,checkedItem){dialog, item ->
+        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
+            hashMapOf(
+                "storage" to firebaseArray[item]
+            ),
+            //Opcion para combinar los datos y que no los machaque
+            SetOptions.merge()
+        )
+        textView.text = modes[item]
+        dialog.dismiss()
+        //TODO: cambiar logica de configuracion
+    }
+    builder.create()
+
+    builder.setPositiveButton("Cancelar",null)
+    val dialog: AlertDialog = builder.create()
+    dialog.show()
+}
