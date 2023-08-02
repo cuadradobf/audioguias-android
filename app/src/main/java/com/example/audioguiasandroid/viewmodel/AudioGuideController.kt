@@ -6,6 +6,6 @@ import com.example.audioguiasandroid.model.repository.AudioGuideRepository
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 
 
-fun updateDataAdapter(audioGuideAdapter: AudioGuideAdapter, listAudioGuide: List<AudioGuide>, filter : Editable?){
+fun updateDataAdapterByFilter(audioGuideAdapter: AudioGuideAdapter, listAudioGuide: List<AudioGuide>, filter : Editable?){
     audioGuideAdapter.updateData(AudioGuideRepository().getFilteredList(listAudioGuide, filter))
 }

@@ -71,14 +71,15 @@ dependencies {
     //Picasso: biblioteca de carga y visualizacion de imagenes  https://square.github.io/picasso/
     implementation 'com.squareup.picasso:picasso:2.71828'
     //ExoPlayer: reproductor https://exoplayer.dev/hello-world.html
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.15.0'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.15.0'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.15.0'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.19.0'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.19.0'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.19.0'
     //Librerias para implementar NavigationDrawer
     implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
     //Libreria para utilizar fragments
     implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("androidx.activity:activity-ktx:1.7.2")
 
 
 }

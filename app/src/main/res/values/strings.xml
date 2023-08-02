@@ -17,7 +17,6 @@
     <string name="account_title">Cuenta</string>
     <string name="delete_account_title">Eliminar cuenta de usuario</string>
     <string name="anonymous">Anónimo</string>
-    <string name="spanish">Español</string>
     <string name="english">Inglés</string>
     <string name="all_redMode">Todo</string>
     <string name="wifi_redMode">Solo wifi</string>
@@ -30,6 +29,10 @@
     <string name="visit_web_page">Visita nuestra página web</string>
     <string name="contact_us_text">Ingrese su pregunta o comentario:</string>
     <string name="send">Enviar</string>
+    <string name="location_10km_mode">10 km</string>
+    <string name="location_50km_mode">50 km</string>
+    <string name="off_mode">Apagado</string>
+    <string name="spanish">Español</string>
 
 
     <!-- TODO: Implementar idioma ingles -->

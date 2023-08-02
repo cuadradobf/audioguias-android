@@ -11,16 +11,14 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.FragmentFavsBinding
-import com.example.audioguiasandroid.databinding.FragmentHomeBinding
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.model.repository.AudioGuideRepository
 import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.example.audioguiasandroid.viewmodel.onItemSelected
-import com.example.audioguiasandroid.viewmodel.updateDataAdapter
+import com.example.audioguiasandroid.viewmodel.updateDataAdapterByFilter
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
@@ -75,7 +73,7 @@ class FavsFragment : Fragment() {
         initRecyclerView()
 
         searchEditText?.addTextChangedListener {filter ->
-            updateDataAdapter(audioGuideAdapter, listAudioGuide, filter)
+            updateDataAdapterByFilter(audioGuideAdapter, listAudioGuide, filter)
         }
 
         userImageView?.setOnClickListener {

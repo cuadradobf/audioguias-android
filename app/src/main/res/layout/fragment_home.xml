@@ -13,6 +13,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/locationImageView_HomeF"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_location_off_24"
+                android:layout_gravity="center"/>
+
             <EditText
                 android:id="@+id/searchEditText_HomeF"
                 android:layout_width="0dp"
@@ -21,7 +28,8 @@
                 android:hint="Buscar..."
                 android:imeOptions="actionDone"
                 android:singleLine="true"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:layout_marginHorizontal="4dp"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/userImageView_HomeF"
