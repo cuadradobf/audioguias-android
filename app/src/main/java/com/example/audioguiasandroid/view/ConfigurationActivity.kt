@@ -30,7 +30,7 @@ class ConfigurationActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
+            showAuth(this,getString(R.string.information), getString(R.string.lost_credentials))
         }else {
             setup()
         }
@@ -40,7 +40,7 @@ class ConfigurationActivity : AppCompatActivity() {
     private fun setup() {
         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
             .addOnSuccessListener { document ->
-                binding.languageTextViewConfiguration.text = document.getString("language") ?: "ES"
+                //binding.languageTextViewConfiguration.text = document.getString("language") ?: "ES"
                 binding.unitOfMeasurementTextViewConfiguration.text = document.getString("unitOfMeasurement") ?: "Km"
 
                 var redMode = document.getString("redMode") ?: "all"
@@ -53,6 +53,7 @@ class ConfigurationActivity : AppCompatActivity() {
                 }
                 binding.redModeTextViewConfiguration.text = redMode
 
+                /*
                 var storage = document.getString("storage") ?: "internal"
                 if (storage == "internal"){
                     storage = getString(R.string.internal_storage)
@@ -60,10 +61,12 @@ class ConfigurationActivity : AppCompatActivity() {
                     storage = getString(R.string.external_storage)
                 }
                 binding.storageTextViewConfiguration.text = storage
+                 */
             }
         binding.backButtonConfiguration.setOnClickListener {
             showMain(this, "home")
         }
+        /*
         binding.languageTitleTextViewCofiguration.setOnClickListener {
             db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                 .addOnSuccessListener { document->
@@ -74,6 +77,8 @@ class ConfigurationActivity : AppCompatActivity() {
                     }
                 }
         }
+
+         */
         binding.unitOfMeasurementTitleTextViewCofiguration.setOnClickListener {
             db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                 .addOnSuccessListener { document->
@@ -88,17 +93,18 @@ class ConfigurationActivity : AppCompatActivity() {
             db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                 .addOnSuccessListener { document->
                     if (document.getString("redMode") == "wifi"){
-                        changeRedMode(this, arrayOf(getString(R.string.all_redMode), getString(R.string.wifi_redMode),getString(R.string.offline_redMode)), 1, binding.redModeTextViewConfiguration)
+                        changeRedMode(this,  1, binding.redModeTextViewConfiguration)
                     }else if (document.getString("redMode") == "offline"){
-                        changeRedMode(this, arrayOf(getString(R.string.all_redMode), getString(R.string.wifi_redMode),getString(R.string.offline_redMode)), 2, binding.redModeTextViewConfiguration)
+                        changeRedMode(this, 2, binding.redModeTextViewConfiguration)
                     }else{
-                        changeRedMode(this, arrayOf(getString(R.string.all_redMode), getString(R.string.wifi_redMode),getString(R.string.offline_redMode)), 0, binding.redModeTextViewConfiguration)
+                        changeRedMode(this, 0, binding.redModeTextViewConfiguration)
                     }
                 }
         }
         binding.deleteAccountTitleTextViewConfiguration.setOnClickListener {
             showDeleteAccount(this)
         }
+        /*
         binding.storageTitleTextViewConfiguration.setOnClickListener {
             db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                 .addOnSuccessListener { document->
@@ -108,6 +114,11 @@ class ConfigurationActivity : AppCompatActivity() {
                         changeDownloadStorage(this, arrayOf(getString(R.string.internal_storage), getString(R.string.external_storage)), 0, binding.storageTextViewConfiguration)
                     }
                 }
+        }
+
+         */
+        binding.licensesTitleTextViewConfiguration.setOnClickListener {
+            //TODO: add LicensesActivity
         }
     }
 }

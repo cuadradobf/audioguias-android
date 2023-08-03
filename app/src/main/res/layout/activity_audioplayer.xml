@@ -24,7 +24,7 @@
                 android:id="@+id/backButton_AudioPlayer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ATRAS"
+                android:text="@string/back"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -59,7 +59,7 @@
             android:id="@+id/autorTextView_AudioPlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            tools:text="Autor"
             android:layout_marginStart="8dp"/>
 
         <com.google.android.exoplayer2.ui.PlayerControlView

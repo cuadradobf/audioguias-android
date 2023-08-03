@@ -20,7 +20,7 @@
             android:id="@+id/backButton_UserProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ATRAS"
+            android:text="@string/back"
             android:layout_marginVertical="4dp"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +48,7 @@
             android:id="@+id/emailTextView_UserProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Email"
+            tools:text="@string/email"
             android:textSize="20dp"
             android:layout_marginVertical="4dp"/>
         <TextView
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="4dp"
             android:textSize="16dp"
-            android:text="Nombre"/>
+            android:text="@string/name"/>
 
         <EditText
             android:id="@+id/nameEditText_UserProfile"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="4dp"
             android:textSize="16dp"
-            android:text="Apellidos"/>
+            android:text="@string/surname_optional"/>
 
         <EditText
             android:id="@+id/surnameEditText_UserProfile"
@@ -85,33 +85,26 @@
             android:id="@+id/saveButton_UserProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="GUARDAR"
+            android:text="@string/save"
             android:layout_marginVertical="4dp"
             android:layout_gravity="end"/>
 
         <Button
             android:id="@+id/changePasswordButton_UserProfile"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CAMBIAR CONTRASEÑA"
-            android:layout_marginVertical="4dp"/>
+            android:text="@string/change_password"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="4dp"/>
 
         <Button
             android:id="@+id/logOutButton_UserProfile"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/holo_orange_dark"
-            android:text="CERRAR SESION"
+            android:layout_gravity="center"
+            android:text="@string/log_out"
             android:layout_marginVertical="4dp"/>
-
-        <Button
-            android:id="@+id/deleteAccountButton_UserProfile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/red"
-            android:text="ELIMINAR CUENTA"
-            android:layout_marginVertical="4dp"
-            android:layout_gravity="bottom"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

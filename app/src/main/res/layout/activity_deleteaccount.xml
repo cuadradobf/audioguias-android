@@ -18,7 +18,7 @@
             android:id="@+id/backButton_DeleteAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ATRAS"
+            android:text="@string/back"
             android:layout_marginVertical="4dp"/>
 
         <EditText
@@ -26,16 +26,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Contraseña"
+            android:hint="@string/password"
             android:inputType="textPassword"
-            android:layout_marginVertical="4dp"/>
+            android:layout_marginVertical="24dp"/>
 
         <Button
             android:id="@+id/deleteAccountButton_DeleteAccount"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ELIMINAR CUENTA"
-            android:layout_marginVertical="4dp"/>
+            android:text="@string/delete_account_title"
+            style="@style/ButtonStyle"
+            android:layout_gravity="center"/>
 
 
     </LinearLayout>

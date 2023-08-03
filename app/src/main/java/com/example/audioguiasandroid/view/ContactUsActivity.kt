@@ -8,7 +8,6 @@ import android.util.Log
 import android.widget.Toast
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityContactUsBinding
-import com.example.audioguiasandroid.databinding.ActivityHelpBinding
 import com.example.audioguiasandroid.viewmodel.showAlert
 import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showHelp
@@ -32,7 +31,7 @@ class ContactUsActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth(this,getString(R.string.information), getString(R.string.lost_credentials))
         }else{
             setup()
         }
@@ -47,7 +46,7 @@ class ContactUsActivity : AppCompatActivity() {
         binding.sendButtonHelp.setOnClickListener {
             val text = binding.feedbackEditTextViewContactUs.text.toString()
             if (text.isNullOrEmpty()){
-                showAlert(this,"Error", "La caja de comentarios se encuentra vacía.")
+                showAlert(this,getString(R.string.information), getString(R.string.empty_box_comment))
             }else{
                 db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                     .addOnSuccessListener {document ->
@@ -62,7 +61,7 @@ class ContactUsActivity : AppCompatActivity() {
                                 "text" to text
                             )
                         )
-                        Toast.makeText(this, "El comentario se ha enviado correctamente.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.send_comment_successfully), Toast.LENGTH_SHORT).show()
                         showHelp(this)
                     }
                     .addOnFailureListener { e->

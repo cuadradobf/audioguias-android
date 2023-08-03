@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        //TODO: cambiar formato de las imagenes
 
         //Setup
         val user = Firebase.auth.currentUser
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
+            showAuth(this,getString(R.string.information), getString(R.string.lost_credentials))
         }else{
             setup()
 
@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when(item.itemId){
             R.id.nav_item_home -> showMain(this, "home")
             //TODO: implementar downloadActivity
-            R.id.nav_item_downloads -> Toast.makeText(this, "Descargas", Toast.LENGTH_SHORT).show()
+            //R.id.nav_item_downloads -> Toast.makeText(this, "Descargas", Toast.LENGTH_SHORT).show()
             R.id.nav_item_favs -> {
                 supportFragmentManager.commit {
                     setReorderingAllowed(true)
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
                 prefs.clear()
                 prefs.apply()
-                showAuth(this,"Información", "Se ha cerrado sesión.")
+                showAuth(this,getString(R.string.information), "Se ha cerrado sesión.")
             }
         }
 

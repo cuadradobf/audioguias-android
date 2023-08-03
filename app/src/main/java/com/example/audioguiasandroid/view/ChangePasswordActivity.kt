@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import com.example.audioguiasandroid.R
@@ -26,7 +28,7 @@ class ChangePasswordActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth(this,getString(R.string.information), getString(R.string.lost_credentials))
         }else{
             setup()
         }
@@ -49,15 +51,25 @@ class ChangePasswordActivity : AppCompatActivity() {
                     changePassword(this, actualPasswordEditText.text.toString(), newPasswordEditText.text.toString())
 
                 }else{
-                    showAlert(this, "Error", "La nueva contraseña no coincide.")
+                    showAlert(this, getString(R.string.information), getString(R.string.dont_match_passwords))
                 }
             }else{
-                showAlert(this, "Error", "Campos obligatorios por completar.")
+                showAlert(this, getString(R.string.information), getString(R.string.required_fields))
             }
         }
 
         backButton.setOnClickListener {
             showUserProfile(this)
+        }
+
+        //Al pulsar Enter sobre el edit text realiza la accion de pulsar el boton de guardado
+        newPasswordEditText2.setOnEditorActionListener { textView, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                saveButton.performClick()
+                true
+            } else {
+                false
+            }
         }
     }
 

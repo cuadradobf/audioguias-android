@@ -8,72 +8,78 @@
     android:background="@color/background"
     tools:context=".view.AuthActivity">
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <EditText
+        android:id="@+id/emailEditText_Auth"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginHorizontal="8dp"/>
 
-        <EditText
-            android:id="@+id/emailEditText_Auth"
-            android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/passwordEditText_Auth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:maxLines="1"
+        android:layout_marginVertical="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText_Auth"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="8dp"/>
+
+    <Button
+        android:id="@+id/signInButton_Auth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorPrimaryDark"
+        android:text="ACCEDER"
+        android:textColor="@color/white"
+        android:layout_marginVertical="24dp"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditText_Auth"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/signInButton_Auth"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="10dp">
+        <TextView
+            android:id="@+id/notRegisteredTextView_Auth"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"
-            android:maxLines="1"/>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-
-        <EditText
-            android:id="@+id/passwordEditText_Auth"
-            android:layout_width="match_parent"
+            android:text="@string/not_registered"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="3dp"
+            android:layout_marginVertical="4dp" />
+        <TextView
+            android:id="@+id/createAccountTextView_Auth"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:singleLine="true"
-            android:maxLines="1"/>
+            android:text="@string/create_account"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/notRegisteredTextView_Auth"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:layout_marginVertical="4dp"
+            android:padding="3dp"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/signUpButton_Auth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:text="REGISTRAR"
-                android:textColor="@color/white" />
 
-            <Space
-                android:layout_width="8dp"
-                android:layout_height="wrap_content" />
 
-            <Button
-                android:id="@+id/signInButton_Auth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/colorPrimaryDark"
-                android:text="ACCEDER"
-                android:textColor="@color/white" />
-        </LinearLayout>
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

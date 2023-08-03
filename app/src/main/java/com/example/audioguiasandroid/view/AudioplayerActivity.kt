@@ -12,6 +12,7 @@ import com.example.audioguiasandroid.model.repository.UserRepository
 import com.example.audioguiasandroid.viewmodel.showAudioguide
 import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showMain
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.ui.PlayerControlView
@@ -26,7 +27,7 @@ import com.squareup.picasso.Picasso
 class AudioplayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAudioplayerBinding
     private var db = FirebaseFirestore.getInstance()
-    private lateinit var player: SimpleExoPlayer
+    private lateinit var player: ExoPlayer
     private lateinit var playerView: PlayerControlView
 
     
@@ -41,7 +42,7 @@ class AudioplayerActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this, "Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
+            showAuth(this, getString(R.string.information), getString(R.string.lost_credentials))
         }else{
             val bundle = intent.extras
             val audioGuideID = bundle?.getString("audioGuide")
@@ -55,8 +56,7 @@ class AudioplayerActivity : AppCompatActivity() {
     }
 
     private fun setup(audioGuideID: String) {
-        title = "Reproductor de audio"
-        player = SimpleExoPlayer.Builder(this).build()
+        player = ExoPlayer.Builder(this).build()
         playerView = binding.playerAudioPlayer
         db.collection("audioGuide").document(audioGuideID).get()
             .addOnSuccessListener { document->
@@ -103,10 +103,8 @@ class AudioplayerActivity : AppCompatActivity() {
         val audioReference : StorageReference = storage.reference.child("audios/audioGuides/" + audioGuideID + "/audio.mp3")
         audioReference.downloadUrl
             .addOnSuccessListener { uri->
-                val item: MediaItem = MediaItem.Builder()
-                    .setUri(uri)
-                    .build()
-                player.addMediaItem(item)
+                val item: MediaItem = MediaItem.fromUri(uri)
+                player.setMediaItem(item)
                 player.prepare()
                 playerView.player = player
             }

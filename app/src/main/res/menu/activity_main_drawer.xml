@@ -4,20 +4,20 @@
         <item android:id="@+id/nav_item_home"
             android:title="Home"/>
         <item android:id="@+id/nav_item_downloads"
-            android:title="Descargas"/>
+            android:title="@string/downloads_title"/>
         <item android:id="@+id/nav_item_favs"
-            android:title="Favoritos"/>
+            android:title="@string/favs_title"/>
         <item android:id="@+id/nav_item_help"
-            android:title="Ayuda y comentarios"/>
+            android:title="@string/help_title"/>
         <item android:id="@+id/nav_item_config"
-            android:title="Configuración"/>
+            android:title="@string/configuration_title"/>
     </group>
-    <item android:title="Cuenta">
+    <item android:title="@string/account_title">
         <menu>
             <item android:id="@+id/nav_item_profile"
-                android:title="Modificar perfil"/>
+                android:title="@string/modify_profile"/>
             <item android:id="@+id/nav_item_logout"
-                android:title="Cerrar sesión"/>
+                android:title="@string/log_out"/>
         </menu>
     </item>
 </menu>

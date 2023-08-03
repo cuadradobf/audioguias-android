@@ -49,7 +49,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this, "Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, vuelve a iniciar sesión.")
+            showAuth(this, getString(R.string.information), getString(R.string.lost_credentials))
         }else{
             val bundle = intent.extras
             val audioGuideID = bundle?.getString("audioGuide")
@@ -64,7 +64,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setup(audioGuideID: String){
-        title = "Audioguia"
+        title = "Audioguias"
         db.collection("audioGuide").document(audioGuideID).get()
             .addOnSuccessListener{
                 binding.titleTextViewAudioGuideActivity.text = it.get("title").toString()
@@ -95,7 +95,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                             if (document.exists()){
                                 val rating = document.get("valoration").toString().toFloat()
                                 binding.ratingBarAudioGuideActivity.rating = rating
-                                binding.commentEditTextAudioGuideActivity.hint = "Modifica tu comentario..."
+                                binding.commentEditTextAudioGuideActivity.hint = getString(R.string.modify_comment)
                             }
                         }
                 }
@@ -104,7 +104,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                         binding.autorTextViewAudioGuideActivity.text = document.get("name").toString() + " " + document.get("surname").toString()
                     }
                     .addOnFailureListener {e->
-                        binding.autorTextViewAudioGuideActivity.text = "Anónimo"
+                        binding.autorTextViewAudioGuideActivity.text = getString(R.string.anonymous)
                         Log.w(ContentValues.TAG, "Error getting user information.", e)
                     }
 
@@ -219,7 +219,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.w(ContentValues.TAG, "Error updating comment data.", e)
             }
         }else{
-            showAlert(this,"Error","El comentario está vacio o no se ha indicado ninguna valoración.")
+            showAlert(this,getString(R.string.information),getString(R.string.empty_comment))
         }
     }
 

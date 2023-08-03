@@ -66,8 +66,9 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toStartOf="@id/costTextView_AudioGuide"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="Precio: "
-                    android:textStyle="bold" />
+                    android:text="@string/cost_text_view"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="4dp"/>
                 <TextView
                     android:id="@+id/onlyTextEurosTextView_AudioGuide"
                     android:layout_width="wrap_content"

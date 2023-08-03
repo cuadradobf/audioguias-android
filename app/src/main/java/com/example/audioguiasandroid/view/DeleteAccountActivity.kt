@@ -32,14 +32,15 @@ class DeleteAccountActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth(this,getString(R.string.information), getString(R.string.lost_credentials))
         }else{
             setup()
         }
     }
 
     private fun setup(){
-        title = "Eliminar cuenta"
+        //TODO: cambiar color del boton eliminar cuenta
+        title = getString(R.string.delete_account_title)
         val deleteAccountButton = findViewById<Button>(R.id.deleteAccountButton_DeleteAccount)
         val backButton = findViewById<Button>(R.id.backButton_DeleteAccount)
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText_DeleteAccount)
@@ -57,7 +58,7 @@ class DeleteAccountActivity : AppCompatActivity() {
                                 if (task.isSuccessful) {
                                     Log.d(ContentValues.TAG, "User account deleted.")
                                 }else{
-                                    showAlert(this, "Error", "Error al eliminar su cuenta de autenticación.")
+                                    showAlert(this, getString(R.string.information), getString(R.string.error_delete_account))
                                 }
                             }
                         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).delete()
@@ -65,10 +66,10 @@ class DeleteAccountActivity : AppCompatActivity() {
                         prefs.clear()
                         prefs.apply()
 
-                        showAuth(this,"Información", "Su cuenta se ha eliminado con exito.")
+                        showAuth(this,getString(R.string.information), getString(R.string.success_delete_account))
 
                     }else{
-                        showAlert(this, "Error", "Contraseña incorrecta.")
+                        showAlert(this, getString(R.string.information), getString(R.string.wrong_password))
                     }
                 }
         }

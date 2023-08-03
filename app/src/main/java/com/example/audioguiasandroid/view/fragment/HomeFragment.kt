@@ -4,19 +4,16 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioguiasandroid.R
@@ -24,20 +21,17 @@ import com.example.audioguiasandroid.databinding.FragmentHomeBinding
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.model.repository.AudioGuideRepository
 import com.example.audioguiasandroid.view.UserProfileActivity
-import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.example.audioguiasandroid.viewmodel.changeLocationMode
-import com.example.audioguiasandroid.viewmodel.initRecyclerViewWithLocation
 import com.example.audioguiasandroid.viewmodel.onItemSelected
 import com.example.audioguiasandroid.viewmodel.updateDataAdapterByFilter
-import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
+import java.util.Locale
 
 class HomeFragment : Fragment() {
     private var storage = Firebase.storage
@@ -45,11 +39,18 @@ class HomeFragment : Fragment() {
     private lateinit var audioGuideAdapter: AudioGuideAdapter
     private lateinit var listAudioGuide : List<AudioGuide>
     private var _binding: FragmentHomeBinding? = null
+    private lateinit var language: String
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
 
+    fun setListAudioGuide(newList: List<AudioGuide>) {
+        listAudioGuide = newList
+    }
+    fun getLanguage():String{
+        return language
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +58,8 @@ class HomeFragment : Fragment() {
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val currentLocale: Locale = resources.configuration.locale
+        language = currentLocale.language
         setup()
 
         return root
@@ -95,13 +98,8 @@ class HomeFragment : Fragment() {
         }
 
         userImageView?.setOnClickListener {
-            if (Firebase.auth.currentUser?.isEmailVerified == true){
-                val intent = Intent(requireActivity(), UserProfileActivity::class.java)
-                startActivity(intent)
-            }else{
-                val intent = Intent(requireActivity(), VerifyActivity::class.java)
-                startActivity(intent)
-            }
+            val intent = Intent(requireActivity(), UserProfileActivity::class.java)
+            startActivity(intent)
         }
 
         locationImageView?.setOnClickListener {
@@ -113,7 +111,7 @@ class HomeFragment : Fragment() {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                Toast.makeText(requireContext(), "Funcionalidad deshabilitada debido a que no se han concedido permisos de ubicación.", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show()
             }else{
                 db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                     .addOnSuccessListener { document ->
@@ -122,7 +120,7 @@ class HomeFragment : Fragment() {
                             "10" -> 0
                             else -> 2
                         }
-                        changeLocationMode(requireActivity(), arrayOf(getString(R.string.location_10km_mode),getString(R.string.location_50km_mode), getString(R.string.off_mode)), item, _binding?.locationImageViewHomeF, R.drawable.baseline_location_on_24, R.drawable.baseline_location_off_24, audioGuideAdapter)
+                        changeLocationMode(requireActivity(), item, _binding?.locationImageViewHomeF, R.drawable.baseline_location_on_24, R.drawable.baseline_location_off_24, audioGuideAdapter)
 
                     }
             }
@@ -174,18 +172,38 @@ class HomeFragment : Fragment() {
     private fun initRecyclerView(){
         val recyclerView : RecyclerView? = _binding?.recyclerAudioGuideHomeF
         if (recyclerView != null){
-            db.collection("audioGuide").get()
-                .addOnSuccessListener { result ->
-                    listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
-                    val manager = LinearLayoutManager(requireContext())
-                    recyclerView?.layoutManager = manager
-                    audioGuideAdapter = AudioGuideAdapter(listAudioGuide){ onItemSelected(requireActivity(), it) }
-                    recyclerView?.adapter = audioGuideAdapter
-                    Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
-                }
+            if (language == "es"){
+                db.collection("audioGuide")
+                    .whereEqualTo("language", "es")
+                    .get()
+                    .addOnSuccessListener { result ->
+                        listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                        val manager = LinearLayoutManager(requireContext())
+                        recyclerView?.layoutManager = manager
+                        audioGuideAdapter = AudioGuideAdapter(listAudioGuide){ onItemSelected(requireActivity(), it) }
+                        recyclerView?.adapter = audioGuideAdapter
+                        Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
+                    }
+            }else{
+                db.collection("audioGuide")
+                    .whereEqualTo("language", "en")
+                    .get()
+                    .addOnSuccessListener { result ->
+                        listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                        val manager = LinearLayoutManager(requireContext())
+                        recyclerView?.layoutManager = manager
+                        audioGuideAdapter = AudioGuideAdapter(listAudioGuide){ onItemSelected(requireActivity(), it) }
+                        recyclerView?.adapter = audioGuideAdapter
+                        Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
+                    }
+            }
+
         }
 
     }
@@ -198,7 +216,7 @@ class HomeFragment : Fragment() {
         if (requestCode == 1001) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // El usuario concedió el permiso, obtén la ubicación actual
-                changeLocationMode(requireActivity(), arrayOf(getString(R.string.location_10km_mode),getString(R.string.location_50km_mode), getString(R.string.off_mode)), 0, _binding?.locationImageViewHomeF, R.drawable.baseline_location_on_24, R.drawable.baseline_location_off_24, audioGuideAdapter)
+                changeLocationMode(requireActivity(), 0, _binding?.locationImageViewHomeF, R.drawable.baseline_location_on_24, R.drawable.baseline_location_off_24, audioGuideAdapter)
             } else {
                 // El usuario denegó el permiso, toma medidas apropiadas (por ejemplo, mostrar un mensaje)
                 _binding?.locationImageViewHomeF?.setImageResource(R.drawable.baseline_location_off_24)
@@ -209,7 +227,7 @@ class HomeFragment : Fragment() {
                     //Opcion para combinar los datos y que no los machaque
                     SetOptions.merge()
                 )
-                Toast.makeText(requireContext(), "Funcionalidad deshabilitada debido a que no se han concedido permisos de ubicación.", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show()
             }
         }
     }

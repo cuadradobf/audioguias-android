@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.provider.Settings.Global.getString
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
@@ -28,14 +29,16 @@ fun changePassword(activity: AppCompatActivity,actualPassword: String, newPasswo
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Log.d(ContentValues.TAG, "User password updated.")
-                            showAlert(activity, "Información", "Contraseña cambiada correctamente.")
+                            //showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.change_password_successfully))
+                            Toast.makeText(activity, activity.getString(R.string.change_password_successfully), Toast.LENGTH_SHORT).show()
+                            showUserProfile(activity)
                         }else{
-                            showAlert(activity, "Error", "Error al cambiar la contraseña.")
+                            showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.change_password_error))
                         }
                     }
 
             }else{
-                showAlert(activity, "Error", "Contraseña actual incorrecta. Error al re-autenticar.")
+                showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.incorrect_actual_password))
             }
         }
 }
@@ -48,7 +51,9 @@ fun sendEmailVerifyAccount(activity: AppCompatActivity){
                 Log.d(ContentValues.TAG, "Email sent.")
             }
         }
-    showAlert(activity, "Información", "Se ha enviado a " + Firebase.auth.currentUser?.email.toString() + " un email de verificación.")
+    val text = activity.getString(R.string.verification_email_sent) + " " + Firebase.auth.currentUser?.email.toString() + "."
+    Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
+    //showAlert(activity, activity.getString(R.string.information), "Se ha enviado a " + Firebase.auth.currentUser?.email.toString() + " un email de verificación.")
 }
 
 fun changeNameAndSurname(activity: AppCompatActivity, name: String, surname: String){
@@ -76,14 +81,16 @@ fun changeNameAndSurname(activity: AppCompatActivity, name: String, surname: Str
                             Log.d(ContentValues.TAG, "User profile updated.")
                         }
                     }
-                showAlert(activity, "Informacion", "Se han guardado los cambios.")
+                val text = activity.getString(R.string.changes_saved)
+                Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
+                //showAlert(activity, "Informacion", "Se han guardado los cambios.")
             }
             .addOnFailureListener{ e ->
                 Log.w(ContentValues.TAG, "Error getting user data.", e)
-                showAlert(activity, "Error", "Error al obtener información del usuario")
+                showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.error_user_info))
             }
     }else{
-        showAlert(activity,"Error","Campos obligatorios sin completar o hay caracteres inválidos. Solo puedes utilizar caracteres de A-z para el nombre y apellidos.")
+        showAlert(activity,activity.getString(R.string.information),activity.getString(R.string.invalid_fields_name_surname))
     }
 }
 
@@ -94,19 +101,19 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
 
     if ((name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && password2.isNotEmpty() && surname.isNotEmpty() && regex.matches(name) && regex.matches(surname)) || (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && password2.isNotEmpty() && surname.isEmpty() && regex.matches(name))){
     }else{
-        showAlert(activity, "Error", "Faltan campos obligatorios por completar o hay caracteres inválidos. Solo puedes utilizar caracteres de A-z para el nombre y apellidos.")
+        showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.invalid_fields_name_surname))
         return false
     }
 
     if (password == password2){
     }else{
-        showAlert(activity, "Error", "Las contraseñas no coinciden.")
+        showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.dont_match_passwords))
         return false
     }
 
     if (regexPassword.matches(password)){
     }else{
-        showAlert(activity,"Error", "La contraseña no cumple con los requisitos. Debe llevar al menos una letra mayúscula, una letra minúscula, un dígito, un símbolo y mínimo 8 caracteres.")
+        showAlert(activity,activity.getString(R.string.information), activity.getString(R.string.password_requirements))
         return false
     }
 
@@ -149,7 +156,7 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
                         }
                     }
             } else {
-                showAlert(activity,"Error","Se ha producido un error en la creacion del usuario.")
+                showAlert(activity,activity.getString(R.string.information),activity.getString(R.string.error_create_account))
             }
         }
         return true
@@ -167,7 +174,7 @@ fun changeLanguage(activity: FragmentActivity, languages: Array<String>, checked
         )
         textView.text = firebaseArray[item]
         dialog.dismiss()
-        //TODO: cambiar logica de configuracion
+        //TODO: implementar logica para cambiar de idioma
     }
     builder.create()
 
@@ -188,7 +195,7 @@ fun changeUnitOfMeasurement(activity: FragmentActivity, units: Array<String>, ch
         )
         textView.text = units[item]
         dialog.dismiss()
-        //TODO: cambiar logica de configuracion
+        //TODO: implementar logica para cambiar la unidad de medida
     }
     builder.create()
 
@@ -197,8 +204,9 @@ fun changeUnitOfMeasurement(activity: FragmentActivity, units: Array<String>, ch
     dialog.show()
 }
 
-fun changeRedMode(activity: FragmentActivity, modes: Array<String>, checkedItem: Int, textView: TextView){
+fun changeRedMode(activity: FragmentActivity, checkedItem: Int, textView: TextView){
     val builder = AlertDialog.Builder(activity)
+    val modes = arrayOf(activity.getString(R.string.all_redMode), activity.getString(R.string.wifi_redMode),activity.getString(R.string.offline_redMode))
     val firebaseArray = arrayOf("all", "wifi", "offline")
     builder.setSingleChoiceItems(modes,checkedItem){dialog, item ->
         FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
@@ -210,7 +218,7 @@ fun changeRedMode(activity: FragmentActivity, modes: Array<String>, checkedItem:
         )
         textView.text = modes[item]
         dialog.dismiss()
-        //TODO: cambiar logica de configuracion
+        //TODO: implementar logica para cambiar el modo de red
     }
     builder.create()
 
@@ -232,7 +240,7 @@ fun changeDownloadStorage(activity: FragmentActivity, modes: Array<String>, chec
         )
         textView.text = modes[item]
         dialog.dismiss()
-        //TODO: cambiar logica de configuracion
+        //TODO: implementar logica para cambiar la ubicacion de descarga
     }
     builder.create()
 
@@ -240,3 +248,5 @@ fun changeDownloadStorage(activity: FragmentActivity, modes: Array<String>, chec
     val dialog: AlertDialog = builder.create()
     dialog.show()
 }
+
+//TODO: implementar logica para main users

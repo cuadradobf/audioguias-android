@@ -3,6 +3,8 @@ package com.example.audioguiasandroid.view
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import com.example.audioguiasandroid.model.data.ProviderType
@@ -13,8 +15,6 @@ import com.example.audioguiasandroid.viewmodel.signUp
 import com.google.firebase.firestore.FirebaseFirestore
 
 class SignUpActivity : AppCompatActivity() {
-
-    private val db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -23,7 +23,7 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setup(){
-        title = "Registro"
+        title = getString(R.string.sign_up_title)
 
         val nameEditText = findViewById<EditText>(R.id.nameEditText_SignUp)
         val surnameEditText = findViewById<EditText>(R.id.surnameEditText_SignUp)
@@ -42,6 +42,16 @@ class SignUpActivity : AppCompatActivity() {
 
         backButton.setOnClickListener {
             showAuth(this)
+        }
+
+        //Al pulsar Enter sobre el edit text realiza la accion de pulsar el boton de registro
+        password2EditText.setOnEditorActionListener { textView, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                signUpButton.performClick()
+                true
+            } else {
+                false
+            }
         }
     }
 }

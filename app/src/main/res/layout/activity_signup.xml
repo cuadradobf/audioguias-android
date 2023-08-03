@@ -10,102 +10,83 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginHorizontal="8dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="8dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <Button
+            android:id="@+id/backButton_SignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back"
+            android:textColor="@color/white"
+            android:layout_marginBottom="24dp"/>
 
         <EditText
             android:id="@+id/nameEditText_SignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Nombre"
+            android:hint="@string/name"
             android:inputType="textPersonName"
             android:singleLine="true"
-            android:maxLines="1"/>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:maxLines="1"
+            android:layout_marginVertical="4dp"/>
 
         <EditText
             android:id="@+id/surnameEditText_SignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Apellidos (Opcional)"
+            android:hint="@string/surname_optional"
             android:inputType="textPersonName"
             android:singleLine="true"
-            android:maxLines="1"/>
+            android:maxLines="1"
+            android:layout_marginVertical="4dp"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
 
         <EditText
             android:id="@+id/emailEditText_SignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:singleLine="true"
-            android:maxLines="1"/>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
+            android:maxLines="1"
+            android:layout_marginVertical="4dp"/>
 
         <EditText
             android:id="@+id/passwordEditText_SignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Contraseña"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:singleLine="true"
-            android:maxLines="1"/>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-
+            android:maxLines="1"
+            android:layout_marginVertical="4dp"/>
         <EditText
             android:id="@+id/password2EditText_SignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Contraseña"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:singleLine="true"
             android:maxLines="1"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-
         <Button
             android:id="@+id/signUpButtton_SignUp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:text="REGISTRAR"
-            android:textColor="@color/white" />
+            android:text="@string/signUp"
+            android:textColor="@color/white"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="40dp" />
 
-        <Button
-            android:id="@+id/backButton_SignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:text="ATRAS"
-            android:textColor="@color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

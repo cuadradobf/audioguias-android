@@ -8,7 +8,9 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -20,6 +22,7 @@ import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showChangePassword
 import com.example.audioguiasandroid.viewmodel.showDeleteAccount
 import com.example.audioguiasandroid.viewmodel.showMain
+import com.example.audioguiasandroid.viewmodel.showVerify
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -44,14 +47,18 @@ class UserProfileActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth(this,getString(R.string.information),getString(R.string.lost_credentials))
         }else{
-            setup()
+            if (Firebase.auth.currentUser?.isEmailVerified == true){
+                setup()
+            }else{
+                showVerify(this)
+            }
         }
     }
 
     private fun setup(){
-        title = "Perfil"
+        title = getString(R.string.profile_title)
 
         val userImage = findViewById<ImageView>(R.id.userImageView_UserProfile)
         val removeImage = findViewById<ImageView>(R.id.removeImageView_UserProfile)
@@ -61,12 +68,11 @@ class UserProfileActivity : AppCompatActivity() {
         val changePasswordButton = findViewById<Button>(R.id.changePasswordButton_UserProfile)
         val saveButton = findViewById<Button>(R.id.saveButton_UserProfile)
         val logOutButton = findViewById<Button>(R.id.logOutButton_UserProfile)
-        val deleteAccountButton = findViewById<Button>(R.id.deleteAccountButton_UserProfile)
         val backButton = findViewById<Button>(R.id.backButton_UserProfile)
 
         val storage = Firebase.storage
-        var storageRef = storage.reference
-        var userRef: StorageReference = storageRef.child("images").child(Firebase.auth.currentUser?.email.toString() + "/profile")
+        val storageRef = storage.reference
+        val userRef: StorageReference = storageRef.child("images").child(Firebase.auth.currentUser?.email.toString() + "/profile")
 
         //Descargar imagen de perfil
         userRef.downloadUrl.addOnSuccessListener {
@@ -113,15 +119,20 @@ class UserProfileActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,"Información", "Se ha cerrado sesión.")
-        }
-
-        deleteAccountButton.setOnClickListener {
-            showDeleteAccount(this)
+            showAuth(this,getString(R.string.information), getString(R.string.log_out_info))
         }
 
         backButton.setOnClickListener {
             showMain(this, "home")
+        }
+        //Al pulsar Enter sobre el edit text realiza la accion de pulsar el boton de guardado
+        surnameEditText.setOnEditorActionListener { textView, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                saveButton.performClick()
+                true
+            } else {
+                false
+            }
         }
 
     }
@@ -159,7 +170,7 @@ class UserProfileActivity : AppCompatActivity() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "Seleccionar imagen"), PICK_IMAGE_REQUEST)
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), PICK_IMAGE_REQUEST)
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

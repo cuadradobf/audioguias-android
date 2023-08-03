@@ -29,12 +29,14 @@ import com.example.audioguiasandroid.view.SignUpActivity
 import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
+import com.example.audioguiasandroid.view.fragment.HomeFragment
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
+import java.util.Locale
 import kotlin.properties.Delegates
 
 fun showAlert(activity: AppCompatActivity, title: String, exception: String){
@@ -47,12 +49,12 @@ fun showAlert(activity: AppCompatActivity, title: String, exception: String){
     }
 
     if (exception.isNullOrEmpty()){
-        builder.setMessage("Se ha producido un error.")
+        builder.setMessage(activity.getString(R.string.error_text))
     }else{
         builder.setMessage(exception)
     }
 
-    builder.setPositiveButton("Aceptar",null)
+    builder.setPositiveButton(activity.getString(R.string.agree),null)
     val dialog: AlertDialog = builder.create()
     dialog.show()
 }
@@ -135,13 +137,13 @@ fun showContactUs(activity: FragmentActivity){
 
 fun changeLocationMode(
     activity: FragmentActivity,
-    modes: Array<String>,
     checkedItem: Int,
     imageView: ImageView?,
     locationOn: Int,
     locationOff: Int,
     audioGuideAdapter: AudioGuideAdapter){
 
+    val modes = arrayOf(activity.getString(R.string.location_10km_mode),activity.getString(R.string.location_50km_mode), activity.getString(R.string.off_mode))
     val builder = AlertDialog.Builder(activity)
     builder.setSingleChoiceItems(modes,checkedItem){dialog, item ->
 
@@ -161,15 +163,29 @@ fun changeLocationMode(
             }
             2 -> {
                 imageView?.setImageResource(locationOff)
-                FirebaseFirestore.getInstance().collection("audioGuide").get()
-                    .addOnSuccessListener { result ->
-                        val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
-                        audioGuideAdapter.updateData(listAudioGuide)
 
-                    }
+                if (HomeFragment().getLanguage() == "es"){
+                    FirebaseFirestore.getInstance().collection("audioGuide")
+                        .whereEqualTo("language", "es")
+                        .get()
+                        .addOnSuccessListener { result ->
+                            val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                            HomeFragment().setListAudioGuide(listAudioGuide)
+                            audioGuideAdapter.updateData(listAudioGuide)
+                        }
+                }else{
+                    FirebaseFirestore.getInstance().collection("audioGuide")
+                        .whereEqualTo("language", "en")
+                        .get()
+                        .addOnSuccessListener { result ->
+                            val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                            HomeFragment().setListAudioGuide(listAudioGuide)
+                            audioGuideAdapter.updateData(listAudioGuide)
+                        }
+                }
+
             }
         }
-
         FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
             hashMapOf(
                 "locationMode" to i
@@ -177,17 +193,12 @@ fun changeLocationMode(
             //Opcion para combinar los datos y que no los machaque
             SetOptions.merge()
         )
-
-
         dialog.dismiss()
     }
 
-
-
-
     builder.create()
 
-    builder.setPositiveButton("Cancelar",null)
+    builder.setPositiveButton(activity.getString(R.string.cancel),null)
     val dialog: AlertDialog = builder.create()
     dialog.show()
 }
@@ -239,7 +250,8 @@ fun initRecyclerViewWithLocation(activity: FragmentActivity, radiusInKm : Double
                         .whereLessThan("location", upperGeoPoint)
                         .get()
                         .addOnSuccessListener { result ->
-                            val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                            var listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                            HomeFragment().setListAudioGuide(listAudioGuide)
                             audioGuideAdapter.updateData(listAudioGuide)
                         }
                         .addOnFailureListener { exception ->

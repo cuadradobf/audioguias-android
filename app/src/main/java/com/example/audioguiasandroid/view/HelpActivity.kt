@@ -25,7 +25,7 @@ class HelpActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,"Alerta", "Los credenciales de tu cuenta se han perdido. Por favor, introducelos de nuevo.")
+            showAuth(this,getString(R.string.information), getString(R.string.lost_credentials))
         }else{
             setup()
         }

@@ -3,9 +3,12 @@ package com.example.audioguiasandroid.view
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.showAlert
@@ -54,7 +57,7 @@ class AuthActivity : AppCompatActivity() {
 
         val emailEditText = findViewById<EditText>(R.id.emailEditText_Auth)
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText_Auth)
-        val signUpButton = findViewById<Button>(R.id.signUpButton_Auth)
+        val createAccountTextView = findViewById<TextView>(R.id.createAccountTextView_Auth)
         val signInButton = findViewById<Button>(R.id.signInButton_Auth)
 
         signInButton.setOnClickListener {
@@ -68,12 +71,21 @@ class AuthActivity : AppCompatActivity() {
                     }
                 }
             }else{
-                showAlert(this, "Error", "Faltan campos obligatorios por completar.")
+                showAlert(this, getString(R.string.information), getString(R.string.required_fields))
             }
         }
 
-        signUpButton.setOnClickListener {
+        createAccountTextView.setOnClickListener {
             showSignUp(this)
+        }
+        //Al pulsar Enter sobre el edit text realiza la accion de pulsar el boton de acceso
+        passwordEditText.setOnEditorActionListener { textView, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                signInButton.performClick()
+                true
+            } else {
+                false
+            }
         }
     }
 }
