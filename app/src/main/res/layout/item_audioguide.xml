@@ -23,12 +23,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Titulo" />
+        <ImageView
+            android:id="@+id/blockImageView_AudioGuide"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/baseline_block_24"
+            app:layout_constraintEnd_toStartOf="@+id/deleteImageView_AudioGuide"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/deleteImageView_AudioGuide"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/baseline_delete_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="8dp"
             app:layout_constraintTop_toBottomOf="@id/titleTextView_AudioGuide">
 
             <ImageView

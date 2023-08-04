@@ -51,7 +51,7 @@ class ConfigurationActivity : AppCompatActivity() {
                 }else{
                     redMode = getString(R.string.offline_redMode)
                 }
-                binding.redModeTextViewConfiguration.text = redMode
+                //binding.redModeTextViewConfiguration.text = redMode
 
                 /*
                 var storage = document.getString("storage") ?: "internal"
@@ -89,6 +89,7 @@ class ConfigurationActivity : AppCompatActivity() {
                     }
                 }
         }
+        /*
         binding.redModeTitleTextViewCofiguration.setOnClickListener {
             db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                 .addOnSuccessListener { document->
@@ -101,6 +102,8 @@ class ConfigurationActivity : AppCompatActivity() {
                     }
                 }
         }
+
+         */
         binding.deleteAccountTitleTextViewConfiguration.setOnClickListener {
             showDeleteAccount(this)
         }

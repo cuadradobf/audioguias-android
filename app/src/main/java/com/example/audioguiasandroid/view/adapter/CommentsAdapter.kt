@@ -8,7 +8,7 @@ import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.model.data.Comment
 import com.example.audioguiasandroid.model.repository.CommentDiffUtil
 
-class CommentsAdapter(private var listComments:List<Comment>):RecyclerView.Adapter<CommentsViewHolder>() {
+class CommentsAdapter(private var listComments:List<Comment>, val onItemRemove:(Comment, String) -> Unit):RecyclerView.Adapter<CommentsViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return CommentsViewHolder(layoutInflater.inflate(R.layout.item_comments, parent, false))
@@ -18,7 +18,7 @@ class CommentsAdapter(private var listComments:List<Comment>):RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: CommentsViewHolder, position: Int) {
         val item = listComments[position]
-        holder.render(item)
+        holder.render(item, onItemRemove)
     }
 
     fun updateData(newData: List<Comment>){

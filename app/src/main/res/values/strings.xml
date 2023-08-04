@@ -29,8 +29,8 @@
     <string name="visit_web_page">Visit our web page</string>
     <string name="contact_us_text">Enter your question or feedback:</string>
     <string name="send">Send</string>
-    <string name="location_10km_mode">10 km</string>
-    <string name="location_50km_mode">50 km</string>
+    <string name="location_10km_mode">10 Km</string>
+    <string name="location_50km_mode">50 Km</string>
     <string name="off_mode">Off</string>
     <string name="spanish">Spanish</string>
     <string name="description_title">Description</string>
@@ -85,6 +85,8 @@
     <string name="error_text">An error has occurred.</string>
     <string name="agree">Agree</string>
     <string name="cancel">Cancel</string>
+    <string name="location_6mi_mode" translatable="false">6 Mi</string>
+    <string name="location_30mi_mode" translatable="false">30 Mi</string>
 
 
 </resources>

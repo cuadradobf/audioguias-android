@@ -17,11 +17,12 @@ import com.example.audioguiasandroid.model.repository.AudioGuideRepository
 import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
-import com.example.audioguiasandroid.viewmodel.onItemSelected
+import com.example.audioguiasandroid.viewmodel.showAudioguide
 import com.example.audioguiasandroid.viewmodel.updateDataAdapterByFilter
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
@@ -101,11 +102,26 @@ class FavsFragment : Fragment() {
                                 listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
                                 val manager = LinearLayoutManager(requireContext())
                                 recyclerView?.layoutManager = manager
-                                audioGuideAdapter = AudioGuideAdapter(listAudioGuide) {
-                                    onItemSelected(
-                                        requireActivity(),
-                                        it
-                                    )
+                                audioGuideAdapter = AudioGuideAdapter(listAudioGuide) {audioGuide, action ->
+                                    when(action){
+                                        "view" -> showAudioguide(requireActivity(), audioGuide.id)
+                                        "delete" -> {
+                                            db.collection("audioGuide").document(audioGuide.id).delete()
+                                                .addOnSuccessListener {
+                                                    listAudioGuide = listAudioGuide.minus(audioGuide)
+                                                    audioGuideAdapter.updateData(listAudioGuide)
+                                                }
+                                        }
+                                        "block" -> {
+                                            db.collection("user").document(audioGuide.user).set(
+                                                hashMapOf(
+                                                    "banned" to true
+                                                ),
+                                                //Opcion para combinar los datos y que no los machaque
+                                                SetOptions.merge()
+                                            )
+                                        }
+                                    }
                                 }
                                 recyclerView?.adapter = audioGuideAdapter
                                 Log.d(ContentValues.TAG, "Getting audio guides data successfully.")

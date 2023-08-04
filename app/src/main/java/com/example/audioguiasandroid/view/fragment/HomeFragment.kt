@@ -23,7 +23,7 @@ import com.example.audioguiasandroid.model.repository.AudioGuideRepository
 import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.example.audioguiasandroid.viewmodel.changeLocationMode
-import com.example.audioguiasandroid.viewmodel.onItemSelected
+import com.example.audioguiasandroid.viewmodel.showAudioguide
 import com.example.audioguiasandroid.viewmodel.updateDataAdapterByFilter
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,17 +40,11 @@ class HomeFragment : Fragment() {
     private lateinit var listAudioGuide : List<AudioGuide>
     private var _binding: FragmentHomeBinding? = null
     private lateinit var language: String
+    private var flag: Boolean = false
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
-    fun setListAudioGuide(newList: List<AudioGuide>) {
-        listAudioGuide = newList
-    }
-    fun getLanguage():String{
-        return language
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,6 +89,24 @@ class HomeFragment : Fragment() {
 
         searchEditText?.addTextChangedListener {filter ->
             updateDataAdapterByFilter(audioGuideAdapter, listAudioGuide, filter)
+
+            if (flag){
+                db.collection("user").document(Firebase.auth.currentUser?.email.toString())
+                    .get()
+                    .addOnSuccessListener {document ->
+                        if ((document.getString("locationMode") ?: "off") != "off"){
+                            _binding?.locationImageViewHomeF?.setImageResource(R.drawable.baseline_location_off_24)
+                            db.collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
+                                hashMapOf(
+                                    "locationMode" to "off"
+                                ),
+                                //Opcion para combinar los datos y que no los machaque
+                                SetOptions.merge()
+                            )
+                        }
+                    }
+                flag = false
+            }
         }
 
         userImageView?.setOnClickListener {
@@ -120,7 +132,15 @@ class HomeFragment : Fragment() {
                             "10" -> 0
                             else -> 2
                         }
-                        changeLocationMode(requireActivity(), item, _binding?.locationImageViewHomeF, R.drawable.baseline_location_on_24, R.drawable.baseline_location_off_24, audioGuideAdapter)
+                        val unitOfMeasurement = document.getString("unitOfMeasurement") ?: "Km"
+                        val modes : Array<String>
+                        if (unitOfMeasurement == "Km"){
+                            modes = arrayOf(getString(R.string.location_10km_mode),getString(R.string.location_50km_mode), getString(R.string.off_mode))
+                        }else{
+                            modes = arrayOf(getString(R.string.location_6mi_mode),getString(R.string.location_30mi_mode), getString(R.string.off_mode))
+                        }
+                        flag = true
+                        changeLocationMode(requireActivity(), item, _binding?.locationImageViewHomeF, modes, R.drawable.baseline_location_on_24, R.drawable.baseline_location_off_24, audioGuideAdapter)
 
                     }
             }
@@ -180,7 +200,7 @@ class HomeFragment : Fragment() {
                         listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
                         val manager = LinearLayoutManager(requireContext())
                         recyclerView?.layoutManager = manager
-                        audioGuideAdapter = AudioGuideAdapter(listAudioGuide){ onItemSelected(requireActivity(), it) }
+                        setAdapter()
                         recyclerView?.adapter = audioGuideAdapter
                         Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
                     }
@@ -195,7 +215,7 @@ class HomeFragment : Fragment() {
                         listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
                         val manager = LinearLayoutManager(requireContext())
                         recyclerView?.layoutManager = manager
-                        audioGuideAdapter = AudioGuideAdapter(listAudioGuide){ onItemSelected(requireActivity(), it) }
+                        setAdapter()
                         recyclerView?.adapter = audioGuideAdapter
                         Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
                     }
@@ -215,10 +235,9 @@ class HomeFragment : Fragment() {
     ) {
         if (requestCode == 1001) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // El usuario concedió el permiso, obtén la ubicación actual
-                changeLocationMode(requireActivity(), 0, _binding?.locationImageViewHomeF, R.drawable.baseline_location_on_24, R.drawable.baseline_location_off_24, audioGuideAdapter)
+                // El usuario concedió el permiso
             } else {
-                // El usuario denegó el permiso, toma medidas apropiadas (por ejemplo, mostrar un mensaje)
+                // El usuario denegó el permiso
                 _binding?.locationImageViewHomeF?.setImageResource(R.drawable.baseline_location_off_24)
                 db.collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
                     hashMapOf(
@@ -229,6 +248,31 @@ class HomeFragment : Fragment() {
                 )
                 Toast.makeText(requireContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private fun setAdapter(){
+        audioGuideAdapter = AudioGuideAdapter(listAudioGuide){ audioGuide, action ->
+            when(action){
+                "view" -> showAudioguide(requireActivity(), audioGuide.id)
+                "delete" -> {
+                    db.collection("audioGuide").document(audioGuide.id).delete()
+                        .addOnSuccessListener {
+                            listAudioGuide = listAudioGuide.minus(audioGuide)
+                            audioGuideAdapter.updateData(listAudioGuide)
+                        }
+                }
+                "block" -> {
+                    db.collection("user").document(audioGuide.user).set(
+                        hashMapOf(
+                            "banned" to true
+                        ),
+                        //Opcion para combinar los datos y que no los machaque
+                        SetOptions.merge()
+                    )
+                }
+            }
+
         }
     }
 }

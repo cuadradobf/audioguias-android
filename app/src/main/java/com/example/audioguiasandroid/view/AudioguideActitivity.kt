@@ -2,7 +2,6 @@ package com.example.audioguiasandroid.view
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioguideBinding
+import com.example.audioguiasandroid.model.data.Comment
 import com.example.audioguiasandroid.model.repository.CommentsRepository
 import com.example.audioguiasandroid.view.adapter.CommentsAdapter
 import com.example.audioguiasandroid.viewmodel.showAlert
@@ -35,7 +35,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityAudioguideBinding
     private var db = FirebaseFirestore.getInstance()
     private lateinit var map: GoogleMap
-    var commentsAdapter: CommentsAdapter? = null
+    lateinit var commentsAdapter: CommentsAdapter
     private var storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -131,6 +131,12 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                 if (listFavAudioGuides!= null && listFavAudioGuides.contains(audioGuideID)){
                     binding.bookmarkImageViewAudioGuideActivity.setImageResource(R.drawable.baseline_bookmark_24)
                 }
+                //Oculta la funcion de comentar si el usuario se encuentra baneado.
+                val banned = document.getBoolean("banned") ?: false
+                if (banned){
+                    binding.ratingBarAudioGuideActivity.visibility = View.GONE
+                    binding.commentLayoutAudioGuideActivity.visibility = View.GONE
+                }
             }
 
         createGoogleMap()
@@ -202,15 +208,15 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.commentLayoutAudioGuideActivity.visibility = View.GONE
                 db.collection("audioGuide").document(audioGuideID).collection("comments").get()
                     .addOnSuccessListener { result ->
-                        val listComment = CommentsRepository().getAllComments(result, audioGuideID)
-                        if(commentsAdapter == null){
+                        var listComment = CommentsRepository().getAllComments(result, audioGuideID)
+                        if(::commentsAdapter.isInitialized){
+                            commentsAdapter.updateData(listComment)
+                        }else{
                             val manager = LinearLayoutManager(this)
                             binding.commentsRecyclerAudioGuideActivity.layoutManager = manager
-                            commentsAdapter = CommentsAdapter(listComment)
+                            setAdapter(listComment, audioGuideID)
                             binding.commentsRecyclerAudioGuideActivity.adapter = commentsAdapter
                             binding.titleCommetsTextViewAudioGuideActivity.visibility = View.VISIBLE
-                        }else{
-                            commentsAdapter?.updateData(listComment)
                         }
 
                     }
@@ -227,14 +233,14 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
         db.collection("audioGuide").document(audioGuideID).collection("comments").get()
             .addOnSuccessListener { result ->
-                val listComment = CommentsRepository().getAllComments(result, audioGuideID)
+                var listComment = CommentsRepository().getAllComments(result, audioGuideID)
 
                 if(listComment.size == 0){
                     binding.titleCommetsTextViewAudioGuideActivity.visibility = View.GONE
                 }else{
                     val manager = LinearLayoutManager(this)
                     binding.commentsRecyclerAudioGuideActivity.layoutManager = manager
-                    commentsAdapter = CommentsAdapter(listComment)
+                    setAdapter(listComment, audioGuideID)
                     binding.commentsRecyclerAudioGuideActivity.adapter = commentsAdapter
                 }
             }
@@ -273,6 +279,32 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                 }
             }
+        }
+    }
+
+    private fun setAdapter(listComment: List<Comment>, audioGuideID: String){
+        commentsAdapter = CommentsAdapter(listComment){comment, action ->
+            when(action){
+                "delete" -> {
+                    db.collection("audioGuide").document(audioGuideID).collection("comments").document(comment.id).delete()
+                        .addOnSuccessListener {
+                            val newList = listComment.minus(comment)
+                            commentsAdapter.updateData(newList)
+                        }
+                }
+                "block" -> {
+                    db.collection("user").document(comment.id).set(
+                        hashMapOf(
+                            "banned" to true
+                        ),
+                        //Opcion para combinar los datos y que no los machaque
+                        SetOptions.merge()
+                    )
+                    binding.ratingBarAudioGuideActivity.visibility = View.GONE
+                    binding.commentLayoutAudioGuideActivity.visibility = View.GONE
+                }
+            }
+
         }
     }
 }

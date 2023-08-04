@@ -1,18 +1,14 @@
 package com.example.audioguiasandroid.viewmodel
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.ImageView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.model.repository.AudioGuideRepository
@@ -29,7 +25,6 @@ import com.example.audioguiasandroid.view.SignUpActivity
 import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
-import com.example.audioguiasandroid.view.fragment.HomeFragment
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -37,7 +32,6 @@ import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import java.util.Locale
-import kotlin.properties.Delegates
 
 fun showAlert(activity: AppCompatActivity, title: String, exception: String){
     val builder = AlertDialog.Builder(activity)
@@ -93,12 +87,7 @@ fun showAudioplayer(activity: AppCompatActivity, audioGuideID: String){
     activity.startActivity(intent)
 }
 
-fun onItemSelected(activity: FragmentActivity, audioGuide: AudioGuide){
-    val intent = Intent(activity, AudioguideActitivity::class.java).apply {
-        putExtra("audioGuide", audioGuide.id)
-    }
-    activity.startActivity(intent)
-}
+
 fun showSignUp(activity: FragmentActivity){
     val intent = Intent(activity, SignUpActivity::class.java)
     activity.startActivity(intent)
@@ -139,11 +128,11 @@ fun changeLocationMode(
     activity: FragmentActivity,
     checkedItem: Int,
     imageView: ImageView?,
+    modes: Array<String>,
     locationOn: Int,
     locationOff: Int,
     audioGuideAdapter: AudioGuideAdapter){
 
-    val modes = arrayOf(activity.getString(R.string.location_10km_mode),activity.getString(R.string.location_50km_mode), activity.getString(R.string.off_mode))
     val builder = AlertDialog.Builder(activity)
     builder.setSingleChoiceItems(modes,checkedItem){dialog, item ->
 
@@ -164,13 +153,15 @@ fun changeLocationMode(
             2 -> {
                 imageView?.setImageResource(locationOff)
 
-                if (HomeFragment().getLanguage() == "es"){
+                val currentLocale: Locale = activity.resources.configuration.locale
+                val language = currentLocale.language
+
+                if (language == "es"){
                     FirebaseFirestore.getInstance().collection("audioGuide")
                         .whereEqualTo("language", "es")
                         .get()
                         .addOnSuccessListener { result ->
                             val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
-                            HomeFragment().setListAudioGuide(listAudioGuide)
                             audioGuideAdapter.updateData(listAudioGuide)
                         }
                 }else{
@@ -179,7 +170,6 @@ fun changeLocationMode(
                         .get()
                         .addOnSuccessListener { result ->
                             val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
-                            HomeFragment().setListAudioGuide(listAudioGuide)
                             audioGuideAdapter.updateData(listAudioGuide)
                         }
                 }
@@ -251,7 +241,6 @@ fun initRecyclerViewWithLocation(activity: FragmentActivity, radiusInKm : Double
                         .get()
                         .addOnSuccessListener { result ->
                             var listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
-                            HomeFragment().setListAudioGuide(listAudioGuide)
                             audioGuideAdapter.updateData(listAudioGuide)
                         }
                         .addOnFailureListener { exception ->

@@ -126,7 +126,10 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
                         "name" to name,
                         "surname" to surname,
                         "provider" to provider,
-                        "rol" to "Standar"
+                        "rol" to "Standar",
+                        "locationMode" to "off",
+                        "unitOfMeasurement" to "Km",
+                        "banned" to false
                     )
                 )
                     .addOnSuccessListener {
@@ -195,7 +198,6 @@ fun changeUnitOfMeasurement(activity: FragmentActivity, units: Array<String>, ch
         )
         textView.text = units[item]
         dialog.dismiss()
-        //TODO: implementar logica para cambiar la unidad de medida
     }
     builder.create()
 

@@ -4,8 +4,8 @@ import com.google.firebase.firestore.GeoPoint
 
 data class AudioGuide(
     val id: String,
+    val user: String,
     val title: String ?= null,
-    val mainImage: String ?= null,
     val cost: Double ?= null,
     val description: String ?= null,
     val location: GeoPoint ?= null,

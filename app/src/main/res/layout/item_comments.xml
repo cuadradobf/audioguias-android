@@ -13,16 +13,17 @@
         android:orientation="vertical"
         android:layout_marginVertical="8dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/userImageView_Comments"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
             <TextView
                 android:id="@+id/autorTextView_Comments"
                 android:layout_width="wrap_content"
@@ -30,13 +31,30 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/userImageView_Comments"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Nombre del usuario"
                 android:layout_marginStart="12dp"
                 android:layout_gravity="center"/>
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/blockImageView_Comments"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_block_24"
+                app:layout_constraintEnd_toStartOf="@+id/deleteImageView_Comments"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"/>
+            <ImageView
+                android:id="@+id/deleteImageView_Comments"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_delete_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"

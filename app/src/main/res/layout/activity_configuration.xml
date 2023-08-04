@@ -65,6 +65,7 @@
         android:textSize="18dp"
         android:layout_marginStart="24dp"
         android:layout_marginVertical="4dp"/>
+    <!--
     <TextView
         android:id="@+id/redModeTitleTextView_Cofiguration"
         android:layout_width="match_parent"
@@ -78,10 +79,11 @@
         android:id="@+id/redModeTextView_Configuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Todo, solo wifi, sin acceso"
+        tools:text="All, wifi, offline"
         android:textSize="18dp"
         android:layout_marginStart="24dp"
         android:layout_marginVertical="4dp"/>
+
     <TextView
         android:id="@+id/notificationsTitle_Configuration"
         android:layout_width="match_parent"
@@ -91,6 +93,7 @@
         android:textColor="@color/black"
         android:layout_marginStart="16dp"
         android:layout_marginVertical="4dp"/>
+        -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

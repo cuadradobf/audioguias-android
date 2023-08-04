@@ -14,13 +14,13 @@ class AudioGuideRepository {
             listAudioGuide.add(
                 AudioGuide(
                     document.id,
-                    document.get("title").toString(),
-                    document.get("mainImage").toString(),
-                    document.get("cost").toString().toDouble(),
-                    document.get("description").toString(),
-                    document.getGeoPoint("location"),
-                    document.get("city").toString(),
-                    document.get("country").toString()
+                    document.get("user").toString(),
+                    document.getString("title") ?: "",
+                    document.getDouble("cost") ?: 0.0,
+                    document.getString("description") ?: "",
+                    document.getGeoPoint("location") ?: GeoPoint(0.0, 0.0),
+                    document.getString("city") ?: "",
+                    document.getString("country") ?: ""
                 )
             )
         }

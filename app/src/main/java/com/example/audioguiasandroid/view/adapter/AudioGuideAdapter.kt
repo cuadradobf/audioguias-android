@@ -10,7 +10,7 @@ import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.model.repository.AudioGuideDiffUtil
 
-class AudioGuideAdapter(private var listAudioGuide:List<AudioGuide>, private val onClickListener: (AudioGuide) -> Unit) : RecyclerView.Adapter<AudioGuideViewHolder>(){
+class AudioGuideAdapter(private var listAudioGuide:List<AudioGuide>, private val onClickListener: (AudioGuide, String) -> Unit) : RecyclerView.Adapter<AudioGuideViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AudioGuideViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return AudioGuideViewHolder(layoutInflater.inflate(R.layout.item_audioguide, parent, false))
