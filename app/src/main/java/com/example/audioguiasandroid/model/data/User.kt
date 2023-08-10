@@ -6,7 +6,6 @@ class User(email: String) {
     var surname: String = ""
     var provider: String = ""
     var rol: String = "Standar"
-    var profileImage: String = ""
     //var audioguiaList: List<Audioguia> = emptyList()
 
 }

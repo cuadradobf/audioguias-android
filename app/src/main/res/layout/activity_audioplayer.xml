@@ -4,47 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.AudioplayerActivity"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="16dp">
+    tools:context=".view.AudioplayerActivity">
+    <Button
+        android:id="@+id/backButton_AudioPlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/bookmarkImageView_AudioPlayer"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/baseline_bookmark_border_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <ImageView
+        android:id="@+id/mainImageView_AudioPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/backButton_AudioPlayer"
+        android:layout_marginTop="16dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <Button
-                android:id="@+id/backButton_AudioPlayer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/back"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <ImageView
-                android:id="@+id/bookmarkImageView_AudioPlayer"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/baseline_bookmark_border_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <ImageView
-            android:id="@+id/mainImageView_AudioPlayer"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            tools:srcCompat="@tools:sample/avatars"
-            android:layout_gravity="center"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="8dp"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/titleTextView_AudioPlayer"
@@ -53,22 +47,25 @@
             tools:text="Titulo"
             android:textColor="@color/black"
             android:textSize="21sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/autorTextView_AudioPlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Autor"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp" />
 
-        <com.google.android.exoplayer2.ui.PlayerControlView
+        <androidx.media3.ui.PlayerView
             android:id="@+id/player_AudioPlayer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
+            app:show_buffering="when_playing"
+            app:show_shuffle_button="false"
             app:show_timeout="0"
+            app:surface_type="none"
             app:hide_on_touch="false"
-            android:layout_marginTop="8dp"/>
+            app:use_controller="true"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

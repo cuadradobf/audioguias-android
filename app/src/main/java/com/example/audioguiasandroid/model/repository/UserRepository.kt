@@ -25,7 +25,7 @@ class UserRepository {
                 user.provider = it.get("provider") as String
                 user.surname = it.get("surname") as String
                 user.rol = it.get("rol") as String
-                user.profileImage = it.get("profileImage") as String
+                //user.profileImage = it.get("profileImage") as String
 
                 //user.audioguiaList =
                 Log.d(TAG, "User data got successfully.")
@@ -49,7 +49,7 @@ class UserRepository {
                     user.surname = document.get("surname") as String
                     user.rol = document.get("rol") as String
                     user.provider = document.get("provider") as String
-                    user.profileImage = document.get("profileImage") as String
+                    //user.profileImage = document.get("profileImage") as String
 
                     users.add(user)
                 }
@@ -64,8 +64,8 @@ class UserRepository {
 
         userCollection.document(user.email).set(hashMapOf(
                 "name" to user.name,
-                "surname" to user.surname,
-                "profileImage" to user.profileImage
+                "surname" to user.surname//,
+                //"profileImage" to user.profileImage
 
             ))
             .addOnSuccessListener {

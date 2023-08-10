@@ -104,7 +104,7 @@ class UserProfileActivity : AppCompatActivity() {
         }
 
         userImage.setOnClickListener {
-            selectImageFromGallery(it)
+            selectImageFromGallery()
         }
 
         changePasswordButton.setOnClickListener {
@@ -126,7 +126,7 @@ class UserProfileActivity : AppCompatActivity() {
             showMain(this, "home")
         }
         //Al pulsar Enter sobre el edit text realiza la accion de pulsar el boton de guardado
-        surnameEditText.setOnEditorActionListener { textView, actionId, event ->
+        surnameEditText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
                 saveButton.performClick()
                 true
@@ -147,7 +147,7 @@ class UserProfileActivity : AppCompatActivity() {
                 val inputStream = contentResolver.openInputStream(imageUri!!)
                 inputStream?.let {
                     val uploadTask = userRef.putStream(it)
-                    uploadTask.addOnSuccessListener { taskSnapshot ->
+                    uploadTask.addOnSuccessListener {
                         // La imagen se subió exitosamente
                         Log.d(ContentValues.TAG, "User image uploaded successfully.")
                         //URL de descarga
@@ -166,7 +166,7 @@ class UserProfileActivity : AppCompatActivity() {
         }
 
     }
-    fun selectImageFromGallery(view: View) {
+    fun selectImageFromGallery() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT

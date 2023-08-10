@@ -93,7 +93,7 @@ class FavsFragment : Fragment() {
         if (recyclerView != null) {
             db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                 .addOnSuccessListener { document ->
-                    val listFavAudioGuides = document.get("favAudioGuide") as? List<String>
+                    val listFavAudioGuides = document.get("favAudioGuide") as? List<*>
                     if (listFavAudioGuides != null && listFavAudioGuides.isNotEmpty()) {
                         db.collection("audioGuide")
                             .whereIn(FieldPath.documentId(), listFavAudioGuides)
@@ -101,7 +101,7 @@ class FavsFragment : Fragment() {
                             .addOnSuccessListener { result ->
                                 listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
                                 val manager = LinearLayoutManager(requireContext())
-                                recyclerView?.layoutManager = manager
+                                recyclerView.layoutManager = manager
                                 audioGuideAdapter = AudioGuideAdapter(listAudioGuide) {audioGuide, action ->
                                     when(action){
                                         "view" -> showAudioguide(requireActivity(), audioGuide.id)
@@ -123,7 +123,7 @@ class FavsFragment : Fragment() {
                                         }
                                     }
                                 }
-                                recyclerView?.adapter = audioGuideAdapter
+                                recyclerView.adapter = audioGuideAdapter
                                 Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
                                 //audioGuideAdapter.updateData(listAudioGuide.toList())
                             }

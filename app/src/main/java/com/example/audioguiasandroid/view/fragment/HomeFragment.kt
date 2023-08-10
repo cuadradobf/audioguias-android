@@ -199,9 +199,9 @@ class HomeFragment : Fragment() {
                     .addOnSuccessListener { result ->
                         listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
                         val manager = LinearLayoutManager(requireContext())
-                        recyclerView?.layoutManager = manager
+                        recyclerView.layoutManager = manager
                         setAdapter()
-                        recyclerView?.adapter = audioGuideAdapter
+                        recyclerView.adapter = audioGuideAdapter
                         Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
                     }
                     .addOnFailureListener { e ->
@@ -214,9 +214,9 @@ class HomeFragment : Fragment() {
                     .addOnSuccessListener { result ->
                         listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
                         val manager = LinearLayoutManager(requireContext())
-                        recyclerView?.layoutManager = manager
+                        recyclerView.layoutManager = manager
                         setAdapter()
-                        recyclerView?.adapter = audioGuideAdapter
+                        recyclerView.adapter = audioGuideAdapter
                         Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
                     }
                     .addOnFailureListener { e ->

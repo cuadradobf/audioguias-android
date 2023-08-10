@@ -7,78 +7,77 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginVertical="8dp">
 
-    <LinearLayout
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/userImageView_Comments"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-            <TextView
-                android:id="@+id/autorTextView_Comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/userImageView_Comments"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Nombre del usuario"
-                android:layout_marginStart="12dp"
-                android:layout_gravity="center"/>
-            <ImageView
-                android:id="@+id/blockImageView_Comments"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/baseline_block_24"
-                app:layout_constraintEnd_toStartOf="@+id/deleteImageView_Comments"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="gone"/>
-            <ImageView
-                android:id="@+id/deleteImageView_Comments"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/baseline_delete_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="gone"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <LinearLayout
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImageView_Comments"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/autorTextView_Comments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="16dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/valoration_text_view"
-                android:layout_marginBottom="4dp"/>
-            <TextView
-                android:id="@+id/valorationTextView_Comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="4/5"/>
-
-        </LinearLayout>
-
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/userImageView_Comments"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Nombre del usuario"
+            android:layout_marginStart="12dp"
+            android:layout_gravity="center"/>
+        <ImageView
+            android:id="@+id/blockImageView_Comments"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/baseline_block_24"
+            app:layout_constraintEnd_toStartOf="@+id/deleteImageView_Comments"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/deleteImageView_Comments"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/baseline_delete_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
+        <RatingBar
+            android:id="@+id/ratingBar_Comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/autorTextView_Comments"
+            android:isIndicator="true"
+            android:stepSize="0.5"
+            android:numStars="5"
+            android:progressBackgroundTint="@color/black"
+            android:progressTint="@color/star"
+            android:scaleY="0.4"
+            android:scaleX="0.4"
+            android:transformPivotX="10dp"
+            android:transformPivotY="20dp"/>
         <TextView
             android:id="@+id/commentsTextView_Comments"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/autorTextView_Comments"
+            android:layout_marginTop="40dp"
             tools:text="Comentario: pqodjfasdofijqaoiqjwefiajsd qj dosi aja  qoeiadfj  qd jai jqeoi adfj  ajsdof  jaodf a aifj apo fi iajd pa"/>
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 </androidx.cardview.widget.CardView>

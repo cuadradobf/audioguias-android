@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.showAlert
 import com.example.audioguiasandroid.viewmodel.showMain
+import com.example.audioguiasandroid.viewmodel.showResetPassword
 import com.example.audioguiasandroid.viewmodel.showSignUp
 import com.google.firebase.auth.FirebaseAuth
 
@@ -54,11 +55,13 @@ class AuthActivity : AppCompatActivity() {
 
     private fun setup(){
         title = "Acceso"
+        //TODO: implementar opcion para resetear password
 
         val emailEditText = findViewById<EditText>(R.id.emailEditText_Auth)
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText_Auth)
         val createAccountTextView = findViewById<TextView>(R.id.createAccountTextView_Auth)
         val signInButton = findViewById<Button>(R.id.signInButton_Auth)
+        val resetPasswordTextView = findViewById<TextView>(R.id.resetPasswordTextView_Auth)
 
         signInButton.setOnClickListener {
             if(emailEditText.text.isNotEmpty() && passwordEditText.text.isNotEmpty()){
@@ -78,8 +81,11 @@ class AuthActivity : AppCompatActivity() {
         createAccountTextView.setOnClickListener {
             showSignUp(this)
         }
+        resetPasswordTextView.setOnClickListener {
+            showResetPassword(this)
+        }
         //Al pulsar Enter sobre el edit text realiza la accion de pulsar el boton de acceso
-        passwordEditText.setOnEditorActionListener { textView, actionId, event ->
+        passwordEditText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
                 signInButton.performClick()
                 true

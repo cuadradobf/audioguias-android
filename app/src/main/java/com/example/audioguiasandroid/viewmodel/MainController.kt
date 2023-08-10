@@ -1,9 +1,11 @@
 package com.example.audioguiasandroid.viewmodel
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +23,7 @@ import com.example.audioguiasandroid.view.ContactUsActivity
 import com.example.audioguiasandroid.view.DeleteAccountActivity
 import com.example.audioguiasandroid.view.HelpActivity
 import com.example.audioguiasandroid.view.MainActivity
+import com.example.audioguiasandroid.view.ResetPasswordActivity
 import com.example.audioguiasandroid.view.SignUpActivity
 import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.VerifyActivity
@@ -92,7 +95,10 @@ fun showSignUp(activity: FragmentActivity){
     val intent = Intent(activity, SignUpActivity::class.java)
     activity.startActivity(intent)
 }
-
+fun showResetPassword(activity: FragmentActivity){
+    val intent = Intent(activity, ResetPasswordActivity::class.java)
+    activity.startActivity(intent)
+}
 fun showAudioguide(activity: FragmentActivity, audioGuideID: String) {
     val intent = Intent(activity, AudioguideActitivity::class.java).apply {
         putExtra("audioGuide", audioGuideID)
@@ -240,11 +246,12 @@ fun initRecyclerViewWithLocation(activity: FragmentActivity, radiusInKm : Double
                         .whereLessThan("location", upperGeoPoint)
                         .get()
                         .addOnSuccessListener { result ->
-                            var listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                            val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
                             audioGuideAdapter.updateData(listAudioGuide)
                         }
-                        .addOnFailureListener { exception ->
+                        .addOnFailureListener { e ->
                             // Manejo de errores en caso de que falle la consulta.
+                            Log.w(ContentValues.TAG, "Error getting audio guide list with location.", e)
                         }
                 }
             }

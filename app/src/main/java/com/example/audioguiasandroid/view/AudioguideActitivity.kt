@@ -35,7 +35,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityAudioguideBinding
     private var db = FirebaseFirestore.getInstance()
     private lateinit var map: GoogleMap
-    lateinit var commentsAdapter: CommentsAdapter
+    private lateinit var commentsAdapter: CommentsAdapter
     private var storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +65,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun setup(audioGuideID: String){
         title = "Audioguias"
+        //TODO: implementar app bar en el resto de vistas 
         db.collection("audioGuide").document(audioGuideID).get()
             .addOnSuccessListener{
                 binding.titleTextViewAudioGuideActivity.text = it.get("title").toString()
@@ -76,6 +77,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                     binding.ratingBarAudioGuideActivity.visibility = View.GONE
                     binding.commentLayoutAudioGuideActivity.visibility = View.GONE
                 }else{
+                    //Imagen de usuario que aparece al añadir un comentario
                     storage.reference.child("images/" + Firebase.auth.currentUser?.email.toString() + "/profile").downloadUrl
                         .addOnSuccessListener { uri->
                             Picasso.get()
@@ -90,6 +92,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                                         .into(binding.userImageViewAudioGuideActivity)
                                 }
                         }
+                    //Caso en el que el usuario ya ha realizado un comentario sobre la audioguia
                     db.collection("audioGuide").document(audioGuideID).collection("comments").document(Firebase.auth.currentUser?.email.toString()).get()
                         .addOnSuccessListener { document ->
                             if (document.exists()){
@@ -101,7 +104,10 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 db.collection("user").document(userID).get()
                     .addOnSuccessListener {document ->
-                        binding.autorTextViewAudioGuideActivity.text = document.get("name").toString() + " " + document.get("surname").toString()
+                        val name = document.getString("name") ?: getString(R.string.anonymous)
+                        val surname = document.getString("surname") ?: ""
+                        val text = "$name $surname"
+                        binding.autorTextViewAudioGuideActivity.text = text
                     }
                     .addOnFailureListener {e->
                         binding.autorTextViewAudioGuideActivity.text = getString(R.string.anonymous)
@@ -124,10 +130,22 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.w(ContentValues.TAG, "Error firebase.", e)
 
             }
+        //Valoracion media de la audioguia
+        db.collection("audioGuide").document(audioGuideID).collection("comments").get()
+            .addOnSuccessListener { result ->
+                var rating : Float = 0f
+                for (document in result){
+                    val valoration = document.getDouble("valoration") ?: 0.0
+                    rating += valoration.toFloat()
+                }
+                rating /= result.size()
+                binding.averageRatingBarAudioGuideActivity.rating = rating
+                binding.commentsAmountTextViewAudioGuideActivity.text = result.size().toString()
+            }
         //Comprueba si el usuario tiene guardada en su lista de favoritos la guia actual y cambia el icono del boton de guardado
         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
             .addOnSuccessListener { document ->
-                val listFavAudioGuides = document.get("favAudioGuide") as? List<String>
+                val listFavAudioGuides = document.get("favAudioGuide") as? List<*>
                 if (listFavAudioGuides!= null && listFavAudioGuides.contains(audioGuideID)){
                     binding.bookmarkImageViewAudioGuideActivity.setImageResource(R.drawable.baseline_bookmark_24)
                 }
@@ -147,7 +165,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
         binding.bookmarkImageViewAudioGuideActivity.setOnClickListener {
             db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                 .addOnSuccessListener { document ->
-                    var listFavAudioGuides = document.get("favAudioGuide") as? List<String>
+                    var listFavAudioGuides = document.get("favAudioGuide") as? List<*>
                     if (listFavAudioGuides != null){
                         if (listFavAudioGuides.contains(audioGuideID)){
                             binding.bookmarkImageViewAudioGuideActivity.setImageResource(R.drawable.baseline_bookmark_border_24)
@@ -208,7 +226,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.commentLayoutAudioGuideActivity.visibility = View.GONE
                 db.collection("audioGuide").document(audioGuideID).collection("comments").get()
                     .addOnSuccessListener { result ->
-                        var listComment = CommentsRepository().getAllComments(result, audioGuideID)
+                        val listComment = CommentsRepository().getAllComments(result, audioGuideID)
                         if(::commentsAdapter.isInitialized){
                             commentsAdapter.updateData(listComment)
                         }else{
@@ -230,10 +248,10 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initRecyclerView(audioGuideID: String) {
-
+        //TODO: colocar el comentario del usuario logeado el primero
         db.collection("audioGuide").document(audioGuideID).collection("comments").get()
             .addOnSuccessListener { result ->
-                var listComment = CommentsRepository().getAllComments(result, audioGuideID)
+                val listComment = CommentsRepository().getAllComments(result, audioGuideID)
 
                 if(listComment.size == 0){
                     binding.titleCommetsTextViewAudioGuideActivity.visibility = View.GONE

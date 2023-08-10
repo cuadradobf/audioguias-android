@@ -2,20 +2,18 @@ package com.example.audioguiasandroid.view
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioplayerBinding
-import com.example.audioguiasandroid.model.repository.UserRepository
 import com.example.audioguiasandroid.viewmodel.showAudioguide
 import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showMain
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.ui.PlayerControlView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -28,7 +26,7 @@ class AudioplayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAudioplayerBinding
     private var db = FirebaseFirestore.getInstance()
     private lateinit var player: ExoPlayer
-    private lateinit var playerView: PlayerControlView
+    private lateinit var playerView: PlayerView
 
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,10 +62,11 @@ class AudioplayerActivity : AppCompatActivity() {
                 val userEmail = document.get("user").toString()
                 db.collection("user").document(userEmail).get()
                     .addOnSuccessListener { user->
-                        val userName = user.get("name").toString()
-                        val userSurname = user.get("surname").toString()
-                        if (userSurname != null || userSurname != " "){
-                            binding.autorTextViewAudioPlayer.text = userName + " " + userSurname
+                        val userName = user.getString("name") ?: getString(R.string.anonymous)
+                        val userSurname = user.getString("surname") ?: ""
+                        if (userSurname.isNotEmpty()){
+                            val text = "$userName $userSurname"
+                            binding.autorTextViewAudioPlayer.text = text
                         }else{
                             binding.autorTextViewAudioPlayer.text = userName
                         }
@@ -82,14 +81,14 @@ class AudioplayerActivity : AppCompatActivity() {
         //Comprueba si el usuario tiene guardada en su lista de favoritos la guia actual y cambia el icono del boton de guardado
         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
             .addOnSuccessListener { document ->
-                val listFavAudioGuides = document.get("favAudioGuide") as? List<String>
-                if (listFavAudioGuides!= null && listFavAudioGuides.contains(audioGuideID)){
+                val listFavAudioGuides = document.get("favAudioGuide") as? List<*>
+                if ((listFavAudioGuides != null) && listFavAudioGuides.contains(audioGuideID)){
                     binding.bookmarkImageViewAudioPlayer.setImageResource(R.drawable.baseline_bookmark_24)
                 }
             }
 
         val storage = Firebase.storage
-        val imageReference : StorageReference = storage.reference.child("images/audioGuides/" + audioGuideID + "/main.jpg")
+        val imageReference : StorageReference = storage.reference.child("images/audioGuides/$audioGuideID/main.jpg")
         imageReference.downloadUrl
             .addOnSuccessListener {uri ->
                 Picasso.get()
@@ -100,11 +99,16 @@ class AudioplayerActivity : AppCompatActivity() {
                 Log.w(ContentValues.TAG, "Error getting main image from Firebase Storage.", e)
             }
 
-        val audioReference : StorageReference = storage.reference.child("audios/audioGuides/" + audioGuideID + "/audio.mp3")
+        val audioReference : StorageReference = storage.reference.child("audios/audioGuides/$audioGuideID/audio.mp3")
         audioReference.downloadUrl
             .addOnSuccessListener { uri->
-                val item: MediaItem = MediaItem.fromUri(uri)
+                val item = MediaItem.Builder()
+                    .setUri(uri)
+                    .setMediaId(audioGuideID)
+                    .build()
+
                 player.setMediaItem(item)
+                player.repeatMode = Player.REPEAT_MODE_OFF
                 player.prepare()
                 playerView.player = player
             }
@@ -120,7 +124,7 @@ class AudioplayerActivity : AppCompatActivity() {
         binding.bookmarkImageViewAudioPlayer.setOnClickListener {
             db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
                 .addOnSuccessListener { document ->
-                    var listFavAudioGuides = document.get("favAudioGuide") as? List<String>
+                    var listFavAudioGuides = document.get("favAudioGuide") as? List<*>
                     if (listFavAudioGuides != null){
                         if (listFavAudioGuides.contains(audioGuideID)){
                             binding.bookmarkImageViewAudioPlayer.setImageResource(R.drawable.baseline_bookmark_border_24)

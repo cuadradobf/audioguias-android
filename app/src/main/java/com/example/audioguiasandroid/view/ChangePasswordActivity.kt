@@ -63,7 +63,7 @@ class ChangePasswordActivity : AppCompatActivity() {
         }
 
         //Al pulsar Enter sobre el edit text realiza la accion de pulsar el boton de guardado
-        newPasswordEditText2.setOnEditorActionListener { textView, actionId, event ->
+        newPasswordEditText2.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
                 saveButton.performClick()
                 true

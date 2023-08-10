@@ -105,14 +105,12 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
         return false
     }
 
-    if (password == password2){
-    }else{
+    if (password != password2){
         showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.dont_match_passwords))
         return false
     }
 
-    if (regexPassword.matches(password)){
-    }else{
+    if (!regexPassword.matches(password)){
         showAlert(activity,activity.getString(R.string.information), activity.getString(R.string.password_requirements))
         return false
     }
@@ -150,9 +148,9 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
                             Log.d(ContentValues.TAG, "User profile updated.")
                         }
                     }
-
+                //TODO: enviar correo en el idioma que corresponda
                 //Manda correo de verificación
-                userAuth!!.sendEmailVerification()
+                userAuth.sendEmailVerification()
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Log.d(ContentValues.TAG, "Email sent.")

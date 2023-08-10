@@ -81,5 +81,11 @@
     <string name="error_text">Se ha producido un error.</string>
     <string name="agree">Aceptar</string>
     <string name="cancel">Cancelar</string>
+    <string name="confirm_password">Confirma la contraseña</string>
+    <string name="forgot_password">¿Ha olvidado su contraseña?</string>
+    <string name="reset_password_link">Reinicia la contraseña</string>
+    <string name="provide_email">Proporcione su correo electrónico: </string>
+    <string name="email_sent">The email has been sent successfully.</string>
+    <string name="invalid_email">El email no es valido.</string>
 
 </resources>

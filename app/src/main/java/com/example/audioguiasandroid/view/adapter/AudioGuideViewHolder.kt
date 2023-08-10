@@ -25,9 +25,10 @@ class AudioGuideViewHolder(view: View):RecyclerView.ViewHolder(view) {
     fun render(audioGuideModel: AudioGuide, onClickListener: (AudioGuide, String) -> Unit){
         binding.titleTextViewAudioGuide.text = audioGuideModel.title
         binding.descriptionTextViewAudioGuide.text = audioGuideModel.description
-        binding.costTextViewAudioGuide.text = audioGuideModel.cost.toString()
-        //TODO: add ciudad y pais
-        //TODO: quitar precio o modificar para que solo aparezcan 2 decimales
+        //binding.costTextViewAudioGuide.text = audioGuideModel.cost.toString()
+        val text = audioGuideModel.city + ", " + audioGuideModel.country
+        binding.cityCountryTextViewAudioGuide.text = text
+        setRating(audioGuideModel.id)
 
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -55,5 +56,19 @@ class AudioGuideViewHolder(view: View):RecyclerView.ViewHolder(view) {
         }
         binding.blockImageViewAudioGuide.setOnClickListener {
             onClickListener(audioGuideModel, "block")        }
+    }
+
+    private fun setRating(id: String){
+        db.collection("audioGuide").document(id).collection("comments").get()
+            .addOnSuccessListener { result ->
+                var rating : Float = 0f
+                for (document in result){
+                    val valoration = document.getDouble("valoration") ?: 0.0
+                    rating += valoration.toFloat()
+                }
+                rating /= result.size()
+                binding.ratingBarAudioGuide.rating = rating
+                binding.commentsAmountTextViewAudioGuide.text = result.size().toString()
+            }
     }
 }

@@ -18,11 +18,12 @@ class CommentsViewHolder(view: View):RecyclerView.ViewHolder(view) {
     private val storageReference = Firebase.storage.reference
 
     fun render(commentsModel: Comment, onItemRemove:(Comment, String) -> Unit){
-        binding.valorationTextViewComments.text = commentsModel.valoration.toString() + "/5"
+        binding.ratingBarComments.rating = commentsModel.valoration?.toFloat() ?: 0f
         binding.commentsTextViewComments.text = commentsModel.commentData.toString()
         db.collection("user").document(commentsModel.userID).get()
             .addOnSuccessListener { document->
-                binding.autorTextViewComments.text = document.get("name").toString() + " " + document.get("surname").toString()
+                val text = document.get("name").toString() + " " + document.get("surname").toString()
+                binding.autorTextViewComments.text = text
             }
         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
             .addOnSuccessListener { document ->

@@ -45,7 +45,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         //Al pulsar Enter sobre el edit text realiza la accion de pulsar el boton de registro
-        password2EditText.setOnEditorActionListener { textView, actionId, event ->
+        password2EditText.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
                 signUpButton.performClick()
                 true
