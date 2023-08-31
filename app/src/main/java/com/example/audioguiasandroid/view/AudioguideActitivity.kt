@@ -93,7 +93,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                                         .into(binding.userImageViewAudioGuideActivity)
                                 }
                         }
-                    //Caso en el que el usuario ya ha realizado un comentario sobre la audioguia
+                    //Caso en el que el usuario ya ha realizado un comentario sobre la audioguia.
                     db.collection("audioGuide").document(audioGuideID).collection("comments").document(Firebase.auth.currentUser?.email.toString()).get()
                         .addOnSuccessListener { document ->
                             if (document.exists()){
