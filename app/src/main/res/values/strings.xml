@@ -91,8 +91,9 @@
     <string name="forgot_password">Forgot your password?</string>
     <string name="reset_password_link">Reset password</string>
     <string name="provide_email">Provide your email: </string>
-    <string name="email_sent">The email has been sent successfully.</string>
+    <string name="email_sent">Your request has been successfully completed. The email may take a few minutes to arrive in your inbox. Check spam.</string>
     <string name="invalid_email">The email is not valid.</string>
+    <string name="confirm_new_password">Confirm new password</string>
 
 
 </resources>

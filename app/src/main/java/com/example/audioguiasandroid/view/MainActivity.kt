@@ -4,21 +4,12 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
-import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityMainBinding
 import com.example.audioguiasandroid.view.fragment.FavsFragment
@@ -74,16 +65,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
 
             }
-
-
+            //Guardar datos
+            val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+            prefs.putString("email", Firebase.auth.currentUser?.email.toString())
+            prefs.apply()
         }
-
-        //Guardar datos
-        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-        prefs.putString("email", Firebase.auth.currentUser?.email.toString())
-        prefs.apply()
-
-
     }
 
     private fun setup() {
@@ -93,11 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initNavigationDrawer() {
         val toolbar : androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar_main)
-        setSupportActionBar(toolbar)
-
         drawer = findViewById(R.id.drawerLayout_Main)
-
-
 
         toggle = ActionBarDrawerToggle(this, drawer, toolbar,
             R.string.navigation_drawer_open,
@@ -110,10 +92,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val navigationView : NavigationView = findViewById(R.id.navigatioView_Main)
         navigationView.setNavigationItemSelectedListener(this)
-
-
-
-
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

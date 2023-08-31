@@ -8,12 +8,21 @@
     android:layout_marginVertical="16dp"
     android:layout_marginHorizontal="16dp"
     tools:context=".view.ConfigurationActivity">
+    <!--
     <Button
         android:id="@+id/backButton_Configuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/back"
         android:layout_marginVertical="4dp"/>
+        -->
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/baseline_arrow_back_24"
+        android:layout_marginVertical="4dp"
+        android:id="@+id/backButton_Configuration"
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +38,7 @@
         android:textColor="@color/black"
         android:layout_marginStart="8dp"
         android:layout_marginVertical="4dp"/>
-    <!--
+
     <TextView
         android:id="@+id/languageTitleTextView_Cofiguration"
         android:layout_width="match_parent"
@@ -47,7 +56,7 @@
         android:textSize="18dp"
         android:layout_marginStart="24dp"
         android:layout_marginVertical="4dp"/>
-        -->
+
     <TextView
         android:id="@+id/unitOfMeasurementTitleTextView_Cofiguration"
         android:layout_width="match_parent"
@@ -155,6 +164,7 @@
         android:textColor="@color/black"
         android:layout_marginStart="16dp"
         android:layout_marginVertical="4dp"/>
+    <!--
     <TextView
         android:id="@+id/licensesTitleTextView_Configuration"
         android:layout_width="match_parent"
@@ -164,5 +174,5 @@
         android:textColor="@color/black"
         android:layout_marginStart="16dp"
         android:layout_marginVertical="4dp"/>
-
+    -->
 </LinearLayout>

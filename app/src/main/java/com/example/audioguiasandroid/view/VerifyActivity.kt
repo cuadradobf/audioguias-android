@@ -36,7 +36,6 @@ class VerifyActivity : AppCompatActivity() {
         val verifyAccountButton = findViewById<Button>(R.id.verifyAccount_Verify)
         val backButton = findViewById<Button>(R.id.backButton_Verify)
         val logOutButton = findViewById<Button>(R.id.logOutButton_Verify)
-        //TODO: Comprobar que no se puede acceder al perfil sin estar verificado antes.
 
         verifyAccountButton.setOnClickListener {
             sendEmailVerifyAccount(this)

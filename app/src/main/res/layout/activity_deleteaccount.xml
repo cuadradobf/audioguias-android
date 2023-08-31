@@ -32,10 +32,10 @@
 
         <Button
             android:id="@+id/deleteAccountButton_DeleteAccount"
+            android:backgroundTint="@color/red"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete_account_title"
-            style="@style/ButtonStyle"
             android:layout_gravity="center"/>
 
 

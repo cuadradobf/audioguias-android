@@ -85,7 +85,8 @@
     <string name="forgot_password">¿Ha olvidado su contraseña?</string>
     <string name="reset_password_link">Reinicia la contraseña</string>
     <string name="provide_email">Proporcione su correo electrónico: </string>
-    <string name="email_sent">The email has been sent successfully.</string>
+    <string name="email_sent">Su petición se ha realizado correctamete. El email puede tardar unos minutos en llegar a su bandeja de entrada. Compruebe el correo no deseado.</string>
     <string name="invalid_email">El email no es valido.</string>
+    <string name="confirm_new_password">Confirmar nueva contraseña</string>
 
 </resources>

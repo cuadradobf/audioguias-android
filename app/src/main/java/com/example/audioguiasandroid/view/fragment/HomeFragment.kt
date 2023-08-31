@@ -39,7 +39,7 @@ class HomeFragment : Fragment() {
     private lateinit var audioGuideAdapter: AudioGuideAdapter
     private lateinit var listAudioGuide : List<AudioGuide>
     private var _binding: FragmentHomeBinding? = null
-    private lateinit var language: String
+    private val language: String = Locale.getDefault().language
     private var flag: Boolean = false
 
     // This property is only valid between onCreateView and
@@ -52,9 +52,9 @@ class HomeFragment : Fragment() {
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-        val currentLocale: Locale = resources.configuration.locale
-        language = currentLocale.language
+
         setup()
+
 
         return root
     }

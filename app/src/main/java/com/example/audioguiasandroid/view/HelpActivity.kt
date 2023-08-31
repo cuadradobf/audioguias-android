@@ -1,6 +1,8 @@
 package com.example.audioguiasandroid.view
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.audioguiasandroid.R
@@ -18,6 +20,7 @@ class HelpActivity : AppCompatActivity() {
         //setContentView(R.layout.activity_help)
         binding = ActivityHelpBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         //Setup
         val user = Firebase.auth.currentUser
@@ -40,7 +43,10 @@ class HelpActivity : AppCompatActivity() {
             showContactUs(this)
         }
         binding.webPageTextViewHelp.setOnClickListener {
-            //TODO: link a la pagina web
+            val url = "https://audioguias.netlify.app/"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
         }
     }
+
 }

@@ -39,39 +39,43 @@ class DeleteAccountActivity : AppCompatActivity() {
     }
 
     private fun setup(){
-        //TODO: cambiar color del boton eliminar cuenta
         title = getString(R.string.delete_account_title)
         val deleteAccountButton = findViewById<Button>(R.id.deleteAccountButton_DeleteAccount)
         val backButton = findViewById<Button>(R.id.backButton_DeleteAccount)
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText_DeleteAccount)
 
         deleteAccountButton.setOnClickListener {
-            val credential = EmailAuthProvider.getCredential(Firebase.auth.currentUser?.email.toString(), passwordEditText.text.toString())
+            if (passwordEditText.text.toString().isNullOrBlank()){
+                showAlert(this, getString(R.string.information), getString(R.string.incorrect_actual_password))
+            }else{
+                val credential = EmailAuthProvider.getCredential(Firebase.auth.currentUser?.email.toString(), passwordEditText.text.toString())
 
-            Firebase.auth.currentUser!!.reauthenticate(credential)
-                .addOnCompleteListener {
-                    if (it.isSuccessful){
-                        Log.d(ContentValues.TAG, "User re-authenticated.")
+                Firebase.auth.currentUser!!.reauthenticate(credential)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful){
+                            Log.d(ContentValues.TAG, "User re-authenticated.")
 
-                        Firebase.auth.currentUser!!.delete()
-                            .addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    Log.d(ContentValues.TAG, "User account deleted.")
-                                }else{
-                                    showAlert(this, getString(R.string.information), getString(R.string.error_delete_account))
+                            Firebase.auth.currentUser!!.delete()
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Log.d(ContentValues.TAG, "User account deleted.")
+                                    }else{
+                                        showAlert(this, getString(R.string.information), getString(R.string.error_delete_account))
+                                    }
                                 }
-                            }
-                        db.collection("user").document(Firebase.auth.currentUser?.email.toString()).delete()
-                        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-                        prefs.clear()
-                        prefs.apply()
+                            db.collection("user").document(Firebase.auth.currentUser?.email.toString()).delete()
+                            val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+                            prefs.clear()
+                            prefs.apply()
 
-                        showAuth(this,getString(R.string.information), getString(R.string.success_delete_account))
+                            showAuth(this,getString(R.string.information), getString(R.string.success_delete_account))
 
-                    }else{
-                        showAlert(this, getString(R.string.information), getString(R.string.wrong_password))
+                        }else{
+                            showAlert(this, getString(R.string.information), getString(R.string.wrong_password))
+                        }
                     }
-                }
+            }
+
         }
 
         backButton.setOnClickListener {

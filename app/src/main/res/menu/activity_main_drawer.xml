@@ -3,8 +3,10 @@
     <group>
         <item android:id="@+id/nav_item_home"
             android:title="Home"/>
+        <!--
         <item android:id="@+id/nav_item_downloads"
             android:title="@string/downloads_title"/>
+        -->
         <item android:id="@+id/nav_item_favs"
             android:title="@string/favs_title"/>
         <item android:id="@+id/nav_item_help"

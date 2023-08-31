@@ -19,7 +19,11 @@ import com.google.firebase.ktx.Firebase
 
 fun changePassword(activity: AppCompatActivity,actualPassword: String, newPassword: String){
     val credential = EmailAuthProvider.getCredential(Firebase.auth.currentUser?.email.toString(), actualPassword)
-
+    val regexPassword = Regex("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\w\\s]).{8,}$")
+    if (!regexPassword.matches(newPassword)){
+        showAlert(activity,activity.getString(R.string.information), activity.getString(R.string.password_requirements))
+        return
+    }
     Firebase.auth.currentUser!!.reauthenticate(credential)
         .addOnCompleteListener {
             if (it.isSuccessful){
@@ -29,7 +33,6 @@ fun changePassword(activity: AppCompatActivity,actualPassword: String, newPasswo
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Log.d(ContentValues.TAG, "User password updated.")
-                            //showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.change_password_successfully))
                             Toast.makeText(activity, activity.getString(R.string.change_password_successfully), Toast.LENGTH_SHORT).show()
                             showUserProfile(activity)
                         }else{
@@ -53,7 +56,6 @@ fun sendEmailVerifyAccount(activity: AppCompatActivity){
         }
     val text = activity.getString(R.string.verification_email_sent) + " " + Firebase.auth.currentUser?.email.toString() + "."
     Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
-    //showAlert(activity, activity.getString(R.string.information), "Se ha enviado a " + Firebase.auth.currentUser?.email.toString() + " un email de verificación.")
 }
 
 fun changeNameAndSurname(activity: AppCompatActivity, name: String, surname: String){
@@ -83,7 +85,6 @@ fun changeNameAndSurname(activity: AppCompatActivity, name: String, surname: Str
                     }
                 val text = activity.getString(R.string.changes_saved)
                 Toast.makeText(activity, text, Toast.LENGTH_SHORT).show()
-                //showAlert(activity, "Informacion", "Se han guardado los cambios.")
             }
             .addOnFailureListener{ e ->
                 Log.w(ContentValues.TAG, "Error getting user data.", e)
@@ -94,7 +95,7 @@ fun changeNameAndSurname(activity: AppCompatActivity, name: String, surname: Str
     }
 }
 
-fun signUp(activity: AppCompatActivity, email: String, password: String, password2: String, name: String, surname: String, provider: String): Boolean{
+fun signUp(activity: AppCompatActivity, email: String, password: String, password2: String, name: String, surname: String): Boolean{
 
     val regex = Regex("^[A-Za-z ]+$")
     val regexPassword = Regex("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\w\\s]).{8,}$")
@@ -123,7 +124,6 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
                     hashMapOf(
                         "name" to name,
                         "surname" to surname,
-                        "provider" to provider,
                         "rol" to "Standar",
                         "locationMode" to "off",
                         "unitOfMeasurement" to "Km",
@@ -148,7 +148,7 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
                             Log.d(ContentValues.TAG, "User profile updated.")
                         }
                     }
-                //TODO: enviar correo en el idioma que corresponda
+
                 //Manda correo de verificación
                 userAuth.sendEmailVerification()
                     .addOnCompleteListener { task ->
@@ -164,8 +164,12 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
 }
 fun changeLanguage(activity: FragmentActivity, languages: Array<String>, checkedItem: Int, textView: TextView){
     val builder = AlertDialog.Builder(activity)
-    val firebaseArray = arrayOf("ES", "EN")
+    //val firebaseArray = arrayOf("ES", "EN")
+
+
+
     builder.setSingleChoiceItems(languages,checkedItem){dialog, item ->
+        /*
         FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
             hashMapOf(
                 "language" to firebaseArray[item]
@@ -175,7 +179,9 @@ fun changeLanguage(activity: FragmentActivity, languages: Array<String>, checked
         )
         textView.text = firebaseArray[item]
         dialog.dismiss()
-        //TODO: implementar logica para cambiar de idioma
+
+         */
+
     }
     builder.create()
 
@@ -248,5 +254,3 @@ fun changeDownloadStorage(activity: FragmentActivity, modes: Array<String>, chec
     val dialog: AlertDialog = builder.create()
     dialog.show()
 }
-
-//TODO: implementar logica para main users

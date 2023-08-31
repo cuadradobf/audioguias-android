@@ -9,6 +9,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.example.audioguiasandroid.BaseActivity
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioplayerBinding
 import com.example.audioguiasandroid.viewmodel.showAudioguide
@@ -147,7 +148,5 @@ class AudioplayerActivity : AppCompatActivity() {
                     )
                 }
         }
-        //TODO: add boton para compartir. Tiene sentido? Solo puedes compartir para gente que tenga la aplicacion ya que no hay link a la pagina web
-        //TODO: opcion para reproducir con el dispositivo bloqueado
     }
 }

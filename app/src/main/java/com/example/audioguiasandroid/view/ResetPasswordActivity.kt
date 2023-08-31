@@ -28,6 +28,8 @@ class ResetPasswordActivity : AppCompatActivity() {
         binding.sendButtonResetPassword.setOnClickListener {
             val email = binding.emailEditTextResetPassword.text.toString()
             if (email.isNullOrEmpty()){
+                showAlert(this, "Error", getString(R.string.invalid_email))
+            }else{
                 Firebase.auth.sendPasswordResetEmail(email)
                     .addOnSuccessListener {
                         showAuth(this,getString(R.string.information),getString(R.string.email_sent))
@@ -35,8 +37,6 @@ class ResetPasswordActivity : AppCompatActivity() {
                     .addOnFailureListener { e ->
                         showAlert(this,"Error", e.message.toString())
                     }
-            }else{
-                showAlert(this, "Error", getString(R.string.invalid_email))
             }
         }
     }

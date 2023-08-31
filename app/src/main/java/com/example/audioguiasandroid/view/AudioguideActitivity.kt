@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.audioguiasandroid.BaseActivity
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioguideBinding
 import com.example.audioguiasandroid.model.data.Comment
@@ -291,7 +292,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
 
                         map.animateCamera(
                             CameraUpdateFactory.newLatLngZoom(place, 16f),
-                            4000,
+                            1500,
                             null
                         )
                     }

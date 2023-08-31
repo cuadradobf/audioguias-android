@@ -30,6 +30,7 @@ import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.SetOptions
@@ -159,8 +160,7 @@ fun changeLocationMode(
             2 -> {
                 imageView?.setImageResource(locationOff)
 
-                val currentLocale: Locale = activity.resources.configuration.locale
-                val language = currentLocale.language
+                val language: String = Locale.getDefault().language
 
                 if (language == "es"){
                     FirebaseFirestore.getInstance().collection("audioGuide")
@@ -209,13 +209,6 @@ fun initRecyclerViewWithLocation(activity: FragmentActivity, radiusInKm : Double
             Manifest.permission.ACCESS_COARSE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED
     ) {
-        // TODO: Consider calling
-        //    ActivityCompat#requestPermissions
-        // here to request the missing permissions, and then overriding
-        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-        //                                          int[] grantResults)
-        // to handle the case where the user grants the permission. See the documentation
-        // for ActivityCompat#requestPermissions for more details.
         ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 1001)
         return false
     }else{
@@ -239,20 +232,44 @@ fun initRecyclerViewWithLocation(activity: FragmentActivity, radiusInKm : Double
                     val lowerGeoPoint = GeoPoint(lowerLatitude, lowerLongitude)
                     val upperGeoPoint = GeoPoint(upperLatitude, upperLongitude)
 
-                    // Realizar la consulta
-                    //TODO: meter la consulta en una sola
-                    FirebaseFirestore.getInstance().collection("audioGuide")
-                        .whereGreaterThan("location", lowerGeoPoint)
-                        .whereLessThan("location", upperGeoPoint)
-                        .get()
-                        .addOnSuccessListener { result ->
-                            val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
-                            audioGuideAdapter.updateData(listAudioGuide)
-                        }
-                        .addOnFailureListener { e ->
-                            // Manejo de errores en caso de que falle la consulta.
-                            Log.w(ContentValues.TAG, "Error getting audio guide list with location.", e)
-                        }
+                    val language = Locale.getDefault().language
+
+                    if (language == "es"){
+                        // Realizar la consulta
+                        FirebaseFirestore.getInstance().collection("audioGuide")
+                            .where(Filter.and(
+                                Filter.equalTo("language", "es"),
+                                Filter.greaterThan("location", lowerGeoPoint),
+                                Filter.lessThan("location", upperGeoPoint)
+                            ))
+                            .get()
+                            .addOnSuccessListener { result ->
+                                val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                                audioGuideAdapter.updateData(listAudioGuide)
+                            }
+                            .addOnFailureListener { e ->
+                                // Manejo de errores en caso de que falle la consulta.
+                                Log.w(ContentValues.TAG, "Error getting audio guide list with location.", e)
+                            }
+                    }else{
+                        // Realizar la consulta
+                        FirebaseFirestore.getInstance().collection("audioGuide")
+                            .where(Filter.and(
+                                Filter.equalTo("language", "en"),
+                                Filter.greaterThan("location", lowerGeoPoint),
+                                Filter.lessThan("location", upperGeoPoint)
+                            ))
+                            .get()
+                            .addOnSuccessListener { result ->
+                                val listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                                audioGuideAdapter.updateData(listAudioGuide)
+                            }
+                            .addOnFailureListener { e ->
+                                // Manejo de errores en caso de que falle la consulta.
+                                Log.w(ContentValues.TAG, "Error getting audio guide list with location.", e)
+                            }
+                    }
+
                 }
             }
     }
