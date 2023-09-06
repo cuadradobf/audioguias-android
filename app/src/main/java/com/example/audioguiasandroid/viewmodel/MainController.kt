@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.example.audioguiasandroid.R
-import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.model.repository.AudioGuideRepository
+import com.example.audioguiasandroid.view.AboutUsActivity
 import com.example.audioguiasandroid.view.AudioguideActitivity
 import com.example.audioguiasandroid.view.AudioplayerActivity
 import com.example.audioguiasandroid.view.AuthActivity
@@ -40,13 +40,13 @@ import java.util.Locale
 fun showAlert(activity: AppCompatActivity, title: String, exception: String){
     val builder = AlertDialog.Builder(activity)
 
-    if (title.isNullOrEmpty()){
+    if (title.isEmpty()){
         builder.setTitle("Error")
     }else{
         builder.setTitle(title)
     }
 
-    if (exception.isNullOrEmpty()){
+    if (exception.isEmpty()){
         builder.setMessage(activity.getString(R.string.error_text))
     }else{
         builder.setMessage(exception)
@@ -63,7 +63,7 @@ fun showMain(activity: AppCompatActivity, fragment: String){
     }
     activity.startActivity(intent)
 }
-fun showUserProfile(activity: AppCompatActivity){
+fun showUserProfile(activity: FragmentActivity){
     val intent = Intent(activity, UserProfileActivity::class.java)
     activity.startActivity(intent)
 }
@@ -92,11 +92,11 @@ fun showAudioplayer(activity: AppCompatActivity, audioGuideID: String){
 }
 
 
-fun showSignUp(activity: FragmentActivity){
+fun showSignUp(activity: AppCompatActivity){
     val intent = Intent(activity, SignUpActivity::class.java)
     activity.startActivity(intent)
 }
-fun showResetPassword(activity: FragmentActivity){
+fun showResetPassword(activity: AppCompatActivity){
     val intent = Intent(activity, ResetPasswordActivity::class.java)
     activity.startActivity(intent)
 }
@@ -107,12 +107,12 @@ fun showAudioguide(activity: FragmentActivity, audioGuideID: String) {
     activity.startActivity(intent)
 }
 
-fun showChangePassword(activity: FragmentActivity){
+fun showChangePassword(activity: AppCompatActivity){
     val intent = Intent(activity, ChangePasswordActivity::class.java)
     activity.startActivity(intent)
 }
 
-fun showDeleteAccount(activity: FragmentActivity){
+fun showDeleteAccount(activity: AppCompatActivity){
     val intent = Intent(activity, DeleteAccountActivity::class.java)
     activity.startActivity(intent)
 }
@@ -131,6 +131,11 @@ fun showContactUs(activity: FragmentActivity){
     activity.startActivity(intent)
 }
 
+fun showAboutUs(activity: AppCompatActivity){
+    val intent = Intent(activity, AboutUsActivity::class.java)
+    activity.startActivity(intent)
+}
+
 fun changeLocationMode(
     activity: FragmentActivity,
     checkedItem: Int,
@@ -143,7 +148,7 @@ fun changeLocationMode(
     val builder = AlertDialog.Builder(activity)
     builder.setSingleChoiceItems(modes,checkedItem){dialog, item ->
 
-        var i : String = "off"
+        var i = "off"
         when(item){
             0 -> {
                 if (initRecyclerViewWithLocation(activity, 10.0, audioGuideAdapter)){

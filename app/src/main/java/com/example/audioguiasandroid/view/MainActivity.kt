@@ -22,19 +22,20 @@ import com.example.audioguiasandroid.viewmodel.showUserProfile
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener{
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var binding: ActivityMainBinding
+    private var storage = Firebase.storage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        //TODO: cambiar formato de las imagenes
 
         //Setup
         val user = Firebase.auth.currentUser
@@ -74,6 +75,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun setup() {
         initNavigationDrawer()
+        storage.reference.child("images/" + Firebase.auth.currentUser?.email.toString() + "/profile").downloadUrl
+            .addOnSuccessListener { uri->
+                Picasso.get()
+                    .load(uri)
+                    .into(binding.userImageViewMain)
+            }
+            .addOnFailureListener {
+                storage.reference.child("images/default/profile.png").downloadUrl
+                    .addOnSuccessListener { uri->
+                        Picasso.get()
+                            .load(uri)
+                            .into(binding.userImageViewMain)
+                    }
+            }
+
+        //FIXME:
+        /*
+        binding.userImageViewMain.setOnClickListener {
+            showUserProfile(this)
+        }
+         */
 
     }
 
@@ -97,14 +119,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_item_home -> showMain(this, "home")
-            //TODO: implementar downloadActivity
-            //R.id.nav_item_downloads -> Toast.makeText(this, "Descargas", Toast.LENGTH_SHORT).show()
-            R.id.nav_item_favs -> {
-                supportFragmentManager.commit {
-                    setReorderingAllowed(true)
-                    add<FavsFragment>(R.id.fragmentContainerView_Main)
-                }
-            }
+            R.id.nav_item_favs -> showMain(this, "favs")
             R.id.nav_item_help -> showHelp(this)
             R.id.nav_item_config -> showConfiguration(this)
             R.id.nav_item_profile -> showUserProfile(this)
@@ -112,7 +127,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
                 prefs.clear()
                 prefs.apply()
-                showAuth(this,getString(R.string.information), "Se ha cerrado sesión.")
+                showAuth(this)
             }
         }
 

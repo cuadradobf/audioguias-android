@@ -1,42 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginVertical="16dp"
-    android:layout_marginHorizontal="16dp"
     tools:context=".view.ConfigurationActivity">
-    <!--
-    <Button
-        android:id="@+id/backButton_Configuration"
+
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/back"
-        android:layout_marginVertical="4dp"/>
-        -->
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/baseline_arrow_back_24"
-        android:layout_marginVertical="4dp"
+        android:src="@drawable/arrow_left"
         android:id="@+id/backButton_Configuration"
-        />
+        android:layout_margin="8dp"
+        android:contentDescription="@string/back"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/configuration_title"
-        android:textSize="25dp"
-        android:textColor="@color/black"
-        android:layout_marginVertical="4dp"/>
+        android:textSize="25sp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="8dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/user_preferences_title"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/black"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginVertical="4dp"/>
 
     <TextView
@@ -44,17 +35,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/language_title"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textColor="@color/black"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginVertical="4dp"/>
     <TextView
         android:id="@+id/languageTextView_Configuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="ES,EN"
-        android:textSize="18dp"
-        android:layout_marginStart="24dp"
+        android:textSize="18sp"
+        android:layout_marginStart="28dp"
         android:layout_marginVertical="4dp"/>
 
     <TextView
@@ -62,117 +53,50 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/unit_of_measurement_title"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textColor="@color/black"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginVertical="4dp"/>
     <TextView
         android:id="@+id/unitOfMeasurementTextView_Configuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Km,Mi"
-        android:textSize="18dp"
-        android:layout_marginStart="24dp"
+        android:textSize="18sp"
+        android:layout_marginStart="28dp"
         android:layout_marginVertical="4dp"/>
-    <!--
-    <TextView
-        android:id="@+id/redModeTitleTextView_Cofiguration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/red_mode_title"
-        android:textSize="18dp"
-        android:textColor="@color/black"
-        android:layout_marginStart="16dp"
-        android:layout_marginVertical="4dp"/>
-    <TextView
-        android:id="@+id/redModeTextView_Configuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="All, wifi, offline"
-        android:textSize="18dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginVertical="4dp"/>
-
-    <TextView
-        android:id="@+id/notificationsTitle_Configuration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/notifications_title"
-        android:textSize="18dp"
-        android:textColor="@color/black"
-        android:layout_marginStart="16dp"
-        android:layout_marginVertical="4dp"/>
-        -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/account_title"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/black"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginVertical="4dp"/>
     <TextView
         android:id="@+id/deleteAccountTitleTextView_Configuration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/delete_account_title"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textColor="@color/black"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginVertical="4dp"/>
-    <!--
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/downloads_title"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        android:layout_marginStart="8dp"
-        android:layout_marginVertical="4dp"/>
-    <TextView
-        android:id="@+id/storageTitleTextView_Configuration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/storage_title"
-        android:textSize="18dp"
-        android:textColor="@color/black"
-        android:layout_marginStart="16dp"
-        android:layout_marginVertical="4dp"/>
-    <TextView
-        android:id="@+id/storageTextView_Configuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Interno,externo"
-        android:textSize="18dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginVertical="4dp"/>
-        -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/several_title"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textColor="@color/black"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginVertical="4dp"/>
     <TextView
         android:id="@+id/aboutUsTitleTextView_Configuration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/about_us_title"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textColor="@color/black"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="20dp"
         android:layout_marginVertical="4dp"/>
-    <!--
-    <TextView
-        android:id="@+id/licensesTitleTextView_Configuration"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/licenses_title"
-        android:textSize="18dp"
-        android:textColor="@color/black"
-        android:layout_marginStart="16dp"
-        android:layout_marginVertical="4dp"/>
-    -->
 </LinearLayout>

@@ -5,59 +5,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.AudioplayerActivity">
-    <Button
+    <ImageView
         android:id="@+id/backButton_AudioPlayer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/back"
+        android:layout_margin="8dp"
+        android:src="@drawable/arrow_left"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/back"/>
 
     <ImageView
         android:id="@+id/bookmarkImageView_AudioPlayer"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/baseline_bookmark_border_24"
+        android:layout_margin="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-    <ImageView
-        android:id="@+id/mainImageView_AudioPlayer"
-        android:layout_width="match_parent"
-        android:layout_height="380dp"
-        android:scaleType="fitCenter"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backButton_AudioPlayer"
-        android:layout_marginTop="16dp"
-        />
-
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/favs_title"/>
     <LinearLayout
+        android:id="@+id/linearLayout_AudioPlayer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="8dp"
-        android:background="@color/white">
+        app:layout_constraintTop_toBottomOf="@+id/backButton_AudioPlayer">
 
         <TextView
             android:id="@+id/titleTextView_AudioPlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Titulo"
+            android:textColor="@color/colorPrimary"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Ciudad, Pais"
             android:textColor="@color/black"
-            android:textSize="21sp"
-            android:textStyle="bold" />
-
+            android:textSize="20sp"
+            android:gravity="center"
+            android:id="@+id/cityCountryTextView_AudioPlayer"/>
         <TextView
             android:id="@+id/autorTextView_AudioPlayer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Autor"
-            android:layout_marginStart="8dp" />
+            android:textSize="20sp"
+            android:gravity="center"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:padding="4dp"/>
 
+
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/mainImageView_AudioPlayer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_AudioPlayer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/playerLayout_AudioPlayer"
+        android:contentDescription="@string/main_image"/>
+
+    <LinearLayout
+        android:id="@+id/playerLayout_AudioPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:id="@+id/descriptionTextView_AudioPlayer"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            tools:text="saodijfoij aoj iao aodjif aoij dja poaj sdjf poaidasdjf aopija djf apo aoidfj ao ijfa ao ifja aoij"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:padding="4dp"/>
         <androidx.media3.ui.PlayerView
             android:id="@+id/player_AudioPlayer"
             android:layout_width="match_parent"
@@ -68,11 +103,11 @@
             app:show_buffering="when_playing"
             app:hide_on_touch="false"
             app:use_controller="true"
-            app:shutter_background_color="@color/background"
+            app:shutter_background_color="@color/colorAccent"
             app:played_color="@color/red"
             app:unplayed_color="@color/white"
             app:buffered_color="@color/grey"
-            app:scrubber_color="@color/white" />
+            app:scrubber_color="@color/white"/>
 
 
     </LinearLayout>

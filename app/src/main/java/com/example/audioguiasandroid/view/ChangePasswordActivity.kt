@@ -2,13 +2,13 @@ package com.example.audioguiasandroid.view
 
 
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.changePassword
 import com.example.audioguiasandroid.viewmodel.showAlert
@@ -41,7 +41,7 @@ class ChangePasswordActivity : AppCompatActivity() {
         val newPasswordEditText = findViewById<EditText>(R.id.newPasswordEditText_ChagePassword)
         val newPasswordEditText2 = findViewById<EditText>(R.id.newPasswordEditText2_ChagePassword)
         val saveButton = findViewById<Button>(R.id.saveButton_ChangePassword)
-        val backButton = findViewById<Button>(R.id.backButton_ChangePassword)
+        val backButton = findViewById<ImageView>(R.id.backButton_ChangePassword)
 
 
         saveButton.setOnClickListener {
@@ -72,6 +72,4 @@ class ChangePasswordActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

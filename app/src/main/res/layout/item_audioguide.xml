@@ -3,31 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_height="wrap_content">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp">
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/titleTextView_AudioGuide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="26sp"
+            android:gravity="center"
+            tools:text="Titulo"
+            android:layout_marginTop="8dp"/>
+
+
+        <TextView
+            android:id="@+id/cityCountryTextView_AudioGuide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Ciudad, Pais"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginVertical="4dp"/>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/titleConstraintLayout"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-            <TextView
-                android:id="@+id/titleTextView_AudioGuide"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="21sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Titulo" />
+
             <ImageView
                 android:id="@+id/blockImageView_AudioGuide"
                 android:layout_width="30dp"
@@ -35,8 +42,8 @@
                 android:src="@drawable/baseline_block_24"
                 app:layout_constraintEnd_toStartOf="@+id/deleteImageView_AudioGuide"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/titleTextView_AudioGuide"
-                android:visibility="gone"/>
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="Block"/>
             <ImageView
                 android:id="@+id/deleteImageView_AudioGuide"
                 android:layout_width="30dp"
@@ -44,101 +51,81 @@
                 android:src="@drawable/baseline_delete_24"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintTop_toBottomOf="@+id/titleTextView_AudioGuide"
-                android:visibility="gone"/>
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/remove"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-            <ImageView
-                android:id="@+id/mainImageView_AudioGuide"
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                tools:background="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/titleConstraintLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="8dp"
-                android:scaleType="centerCrop"/>
-            <RatingBar
-                android:id="@+id/ratingBar_AudioGuide"
+        <ImageView
+            android:id="@+id/mainImageView_AudioGuide"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            tools:background="@color/black"
+            android:layout_marginTop="4dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/main_image"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorAccent">
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/mainImageView_AudioGuide"
-                app:layout_constraintTop_toBottomOf="@id/titleConstraintLayout"
-                android:isIndicator="true"
-                android:stepSize="0.1"
-                android:numStars="5"
-                android:progressBackgroundTint="@color/black"
-                android:progressTint="@color/star"
-                android:scaleY="0.4"
-                android:scaleX="0.4"
-                android:transformPivotX="10dp"
-                android:transformPivotY="20dp"/>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="8dp"
-                app:layout_constraintStart_toEndOf="@id/mainImageView_AudioGuide"
-                app:layout_constraintTop_toBottomOf="@+id/titleConstraintLayout"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:layout_gravity="end"
+                android:layout_marginTop="12dp"
+                android:id="@+id/valoratioLayout_AudioGuide">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="4.5"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="8dp"
+                    android:id="@+id/valorationTextView_AudioGuide"
+                    android:textColor="@color/colorPrimary"/>
+                <RatingBar
+                    android:id="@+id/ratingBar_AudioGuide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@id/valorationTextView_AudioGuide"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:isIndicator="true"
+                    android:stepSize="0.1"
+                    android:numStars="5"
+                    android:progressBackgroundTint="@color/grey"
+                    android:progressTint="@color/star"
+                    android:scaleY="0.4"
+                    android:scaleX="0.4"
+                    android:transformPivotX="10dp"
+                    android:transformPivotY="20dp"/>
                 <TextView
                     android:id="@+id/commentsAmountTextView_AudioGuide"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ratingBar_AudioGuide"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="100"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginTop="4dp"/>
-
-                <TextView
-                    android:id="@+id/cityCountryTextView_AudioGuide"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Ciudad, Pais"
-                    android:layout_marginTop="30dp"/>
-
-                <TextView
+                    tools:text="(100)"
+                    android:textSize="18sp"
                     android:layout_marginTop="8dp"
-                    android:id="@+id/descriptionTextView_AudioGuide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="70dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cityCountryTextView_AudioGuide"
-                    tools:text="descrip dasofijas adfpoasdifasf asfaosdifja adsifjapdodsadf  sadf  asdf  asdf  adsf ad fadf f sdafasdf ad fasf adf asf adofijaofdj asdf afjapodf ajf aodsifa idfjaofifjadofi jafaoidfjaofj ajdiofpajoif adfjaoifja afj aoifj adfjioapfji asdfja poia odsfija  aoidfjaodf " />
-<!--
-                <TextView
-                    android:id="@+id/costTextView_AudioGuide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toStartOf="@id/onlyTextEurosTextView_AudioGuide"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    tools:text="Coste" />
+                    android:layout_marginStart="-135dp"/>
 
-                <TextView
-                    android:id="@+id/onlyTextCostTextView_AudioGuide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toStartOf="@id/costTextView_AudioGuide"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="@string/cost_text_view"
-                    android:textStyle="bold"
-                    android:layout_marginEnd="4dp"/>
-                <TextView
-                    android:id="@+id/onlyTextEurosTextView_AudioGuide"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:text=" €"
-                    android:textStyle="bold" />
-                -->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/descriptionTextView_AudioGuide"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:padding="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cityCountryTextView_AudioGuide"
+                tools:text="descrip dasofijas adfpoasdifasf asfaosdifja adsifjapdodsadf  sadf  asdf  asdf  adsf ad fadf f sdafasdf ad fasf adf asf adofijaofdj asdf afjapodf ajf aodsifa idfjaofifjadofi jafaoidfjaofj ajdiofpajoif adfjaoifja afj aoifj adfjioapfji asdfja poia odsfija  aoidfjaodf " />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

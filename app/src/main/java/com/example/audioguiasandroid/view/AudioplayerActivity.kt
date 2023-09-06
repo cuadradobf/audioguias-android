@@ -9,7 +9,6 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
-import com.example.audioguiasandroid.BaseActivity
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioplayerBinding
 import com.example.audioguiasandroid.viewmodel.showAudioguide
@@ -59,7 +58,10 @@ class AudioplayerActivity : AppCompatActivity() {
         playerView = binding.playerAudioPlayer
         db.collection("audioGuide").document(audioGuideID).get()
             .addOnSuccessListener { document->
-                binding.titleTextViewAudioPlayer.text = document.get("title").toString()
+                binding.titleTextViewAudioPlayer.text = document.getString("title") ?: ""
+                binding.descriptionTextViewAudioPlayer.text = document.getString("description") ?: ""
+                val cc = (document.getString("city") ?: "") + ", " + (document.getString("country") ?: "")
+                binding.cityCountryTextViewAudioPlayer.text = cc
                 val userEmail = document.get("user").toString()
                 db.collection("user").document(userEmail).get()
                     .addOnSuccessListener { user->

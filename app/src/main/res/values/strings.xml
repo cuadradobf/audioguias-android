@@ -26,7 +26,7 @@
     <string name="help_title">Help and feedback</string>
     <string name="back">Back</string>
     <string name="contact_us_title">Contact us</string>
-    <string name="visit_web_page">Visit our web page</string>
+    <string name="visit_web_page"><u>Visit our web page</u></string>
     <string name="contact_us_text">Enter your question or feedback:</string>
     <string name="send">Send</string>
     <string name="location_10km_mode">10 Km</string>
@@ -94,6 +94,15 @@
     <string name="email_sent">Your request has been successfully completed. The email may take a few minutes to arrive in your inbox. Check spam.</string>
     <string name="invalid_email">The email is not valid.</string>
     <string name="confirm_new_password">Confirm new password</string>
+    <string name="about_us_text_1">This is a company dedicated to the development of web applications.</string>
+    <string name="about_us_text_2">Audioguias is a web application that allows users to create and share audio guides for tourist locations.</string>
+    <string name="about_us_text_3">This application has been developed by:</string>
+    <string name="login">Login</string>
+    <string name="access">Log in</string>
+    <string name="change_location_range">Change location range</string>
+    <string name="home">Home</string>
+    <string name="main_image">Main image</string>
+    <string name="remove">Remove</string>
 
 
 </resources>

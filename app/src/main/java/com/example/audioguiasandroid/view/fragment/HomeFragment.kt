@@ -2,7 +2,6 @@ package com.example.audioguiasandroid.view.fragment
 
 import android.Manifest
 import android.content.ContentValues
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -20,7 +19,6 @@ import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.FragmentHomeBinding
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.model.repository.AudioGuideRepository
-import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.example.audioguiasandroid.viewmodel.changeLocationMode
 import com.example.audioguiasandroid.viewmodel.showAudioguide
@@ -29,12 +27,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import com.squareup.picasso.Picasso
 import java.util.Locale
 
 class HomeFragment : Fragment() {
-    private var storage = Firebase.storage
     private var db = FirebaseFirestore.getInstance()
     private lateinit var audioGuideAdapter: AudioGuideAdapter
     private lateinit var listAudioGuide : List<AudioGuide>
@@ -49,7 +44,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -65,23 +60,8 @@ class HomeFragment : Fragment() {
 
     private fun setup() {
         val locationImageView = _binding?.locationImageViewHomeF
-        val userImageView = _binding?.userImageViewHomeF
+        val changeRangeLayout = _binding?.changeRangeLayoutHomeF
         val searchEditText = _binding?.searchEditTextHomeF
-        //Add funcion de ubicacion
-        storage.reference.child("images/" + Firebase.auth.currentUser?.email.toString() + "/profile").downloadUrl
-            .addOnSuccessListener { uri->
-                Picasso.get()
-                    .load(uri)
-                    .into(userImageView)
-            }
-            .addOnFailureListener {
-                storage.reference.child("images/default/profile.png").downloadUrl
-                    .addOnSuccessListener { uri->
-                        Picasso.get()
-                            .load(uri)
-                            .into(userImageView)
-                    }
-            }
 
         initRecyclerView()
         requestLocationPermissions()
@@ -109,12 +89,10 @@ class HomeFragment : Fragment() {
             }
         }
 
-        userImageView?.setOnClickListener {
-            val intent = Intent(requireActivity(), UserProfileActivity::class.java)
-            startActivity(intent)
+        if (locationImageView?.hasOnClickListeners() == true){
+            Toast.makeText(requireContext(), "Rango de ubicacion", Toast.LENGTH_LONG).show()
         }
-
-        locationImageView?.setOnClickListener {
+        changeRangeLayout?.setOnClickListener {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION

@@ -42,7 +42,8 @@
             app:layout_constraintEnd_toStartOf="@+id/deleteImageView_Comments"
             android:layout_marginEnd="16dp"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:contentDescription="Block"/>
         <ImageView
             android:id="@+id/deleteImageView_Comments"
             android:layout_width="30dp"
@@ -51,7 +52,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:contentDescription="@string/remove"/>
         <RatingBar
             android:id="@+id/ratingBar_Comments"
             android:layout_width="wrap_content"
@@ -61,7 +63,7 @@
             android:isIndicator="true"
             android:stepSize="0.5"
             android:numStars="5"
-            android:progressBackgroundTint="@color/black"
+            android:progressBackgroundTint="@color/grey"
             android:progressTint="@color/star"
             android:scaleY="0.4"
             android:scaleX="0.4"

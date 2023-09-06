@@ -1,7 +1,6 @@
 package com.example.audioguiasandroid.view.fragment
 
 import android.content.ContentValues
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.audioguiasandroid.databinding.FragmentFavsBinding
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.example.audioguiasandroid.model.repository.AudioGuideRepository
-import com.example.audioguiasandroid.view.UserProfileActivity
-import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.example.audioguiasandroid.viewmodel.showAudioguide
 import com.example.audioguiasandroid.viewmodel.updateDataAdapterByFilter
@@ -24,11 +21,8 @@ import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
-import com.squareup.picasso.Picasso
 
 class FavsFragment : Fragment() {
-    private var storage = Firebase.storage
     private var db = FirebaseFirestore.getInstance()
     private lateinit var audioGuideAdapter: AudioGuideAdapter
     private var _binding: FragmentFavsBinding? = null
@@ -40,7 +34,7 @@ class FavsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFavsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         setup()
@@ -54,37 +48,12 @@ class FavsFragment : Fragment() {
     }
 
     private fun setup() {
-        val userImageView = _binding?.userImageViewFavs
         val searchEditText = _binding?.searchEditTextFavs
 
-        storage.reference.child("images/" + Firebase.auth.currentUser?.email.toString() + "/profile").downloadUrl
-            .addOnSuccessListener { uri ->
-                Picasso.get()
-                    .load(uri)
-                    .into(userImageView)
-            }
-            .addOnFailureListener {
-                storage.reference.child("images/default/profile.png").downloadUrl
-                    .addOnSuccessListener { uri ->
-                        Picasso.get()
-                            .load(uri)
-                            .into(userImageView)
-                    }
-            }
         initRecyclerView()
 
         searchEditText?.addTextChangedListener {filter ->
             updateDataAdapterByFilter(audioGuideAdapter, listAudioGuide, filter)
-        }
-
-        userImageView?.setOnClickListener {
-            if (Firebase.auth.currentUser?.isEmailVerified == true) {
-                val intent = Intent(requireActivity(), UserProfileActivity::class.java)
-                startActivity(intent)
-            } else {
-                val intent = Intent(requireActivity(), VerifyActivity::class.java)
-                startActivity(intent)
-            }
         }
     }
 

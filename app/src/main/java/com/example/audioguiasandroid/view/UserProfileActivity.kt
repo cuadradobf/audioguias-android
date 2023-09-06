@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
@@ -20,7 +19,6 @@ import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.changeNameAndSurname
 import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showChangePassword
-import com.example.audioguiasandroid.viewmodel.showDeleteAccount
 import com.example.audioguiasandroid.viewmodel.showMain
 import com.example.audioguiasandroid.viewmodel.showVerify
 
@@ -68,7 +66,7 @@ class UserProfileActivity : AppCompatActivity() {
         val changePasswordButton = findViewById<Button>(R.id.changePasswordButton_UserProfile)
         val saveButton = findViewById<Button>(R.id.saveButton_UserProfile)
         val logOutButton = findViewById<Button>(R.id.logOutButton_UserProfile)
-        val backButton = findViewById<Button>(R.id.backButton_UserProfile)
+        val backButton = findViewById<ImageView>(R.id.backButton_UserProfile)
 
         val storage = Firebase.storage
         val storageRef = storage.reference
@@ -119,7 +117,7 @@ class UserProfileActivity : AppCompatActivity() {
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
-            showAuth(this,getString(R.string.information), getString(R.string.log_out_info))
+            showAuth(this)
         }
 
         backButton.setOnClickListener {
@@ -140,8 +138,8 @@ class UserProfileActivity : AppCompatActivity() {
     private fun uploadImage(){
         if (imageUri != null){
             val storage = Firebase.storage
-            var storageRef = storage.reference
-            var userRef: StorageReference = storageRef.child("images").child(Firebase.auth.currentUser?.email.toString() + "/profile")
+            val storageRef = storage.reference
+            val userRef: StorageReference = storageRef.child("images").child(Firebase.auth.currentUser?.email.toString() + "/profile")
 
             try {
                 val inputStream = contentResolver.openInputStream(imageUri!!)
@@ -173,6 +171,7 @@ class UserProfileActivity : AppCompatActivity() {
         //FIXME:
         startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), PICK_IMAGE_REQUEST)
     }
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

@@ -1,7 +1,6 @@
 package com.example.audioguiasandroid.viewmodel
 
 import android.content.ContentValues
-import android.provider.Settings.Global.getString
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
@@ -162,33 +161,6 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
         }
         return true
 }
-fun changeLanguage(activity: FragmentActivity, languages: Array<String>, checkedItem: Int, textView: TextView){
-    val builder = AlertDialog.Builder(activity)
-    //val firebaseArray = arrayOf("ES", "EN")
-
-
-
-    builder.setSingleChoiceItems(languages,checkedItem){dialog, item ->
-        /*
-        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-            hashMapOf(
-                "language" to firebaseArray[item]
-            ),
-            //Opcion para combinar los datos y que no los machaque
-            SetOptions.merge()
-        )
-        textView.text = firebaseArray[item]
-        dialog.dismiss()
-
-         */
-
-    }
-    builder.create()
-
-    builder.setPositiveButton("Cancelar",null)
-    val dialog: AlertDialog = builder.create()
-    dialog.show()
-}
 
 fun changeUnitOfMeasurement(activity: FragmentActivity, units: Array<String>, checkedItem: Int, textView: TextView){
     val builder = AlertDialog.Builder(activity)
@@ -210,47 +182,3 @@ fun changeUnitOfMeasurement(activity: FragmentActivity, units: Array<String>, ch
     dialog.show()
 }
 
-fun changeRedMode(activity: FragmentActivity, checkedItem: Int, textView: TextView){
-    val builder = AlertDialog.Builder(activity)
-    val modes = arrayOf(activity.getString(R.string.all_redMode), activity.getString(R.string.wifi_redMode),activity.getString(R.string.offline_redMode))
-    val firebaseArray = arrayOf("all", "wifi", "offline")
-    builder.setSingleChoiceItems(modes,checkedItem){dialog, item ->
-        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-            hashMapOf(
-                "redMode" to firebaseArray[item]
-            ),
-            //Opcion para combinar los datos y que no los machaque
-            SetOptions.merge()
-        )
-        textView.text = modes[item]
-        dialog.dismiss()
-        //TODO: implementar logica para cambiar el modo de red
-    }
-    builder.create()
-
-    builder.setPositiveButton("Cancelar",null)
-    val dialog: AlertDialog = builder.create()
-    dialog.show()
-}
-
-fun changeDownloadStorage(activity: FragmentActivity, modes: Array<String>, checkedItem: Int, textView: TextView){
-    val builder = AlertDialog.Builder(activity)
-    val firebaseArray = arrayOf("internal", "external")
-    builder.setSingleChoiceItems(modes,checkedItem){dialog, item ->
-        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-            hashMapOf(
-                "storage" to firebaseArray[item]
-            ),
-            //Opcion para combinar los datos y que no los machaque
-            SetOptions.merge()
-        )
-        textView.text = modes[item]
-        dialog.dismiss()
-        //TODO: implementar logica para cambiar la ubicacion de descarga
-    }
-    builder.create()
-
-    builder.setPositiveButton("Cancelar",null)
-    val dialog: AlertDialog = builder.create()
-    dialog.show()
-}

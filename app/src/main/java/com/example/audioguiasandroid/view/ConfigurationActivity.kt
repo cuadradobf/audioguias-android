@@ -7,6 +7,7 @@ import com.example.audioguiasandroid.BaseActivity
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityConfigurationBinding
 import com.example.audioguiasandroid.viewmodel.changeUnitOfMeasurement
+import com.example.audioguiasandroid.viewmodel.showAboutUs
 import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showDeleteAccount
 import com.example.audioguiasandroid.viewmodel.showMain
@@ -82,7 +83,7 @@ class ConfigurationActivity : BaseActivity() {
                 checkedItem = 0
             }
 
-            builder.setSingleChoiceItems(arrayOf(getString(R.string.spanish), getString(R.string.english)),checkedItem){dialog, item ->
+            builder.setSingleChoiceItems(arrayOf(getString(R.string.spanish), getString(R.string.english)),checkedItem){_, item ->
                 if (item == 1){
                     updateLocale(Locale.ENGLISH)
                 }else if (item == 0){
@@ -90,7 +91,6 @@ class ConfigurationActivity : BaseActivity() {
                 }
 
             }
-
             builder.create()
 
             builder.setPositiveButton("Cancelar",null)
@@ -140,6 +140,9 @@ class ConfigurationActivity : BaseActivity() {
         }
 
          */
+        binding.aboutUsTitleTextViewConfiguration.setOnClickListener {
+            showAboutUs(this)
+        }
 
     }
 }

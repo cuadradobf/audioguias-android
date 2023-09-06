@@ -1,10 +1,8 @@
 package com.example.audioguiasandroid.view.adapter
 
-import android.content.DialogInterface.OnClickListener
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.DiffUtil.DiffResult
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.model.data.AudioGuide

@@ -23,7 +23,7 @@
     <string name="help_title">Ayuda y comentarios</string>
     <string name="back">Atras</string>
     <string name="contact_us_title">Contacta con nosotros</string>
-    <string name="visit_web_page">Visita nuestra página web</string>
+    <string name="visit_web_page"><u>Visita nuestra página web</u></string>
     <string name="contact_us_text">Ingrese su pregunta o comentario:</string>
     <string name="send">Enviar</string>
     <string name="location_10km_mode">10 km</string>
@@ -88,5 +88,13 @@
     <string name="email_sent">Su petición se ha realizado correctamete. El email puede tardar unos minutos en llegar a su bandeja de entrada. Compruebe el correo no deseado.</string>
     <string name="invalid_email">El email no es valido.</string>
     <string name="confirm_new_password">Confirmar nueva contraseña</string>
-
+    <string name="about_us_text_1">AudioGuias es una aplicación web que permite a los usuarios crear y compartir guías de audio para lugares turísticos.</string>
+    <string name="about_us_text_2">Creada para un proyecto final de grado de la Universidad de Córdoba.</string>
+    <string name="about_us_text_3">Esta aplicación ha sido desarrollada por:</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="access">Acceder</string>
+    <string name="change_location_range">Cambiar rango de ubicación</string>ç
+    <string name="home">Principal</string>
+    <string name="main_image">Imagen principal</string>
+    <string name="remove">Quitar</string>
 </resources>

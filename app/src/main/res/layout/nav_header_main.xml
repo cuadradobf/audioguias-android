@@ -2,10 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nav_header"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="160dp"
-    android:background="#162534"
+    android:background="#048B68"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -17,13 +17,17 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:id="@+id/imageView_NavHeader"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/logo"
+        android:layout_gravity="center"
+        android:contentDescription="Logo"/>
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_NavHeader"
-        android:paddingTop="16dp"
+        android:layout_gravity="center"
         android:text="@string/app_name"
+        android:layout_marginStart="16dp"
+        android:textSize="22sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
 </LinearLayout>

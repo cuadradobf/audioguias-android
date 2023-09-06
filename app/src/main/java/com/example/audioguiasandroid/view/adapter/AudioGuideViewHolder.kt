@@ -1,12 +1,7 @@
 package com.example.audioguiasandroid.view.adapter
 
-import android.media.Image
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ItemAudioguideBinding
 import com.example.audioguiasandroid.model.data.AudioGuide
 import com.google.firebase.auth.ktx.auth
@@ -25,14 +20,13 @@ class AudioGuideViewHolder(view: View):RecyclerView.ViewHolder(view) {
     fun render(audioGuideModel: AudioGuide, onClickListener: (AudioGuide, String) -> Unit){
         binding.titleTextViewAudioGuide.text = audioGuideModel.title
         binding.descriptionTextViewAudioGuide.text = audioGuideModel.description
-        //binding.costTextViewAudioGuide.text = audioGuideModel.cost.toString()
         val text = audioGuideModel.city + ", " + audioGuideModel.country
         binding.cityCountryTextViewAudioGuide.text = text
         setRating(audioGuideModel.id)
 
         val storage = Firebase.storage
         val storageRef = storage.reference
-        val userRef: StorageReference = storageRef.child("images/audioGuides/" + audioGuideModel.id.toString() + "/main.jpg")
+        val userRef: StorageReference = storageRef.child("images/audioGuides/" + audioGuideModel.id + "/main.jpg")
 
         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
             .addOnSuccessListener { document ->
@@ -61,14 +55,21 @@ class AudioGuideViewHolder(view: View):RecyclerView.ViewHolder(view) {
     private fun setRating(id: String){
         db.collection("audioGuide").document(id).collection("comments").get()
             .addOnSuccessListener { result ->
-                var rating : Float = 0f
-                for (document in result){
-                    val valoration = document.getDouble("valoration") ?: 0.0
-                    rating += valoration.toFloat()
+
+                if (result.size() == 0){
+                    binding.valoratioLayoutAudioGuide.visibility = View.GONE
+                }else {
+                    var rating = 0f
+                    for (document in result) {
+                        val valoration = document.getDouble("valoration") ?: 0.0
+                        rating += valoration.toFloat()
+                    }
+                    rating /= result.size()
+                    binding.valorationTextViewAudioGuide.text = rating.toString()
+                    binding.ratingBarAudioGuide.rating = rating
+                    val commentsAmount = "(" + result.size().toString() + ")"
+                    binding.commentsAmountTextViewAudioGuide.text = commentsAmount
                 }
-                rating /= result.size()
-                binding.ratingBarAudioGuide.rating = rating
-                binding.commentsAmountTextViewAudioGuide.text = result.size().toString()
             }
     }
 }

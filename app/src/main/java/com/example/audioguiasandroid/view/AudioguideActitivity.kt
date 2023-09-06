@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.audioguiasandroid.BaseActivity
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.databinding.ActivityAudioguideBinding
 import com.example.audioguiasandroid.model.data.Comment
@@ -65,14 +64,13 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun setup(audioGuideID: String){
-        title = "Audioguias"
-        //TODO: implementar app bar en el resto de vistas 
         db.collection("audioGuide").document(audioGuideID).get()
             .addOnSuccessListener{
-                binding.titleTextViewAudioGuideActivity.text = it.get("title").toString()
-                //binding.costTextViewAudioGuideActivity.text = it.get("cost").toString()
-                binding.descriptionTextViewAudioGuideActivity.text = it.get("description").toString()
-                val userID = it.get("user").toString()
+                binding.titleTextViewAudioGuideActivity.text = it.getString("title") ?: ""
+                val address = (it.getString("city") ?: "") + ", " + (it.getString("country") ?: "")
+                binding.addressTextViewAudioGuideActivity.text = address
+                binding.descriptionTextViewAudioGuideActivity.text = it.getString("description") ?: ""
+                val userID = it.getString("user") ?: ""
                 //Si el autor de la audioguia es el mismo que el usuario se oculta la opcion de comentar su propio contenido
                 if (userID == Firebase.auth.currentUser?.email.toString()){
                     binding.ratingBarAudioGuideActivity.visibility = View.GONE
@@ -134,14 +132,23 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
         //Valoracion media de la audioguia
         db.collection("audioGuide").document(audioGuideID).collection("comments").get()
             .addOnSuccessListener { result ->
-                var rating : Float = 0f
-                for (document in result){
-                    val valoration = document.getDouble("valoration") ?: 0.0
-                    rating += valoration.toFloat()
+                if (result.size() == 0){
+                    binding.valorationTextViewAudioGuideActivity.visibility = View.GONE
+                    binding.averageRatingBarAudioGuideActivity.visibility = View.GONE
+                    binding.commentsAmountTextViewAudioGuideActivity.visibility = View.GONE
+                }else{
+                    var rating = 0f
+                    for (document in result){
+                        val valoration = document.getDouble("valoration") ?: 0.0
+                        rating += valoration.toFloat()
+                    }
+                    rating /= result.size()
+
+                    binding.valorationTextViewAudioGuideActivity.text = rating.toString()
+                    binding.averageRatingBarAudioGuideActivity.rating = rating
+                    val commentesAmount = "(" + result.size().toString() + ")"
+                    binding.commentsAmountTextViewAudioGuideActivity.text = commentesAmount
                 }
-                rating /= result.size()
-                binding.averageRatingBarAudioGuideActivity.rating = rating
-                binding.commentsAmountTextViewAudioGuideActivity.text = result.size().toString()
             }
         //Comprueba si el usuario tiene guardada en su lista de favoritos la guia actual y cambia el icono del boton de guardado
         db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
@@ -202,6 +209,12 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
             sendComment(audioGuideID)
         }
 
+        binding.addButtonAudioGuideActivity.setOnClickListener {
+            binding.commentsRecyclerAudioGuideActivity.visibility = View.GONE
+            binding.ratingBarAudioGuideActivity.visibility = View.VISIBLE
+            binding.commentLayoutAudioGuideActivity.visibility = View.VISIBLE
+        }
+
     }
 
     private fun sendComment(audioGuideID: String) {
@@ -237,7 +250,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
                             binding.commentsRecyclerAudioGuideActivity.adapter = commentsAdapter
                             binding.titleCommetsTextViewAudioGuideActivity.visibility = View.VISIBLE
                         }
-
+                        binding.commentsRecyclerAudioGuideActivity.visibility = View.VISIBLE
                     }
             }
             .addOnFailureListener { e ->
@@ -249,7 +262,6 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initRecyclerView(audioGuideID: String) {
-        //TODO: colocar el comentario del usuario logeado el primero
         db.collection("audioGuide").document(audioGuideID).collection("comments").get()
             .addOnSuccessListener { result ->
                 val listComment = CommentsRepository().getAllComments(result, audioGuideID)

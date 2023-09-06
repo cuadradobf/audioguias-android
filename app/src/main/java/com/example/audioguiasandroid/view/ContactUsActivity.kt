@@ -20,7 +20,7 @@ class ContactUsActivity : AppCompatActivity() {
     private var db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_contact_us)
+        //setContentView(R.layout.activity_contact_us)
 
         binding = ActivityContactUsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -45,7 +45,7 @@ class ContactUsActivity : AppCompatActivity() {
         }
         binding.sendButtonHelp.setOnClickListener {
             val text = binding.feedbackEditTextViewContactUs.text.toString()
-            if (text.isNullOrEmpty()){
+            if (text.isEmpty()){
                 showAlert(this,getString(R.string.information), getString(R.string.empty_box_comment))
             }else{
                 db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
