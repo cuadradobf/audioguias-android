@@ -1,15 +1,14 @@
 package com.example.audioguiasandroid.view
 
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.sendEmailVerifyAccount
 import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showMain
-import com.example.audioguiasandroid.viewmodel.showVerify
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -34,7 +33,7 @@ class VerifyActivity : AppCompatActivity() {
         title = getString(R.string.account_verification_title)
 
         val verifyAccountButton = findViewById<Button>(R.id.verifyAccount_Verify)
-        val backButton = findViewById<Button>(R.id.backButton_Verify)
+        val backButton = findViewById<ImageView>(R.id.backButton_Verify)
         val logOutButton = findViewById<Button>(R.id.logOutButton_Verify)
 
         verifyAccountButton.setOnClickListener {

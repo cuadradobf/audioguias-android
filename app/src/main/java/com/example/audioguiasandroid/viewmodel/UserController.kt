@@ -58,7 +58,7 @@ fun sendEmailVerifyAccount(activity: AppCompatActivity){
 }
 
 fun changeNameAndSurname(activity: AppCompatActivity, name: String, surname: String){
-    val regex = Regex("^[A-Za-z ]+$")
+    val regex = Regex("^[a-zA-ZÀ-ÿ\\u00f1\\u00d1]+( [a-zA-ZÀ-ÿ\\u00f1\\u00d1]+)*$")
     if ((name.isNotEmpty() && regex.matches(name) && surname.isEmpty()) || (name.isNotEmpty() && surname.isNotEmpty() && regex.matches(name) && regex.matches(surname))){
         FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
             hashMapOf(
@@ -96,7 +96,7 @@ fun changeNameAndSurname(activity: AppCompatActivity, name: String, surname: Str
 
 fun signUp(activity: AppCompatActivity, email: String, password: String, password2: String, name: String, surname: String): Boolean{
 
-    val regex = Regex("^[A-Za-z ]+$")
+    val regex = Regex("^[a-zA-ZÀ-ÿ\\u00f1\\u00d1]+( [a-zA-ZÀ-ÿ\\u00f1\\u00d1]+)*$")
     val regexPassword = Regex("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\w\\s]).{8,}$")
 
     if ((name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && password2.isNotEmpty() && surname.isNotEmpty() && regex.matches(name) && regex.matches(surname)) || (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && password2.isNotEmpty() && surname.isEmpty() && regex.matches(name))){

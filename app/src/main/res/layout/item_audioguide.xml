@@ -43,7 +43,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/deleteImageView_AudioGuide"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="Block"/>
+                android:contentDescription="Block"
+                android:visibility="gone"/>
             <ImageView
                 android:id="@+id/deleteImageView_AudioGuide"
                 android:layout_width="30dp"
@@ -52,7 +53,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintTop_toTopOf="parent"
-                android:contentDescription="@string/remove"/>
+                android:contentDescription="@string/remove"
+                android:visibility="gone"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
         <ImageView
             android:id="@+id/mainImageView_AudioGuide"

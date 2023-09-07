@@ -2,17 +2,16 @@ package com.example.audioguiasandroid.view
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.showAlert
 import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showMain
-import com.example.audioguiasandroid.viewmodel.showUserProfile
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,11 +40,11 @@ class DeleteAccountActivity : AppCompatActivity() {
     private fun setup(){
         title = getString(R.string.delete_account_title)
         val deleteAccountButton = findViewById<Button>(R.id.deleteAccountButton_DeleteAccount)
-        val backButton = findViewById<Button>(R.id.backButton_DeleteAccount)
+        val backButton = findViewById<ImageView>(R.id.backButton_DeleteAccount)
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText_DeleteAccount)
 
         deleteAccountButton.setOnClickListener {
-            if (passwordEditText.text.toString().isNullOrBlank()){
+            if (passwordEditText.text.toString().isBlank()){
                 showAlert(this, getString(R.string.information), getString(R.string.incorrect_actual_password))
             }else{
                 val credential = EmailAuthProvider.getCredential(Firebase.auth.currentUser?.email.toString(), passwordEditText.text.toString())

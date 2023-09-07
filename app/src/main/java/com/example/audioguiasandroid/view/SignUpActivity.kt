@@ -6,6 +6,7 @@ import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import com.example.audioguiasandroid.R
 import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showMain
@@ -28,7 +29,7 @@ class SignUpActivity : AppCompatActivity() {
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText_SignUp)
         val password2EditText = findViewById<EditText>(R.id.password2EditText_SignUp)
         val signUpButton = findViewById<Button>(R.id.signUpButtton_SignUp)
-        val backButton = findViewById<Button>(R.id.backButton_SignUp)
+        val backButton = findViewById<ImageView>(R.id.backButton_SignUp)
 
 
         signUpButton.setOnClickListener {
