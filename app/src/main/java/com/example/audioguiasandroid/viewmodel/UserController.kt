@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import com.example.audioguiasandroid.R
 import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
@@ -99,8 +98,15 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
     val regex = Regex("^[a-zA-ZÀ-ÿ\\u00f1\\u00d1]+( [a-zA-ZÀ-ÿ\\u00f1\\u00d1]+)*$")
     val regexPassword = Regex("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^\\w\\s]).{8,}$")
 
-    if ((name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && password2.isNotEmpty() && surname.isNotEmpty() && regex.matches(name) && regex.matches(surname)) || (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && password2.isNotEmpty() && surname.isEmpty() && regex.matches(name))){
-    }else{
+    if (name.isBlank() || email.isBlank() || password.isBlank() || password2.isBlank()){
+        showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.invalid_fields_name_surname))
+        return false
+    }
+    if (!regex.matches(name)){
+        showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.invalid_fields_name_surname))
+        return false
+    }
+    if (surname.isNotEmpty() && !regex.matches(surname)){
         showAlert(activity, activity.getString(R.string.information), activity.getString(R.string.invalid_fields_name_surname))
         return false
     }
@@ -115,51 +121,8 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
         return false
     }
 
-    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-        .addOnCompleteListener {
-            if (it.isSuccessful) {
-                FirebaseFirestore.getInstance().collection("user")
-                    .document(Firebase.auth.currentUser?.email.toString()).set(
-                    hashMapOf(
-                        "name" to name,
-                        "surname" to surname,
-                        "rol" to "Standar",
-                        "locationMode" to "off",
-                        "unitOfMeasurement" to "Km",
-                        "banned" to false
-                    )
-                )
-                    .addOnSuccessListener {
-                        Log.d(ContentValues.TAG, "User data updated successfully.")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(ContentValues.TAG, "Error updating user data.", e)
-                    }
-                val userAuth = Firebase.auth.currentUser
 
-                //Actualizar el nombre en auth
-                val profileUpdates = userProfileChangeRequest {
-                    displayName = name
-                }
-                userAuth!!.updateProfile(profileUpdates)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d(ContentValues.TAG, "User profile updated.")
-                        }
-                    }
-
-                //Manda correo de verificación
-                userAuth.sendEmailVerification()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.d(ContentValues.TAG, "Email sent.")
-                        }
-                    }
-            } else {
-                showAlert(activity,activity.getString(R.string.information),activity.getString(R.string.error_create_account))
-            }
-        }
-        return true
+    return true
 }
 
 fun changeUnitOfMeasurement(activity: FragmentActivity, units: Array<String>, checkedItem: Int, textView: TextView){

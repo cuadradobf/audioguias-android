@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -37,9 +38,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Setup
-        val user = Firebase.auth.currentUser
-        if (user == null){
+        if (Firebase.auth.currentUser == null){
             val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
             prefs.clear()
             prefs.apply()
@@ -90,12 +89,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
             }
 
-        //FIXME:
-        /*
-        binding.userImageViewMain.setOnClickListener {
+        val userImage = findViewById<ImageView>(R.id.userImageView_Main)
+
+        userImage.setOnClickListener {
             showUserProfile(this)
         }
-         */
+
 
     }
 

@@ -56,8 +56,6 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun setup(){
-        title = getString(R.string.profile_title)
-
         val userImage = findViewById<ImageView>(R.id.userImageView_UserProfile)
         val removeImage = findViewById<ImageView>(R.id.removeImageView_UserProfile)
         val emailTextView = findViewById<TextView>(R.id.emailTextView_UserProfile)
@@ -168,7 +166,6 @@ class UserProfileActivity : AppCompatActivity() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
-        //FIXME:
         startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)), PICK_IMAGE_REQUEST)
     }
     @Deprecated("Deprecated in Java")

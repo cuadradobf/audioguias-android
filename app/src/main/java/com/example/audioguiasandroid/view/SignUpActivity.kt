@@ -1,16 +1,24 @@
 package com.example.audioguiasandroid.view
 
+import android.content.ContentValues
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import com.example.audioguiasandroid.R
+import com.example.audioguiasandroid.viewmodel.showAlert
 import com.example.audioguiasandroid.viewmodel.showAuth
 import com.example.audioguiasandroid.viewmodel.showMain
 import com.example.audioguiasandroid.viewmodel.signUp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 
 class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +42,56 @@ class SignUpActivity : AppCompatActivity() {
 
         signUpButton.setOnClickListener {
             if (signUp(this, emailEditText.text.toString(), passwordEditText.text.toString(), password2EditText.text.toString(), nameEditText.text.toString(), surnameEditText.text.toString())){
-                showMain(this, "home")
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(emailEditText.text.toString(), passwordEditText.text.toString())
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            FirebaseFirestore.getInstance().collection("user")
+                                .document(Firebase.auth.currentUser?.email.toString()).set(
+                                    hashMapOf(
+                                        "name" to nameEditText.text.toString(),
+                                        "surname" to surnameEditText.text.toString(),
+                                        "rol" to "Standar",
+                                        "locationMode" to "off",
+                                        "unitOfMeasurement" to "Km",
+                                        "banned" to false
+                                    )
+                                )
+                                .addOnSuccessListener {
+                                    Log.d(ContentValues.TAG, "User data updated successfully.")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(ContentValues.TAG, "Error updating user data.", e)
+                                }
+                            val userAuth = Firebase.auth.currentUser
+
+                            //Actualizar el nombre en auth
+                            val profileUpdates = userProfileChangeRequest {
+                                displayName = nameEditText.text.toString()
+                            }
+                            userAuth!!.updateProfile(profileUpdates)
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Log.d(ContentValues.TAG, "User profile updated.")
+                                    }
+                                }
+
+                            //Manda correo de verificación
+                            userAuth.sendEmailVerification()
+                                .addOnCompleteListener { task ->
+                                    if (task.isSuccessful) {
+                                        Log.d(ContentValues.TAG, "Email sent.")
+                                    }
+                                }
+                            showMain(this, "home")
+                        } else {
+                            showAlert(this, getString(R.string.information), getString(R.string.error_create_account))
+
+                        }
+                    }
+
+
+
+
             }
         }
 
