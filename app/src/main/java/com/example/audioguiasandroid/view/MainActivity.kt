@@ -22,6 +22,7 @@ import com.example.audioguiasandroid.viewmodel.showMain
 import com.example.audioguiasandroid.viewmodel.showUserProfile
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var binding: ActivityMainBinding
     private var storage = Firebase.storage
+    private var db = FirebaseFirestore.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_main)
@@ -63,12 +65,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         }
                     }
                 }
-
             }
-            //Guardar datos
-            val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-            prefs.putString("email", Firebase.auth.currentUser?.email.toString())
-            prefs.apply()
+            db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
+                .addOnSuccessListener {document ->
+                    val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+                    if (document != null && document.exists()) {
+                        //Guardar datos
+                        prefs.putString("email", Firebase.auth.currentUser?.email.toString())
+                    }else{
+                        prefs.clear()
+                        showAuth(this)
+                    }
+                    prefs.apply()
+                }
         }
     }
 

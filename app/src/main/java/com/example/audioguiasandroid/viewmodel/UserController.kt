@@ -1,6 +1,7 @@
 package com.example.audioguiasandroid.viewmodel
 
 import android.content.ContentValues
+import android.content.Context
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
@@ -125,17 +126,21 @@ fun signUp(activity: AppCompatActivity, email: String, password: String, passwor
     return true
 }
 
-fun changeUnitOfMeasurement(activity: FragmentActivity, units: Array<String>, checkedItem: Int, textView: TextView){
+fun changeUnitOfMeasurement(activity: FragmentActivity, checkedItem: Int, textView: TextView){
     val builder = AlertDialog.Builder(activity)
-    builder.setSingleChoiceItems(units,checkedItem){dialog, item ->
-        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-            hashMapOf(
-                "unitOfMeasurement" to units[item]
-            ),
-            //Opcion para combinar los datos y que no los machaque
-            SetOptions.merge()
-        )
-        textView.text = units[item]
+    builder.setSingleChoiceItems(arrayOf("Km", "Mi"),checkedItem){dialog, item ->
+        val prefs = activity.getSharedPreferences(activity.getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        when(item){
+            0 -> {
+                prefs.putString("unitOfMeasurement", "Km")
+                textView.text = "Km"
+            }
+            1 -> {
+                prefs.putString("unitOfMeasurement", "Mi")
+                textView.text = "Mi"
+            }
+        }
+        prefs.apply()
         dialog.dismiss()
     }
     builder.create()
@@ -144,4 +149,3 @@ fun changeUnitOfMeasurement(activity: FragmentActivity, units: Array<String>, ch
     val dialog: AlertDialog = builder.create()
     dialog.show()
 }
-

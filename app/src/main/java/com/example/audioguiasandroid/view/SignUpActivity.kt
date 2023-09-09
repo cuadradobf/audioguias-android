@@ -29,8 +29,6 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setup(){
-        title = getString(R.string.sign_up_title)
-
         val nameEditText = findViewById<EditText>(R.id.nameEditText_SignUp)
         val surnameEditText = findViewById<EditText>(R.id.surnameEditText_SignUp)
         val emailEditText = findViewById<EditText>(R.id.emailEditText_SignUp)
@@ -51,8 +49,6 @@ class SignUpActivity : AppCompatActivity() {
                                         "name" to nameEditText.text.toString(),
                                         "surname" to surnameEditText.text.toString(),
                                         "rol" to "Standar",
-                                        "locationMode" to "off",
-                                        "unitOfMeasurement" to "Km",
                                         "banned" to false
                                     )
                                 )
@@ -88,10 +84,6 @@ class SignUpActivity : AppCompatActivity() {
 
                         }
                     }
-
-
-
-
             }
         }
 

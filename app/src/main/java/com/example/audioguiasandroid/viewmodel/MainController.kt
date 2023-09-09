@@ -2,6 +2,7 @@ package com.example.audioguiasandroid.viewmodel
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -29,12 +30,9 @@ import com.example.audioguiasandroid.view.UserProfileActivity
 import com.example.audioguiasandroid.view.VerifyActivity
 import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.google.android.gms.location.LocationServices
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.ktx.Firebase
 import java.util.Locale
 
 fun showAlert(activity: AppCompatActivity, title: String, exception: String){
@@ -187,14 +185,10 @@ fun changeLocationMode(
 
             }
         }
-        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-            hashMapOf(
-                "locationMode" to i
-            ),
-            //Opcion para combinar los datos y que no los machaque
-            SetOptions.merge()
-        )
-        dialog.dismiss()
+
+        val prefs = activity.getSharedPreferences(activity.getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        prefs.putString("locationMode", i)
+        prefs.apply()
     }
 
     builder.create()

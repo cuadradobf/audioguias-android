@@ -17,11 +17,10 @@ import com.example.audioguiasandroid.viewmodel.showResetPassword
 import com.example.audioguiasandroid.viewmodel.showSignUp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class AuthActivity : BaseActivity() {
-    private var db = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
@@ -36,9 +35,7 @@ class AuthActivity : BaseActivity() {
             showAlert(this, title, exception)
             setup()
         }
-
         session()
-
     }
 
     override fun onStart(){
@@ -48,30 +45,13 @@ class AuthActivity : BaseActivity() {
     }
     private fun session(){
 
-        if (Firebase.auth.currentUser != null){
-            db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
-                .addOnSuccessListener {document ->
-                    if (document != null && document.exists()) {
-                        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
-                        val email = prefs.getString("email", null)
-                        if (email != null){
-                            // El documento existe
-                            val authLayout = findViewById<ConstraintLayout>(R.id.authLayout_Auth)
-                            authLayout.visibility = View.INVISIBLE
-                            showMain(this, "home")
-                        }
-                    } else {
-                        // El documento no existe
-                        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-                        prefs.clear()
-                        prefs.apply()
-                    }
-                }
-                .addOnFailureListener {
-                    val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
-                    prefs.clear()
-                    prefs.apply()
-                }
+        val prefs = getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val email = prefs.getString("email", null)
+        if (email != null && Firebase.auth.currentUser != null){
+            // El documento existe
+            val authLayout = findViewById<ConstraintLayout>(R.id.authLayout_Auth)
+            authLayout.visibility = View.INVISIBLE
+            showMain(this, "home")
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.audioguiasandroid.view.fragment
 
 import android.Manifest
 import android.content.ContentValues
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -23,10 +24,8 @@ import com.example.audioguiasandroid.view.adapter.AudioGuideAdapter
 import com.example.audioguiasandroid.viewmodel.changeLocationMode
 import com.example.audioguiasandroid.viewmodel.showAudioguide
 import com.example.audioguiasandroid.viewmodel.updateDataAdapterByFilter
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.ktx.Firebase
 import java.util.Locale
 
 class HomeFragment : Fragment() {
@@ -47,6 +46,10 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putString("locationMode", "off")
+        editor.apply()
 
         setup()
 
@@ -71,27 +74,17 @@ class HomeFragment : Fragment() {
             updateDataAdapterByFilter(audioGuideAdapter, listAudioGuide, filter)
 
             if (flag){
-                db.collection("user").document(Firebase.auth.currentUser?.email.toString())
-                    .get()
-                    .addOnSuccessListener {document ->
-                        if ((document.getString("locationMode") ?: "off") != "off"){
-                            _binding?.locationImageViewHomeF?.setImageResource(R.drawable.baseline_location_off_24)
-                            db.collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-                                hashMapOf(
-                                    "locationMode" to "off"
-                                ),
-                                //Opcion para combinar los datos y que no los machaque
-                                SetOptions.merge()
-                            )
-                        }
-                    }
+                val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+                prefs.putString("locationMode", "off")
+                prefs.apply()
+                locationImageView?.setImageResource(R.drawable.location_grey)
+
                 flag = false
             }
+
+
         }
 
-        if (locationImageView?.hasOnClickListeners() == true){
-            Toast.makeText(requireContext(), "Rango de ubicacion", Toast.LENGTH_LONG).show()
-        }
         changeRangeLayout?.setOnClickListener {
             if (ActivityCompat.checkSelfPermission(
                     requireContext(),
@@ -103,37 +96,31 @@ class HomeFragment : Fragment() {
             ) {
                 Toast.makeText(requireContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show()
             }else{
-                db.collection("user").document(Firebase.auth.currentUser?.email.toString()).get()
-                    .addOnSuccessListener { document ->
-                        val item = when(document.getString("locationMode") ?: "off"){
-                            "50" -> 1
-                            "10" -> 0
-                            else -> 2
-                        }
-                        val unitOfMeasurement = document.getString("unitOfMeasurement") ?: "Km"
-                        val modes : Array<String>
-                        if (unitOfMeasurement == "Km"){
-                            modes = arrayOf(getString(R.string.location_10km_mode),getString(R.string.location_50km_mode), getString(R.string.off_mode))
-                        }else{
-                            modes = arrayOf(getString(R.string.location_6mi_mode),getString(R.string.location_30mi_mode), getString(R.string.off_mode))
-                        }
-                        flag = true
-                        changeLocationMode(requireActivity(), item, _binding?.locationImageViewHomeF, modes, R.drawable.baseline_location_on_24, R.drawable.baseline_location_off_24, audioGuideAdapter)
 
-                    }
+                val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE)
+                val item = when(prefs.getString("locationMode", "off")){
+                    "10" -> 0
+                    "50" -> 1
+                    else -> 2
+                }
+                val unitOfMeasurement = prefs.getString("unitOfMeasurement", "Km")
+                val modes : Array<String>
+                if (unitOfMeasurement == "Km"){
+                    modes = arrayOf(getString(R.string.location_10km_mode),getString(R.string.location_50km_mode), getString(R.string.off_mode))
+                }else{
+                    modes = arrayOf(getString(R.string.location_6mi_mode),getString(R.string.location_30mi_mode), getString(R.string.off_mode))
+                }
+                flag = true
+                changeLocationMode(requireActivity(), item, locationImageView, modes, R.drawable.location, R.drawable.location_grey, audioGuideAdapter)
             }
 
         }
     }
 
     private fun initUserLocation() {
-        FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-            hashMapOf(
-                "locationMode" to "off"
-            ),
-            //Opcion para combinar los datos y que no los machaque
-            SetOptions.merge()
-        )
+        val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+        prefs.putString("locationMode", "off")
+        prefs.apply()
     }
 
     private fun requestLocationPermissions() {
@@ -148,14 +135,10 @@ class HomeFragment : Fragment() {
                     // Only approximate location access granted.
                 } else -> {
                 // No location access granted.
-                FirebaseFirestore.getInstance().collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-                    hashMapOf(
-                        "locationMode" to "off"
-                    ),
-                    //Opcion para combinar los datos y que no los machaque
-                    SetOptions.merge()
-                )
-                _binding?.locationImageViewHomeF?.setImageResource(R.drawable.baseline_location_off_24)
+                val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+                prefs.putString("locationMode", "off")
+                prefs.apply()
+                _binding?.locationImageViewHomeF?.setImageResource(R.drawable.location_grey)
             }
             }
         }
@@ -169,43 +152,41 @@ class HomeFragment : Fragment() {
     }
     private fun initRecyclerView(){
         val recyclerView : RecyclerView? = _binding?.recyclerAudioGuideHomeF
-        if (recyclerView != null){
-            if (language == "es"){
-                db.collection("audioGuide")
-                    .whereEqualTo("language", "es")
-                    .get()
-                    .addOnSuccessListener { result ->
-                        listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
-                        val manager = LinearLayoutManager(requireContext())
-                        recyclerView.layoutManager = manager
-                        setAdapter()
-                        recyclerView.adapter = audioGuideAdapter
-                        Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
-                    }
-            }else{
-                db.collection("audioGuide")
-                    .whereEqualTo("language", "en")
-                    .get()
-                    .addOnSuccessListener { result ->
-                        listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
-                        val manager = LinearLayoutManager(requireContext())
-                        recyclerView.layoutManager = manager
-                        setAdapter()
-                        recyclerView.adapter = audioGuideAdapter
-                        Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
-                    }
-            }
-
+        if (language == "es"){
+            db.collection("audioGuide")
+                .whereEqualTo("language", "es")
+                .get()
+                .addOnSuccessListener { result ->
+                    listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                    val manager = LinearLayoutManager(requireContext())
+                    recyclerView?.layoutManager = manager
+                    setAdapter()
+                    recyclerView?.adapter = audioGuideAdapter
+                    Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
+                }
+        }else{
+            db.collection("audioGuide")
+                .whereEqualTo("language", "en")
+                .get()
+                .addOnSuccessListener { result ->
+                    listAudioGuide = AudioGuideRepository().getAllAudioGuides(result)
+                    val manager = LinearLayoutManager(requireContext())
+                    recyclerView?.layoutManager = manager
+                    setAdapter()
+                    recyclerView?.adapter = audioGuideAdapter
+                    Log.d(ContentValues.TAG, "Getting audio guides data successfully.")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(ContentValues.TAG, "Error getting audio guides data.", e)
+                }
         }
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -216,14 +197,10 @@ class HomeFragment : Fragment() {
                 // El usuario concedió el permiso
             } else {
                 // El usuario denegó el permiso
-                _binding?.locationImageViewHomeF?.setImageResource(R.drawable.baseline_location_off_24)
-                db.collection("user").document(Firebase.auth.currentUser?.email.toString()).set(
-                    hashMapOf(
-                        "locationMode" to "off"
-                    ),
-                    //Opcion para combinar los datos y que no los machaque
-                    SetOptions.merge()
-                )
+                _binding?.locationImageViewHomeF?.setImageResource(R.drawable.location_grey)
+                val prefs = requireActivity().getSharedPreferences(getString(R.string.prefs_file), Context.MODE_PRIVATE).edit()
+                prefs.putString("locationMode", "off")
+                prefs.apply()
                 Toast.makeText(requireContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show()
             }
         }
