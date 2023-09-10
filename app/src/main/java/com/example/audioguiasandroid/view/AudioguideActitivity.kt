@@ -266,7 +266,7 @@ class AudioguideActitivity : AppCompatActivity(), OnMapReadyCallback {
             .addOnSuccessListener { result ->
                 val listComment = CommentsRepository().getAllComments(result, audioGuideID)
 
-                if(listComment.size == 0){
+                if(listComment.isEmpty()){
                     binding.titleCommetsTextViewAudioGuideActivity.visibility = View.GONE
                 }else{
                     val manager = LinearLayoutManager(this)

@@ -72,9 +72,6 @@
                 android:text="@string/signUp"
                 android:textSize="20sp"
                 tools:text="Ciudad, Pais"/>
-
-
-
             <ImageView
                 android:id="@+id/mainImageView_AudioGuideActivity"
                 tools:src="@tools:sample/avatars"
@@ -83,7 +80,6 @@
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/main_image"/>
-
             <TextView
                 android:id="@+id/autorTextView_AudioGuideActivity"
                 android:layout_width="match_parent"
@@ -97,7 +93,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="end">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -161,8 +157,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
+            android:textSize="16sp"
             android:background="@color/colorAccent"
-            tools:text="dfaadfad apdofiaj pd asdoifj apsd adoifja of aspd oiafj adfj adpof adfijasdofi jadofij adsofi jadof ajsdfoaijdfapod ija fjadfo " />
+            tools:text="Descripcion" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -177,7 +174,9 @@
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="8dp"/>
             <ImageView
                 android:id="@+id/addButton_AudioGuideActivity"
                 android:layout_width="wrap_content"
@@ -231,7 +230,8 @@
                     android:layout_height="30dp"
                     android:src="@drawable/send"
                     android:layout_marginHorizontal="8dp"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/send"/>
             </LinearLayout>
 
         </LinearLayout>
